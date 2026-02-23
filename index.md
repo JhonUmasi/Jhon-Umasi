@@ -1,6 +1,3 @@
----
-layout: null
----
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -35,15 +32,15 @@ layout: null
             min-height: 100vh;
         }
 
-        /* Fondo con overlay profesional */
+        /* Fondo con overlay profesional - CLARO */
         .hero-bg {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('./assets/images/Background.png') no-repeat center center/cover;
-            filter: brightness(0.3);
+            background: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80') no-repeat center center/cover;
+            filter: brightness(0.7);
             z-index: -1;
         }
 
@@ -54,7 +51,7 @@ layout: null
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(45deg, rgba(0,119,190,0.4), rgba(0,0,0,0.7));
+            background: linear-gradient(45deg, rgba(0,119,190,0.2), rgba(255,255,255,0.3));
         }
 
         .wrapper {
@@ -65,7 +62,7 @@ layout: null
             flex-direction: column;
         }
 
-        /* Header profesional */
+        /* Header profesional - STICKY */
         .header {
             background: rgba(255,255,255,0.95);
             backdrop-filter: blur(10px);
@@ -137,7 +134,7 @@ layout: null
 
         /* Hero section */
         .hero {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.2);
             backdrop-filter: blur(5px);
             color: white;
             text-align: center;
@@ -150,6 +147,8 @@ layout: null
             margin-bottom: 1rem;
             font-weight: 300;
             letter-spacing: 2px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
 
         .hero h2 strong {
@@ -161,7 +160,7 @@ layout: null
             font-size: 1.1rem;
             max-width: 700px;
             margin: 0 auto 2rem;
-            opacity: 0.9;
+            opacity: 0.95;
         }
 
         .btn-cv {
@@ -179,6 +178,7 @@ layout: null
             text-transform: uppercase;
             letter-spacing: 1px;
             box-shadow: var(--shadow);
+            border: none;
         }
 
         .btn-cv:hover {
@@ -195,8 +195,36 @@ layout: null
             flex: 1;
         }
 
+        /* INDICE DE NAVEGACIÓN */
+        .section-index {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0 3rem;
+            flex-wrap: wrap;
+        }
+
+        .index-link {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(5px);
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .index-link:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
         .section {
             margin-bottom: 4rem;
+            scroll-margin-top: 80px; /* Para que al navegar con el índice no quede tapado por el header */
         }
 
         .section-title {
@@ -208,11 +236,12 @@ layout: null
             display: inline-block;
             text-transform: uppercase;
             letter-spacing: 2px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
         }
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
         }
 
@@ -241,13 +270,11 @@ layout: null
             overflow: hidden;
         }
 
-        .card-image img {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 3px solid white;
-            background: white;
+        /* ICONOS MÁS GRANDES */
+        .card-image i {
+            font-size: 5rem;
+            color: white;
+            filter: drop-shadow(2px 4px 4px rgba(0,0,0,0.2));
         }
 
         .card-content {
@@ -281,20 +308,25 @@ layout: null
             font-weight: 600;
         }
 
-        /* Footer */
+        /* Footer FLOTANTE (ANCLADO) */
         .footer {
             background: var(--dark);
             color: white;
-            padding: 2rem;
+            padding: 1rem 2rem;
             text-align: center;
-            margin-top: auto;
+            position: sticky;
+            bottom: 0;
+            width: 100%;
+            z-index: 90;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.2);
+            border-top: 2px solid var(--accent);
         }
 
         .footer-links {
             display: flex;
             justify-content: center;
             gap: 2rem;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
             flex-wrap: wrap;
         }
 
@@ -305,10 +337,15 @@ layout: null
             align-items: center;
             gap: 0.5rem;
             transition: color 0.3s;
+            font-size: 1rem;
         }
 
         .footer-links a:hover {
             color: var(--accent);
+        }
+
+        .footer-links i {
+            font-size: 1.3rem; /* Iconos del footer un poco más grandes */
         }
 
         .copyright {
@@ -335,6 +372,10 @@ layout: null
             
             .grid {
                 grid-template-columns: 1fr;
+            }
+
+            .footer {
+                position: relative; /* En móvil, mejor que no sea flotante para no ocupar mucho espacio */
             }
         }
     </style>
@@ -366,19 +407,27 @@ layout: null
         <section class="hero">
             <h2><strong>Estructuras</strong> que inspiran · <strong>Código</strong> que transforma</h2>
             <p>Ingeniero Civil Estructural · Desarrollador de Videojuegos · Investigador</p>
-            <a href="./assets/docs/mi-cv.pdf" class="btn-cv">
-                <i class="fas fa-download"></i> DESCARGAR CV COMPLETO
+            <!-- Botón cambiado a "Información Personal" -->
+            <a href="#" class="btn-cv" onclick="alert('Sección de Información Personal (próximamente)'); return false;">
+                <i class="fas fa-user"></i> INFORMACIÓN PERSONAL
             </a>
         </section>
 
         <main class="main-content">
+            <!-- ÍNDICE DE NAVEGACIÓN -->
+            <div class="section-index">
+                <a href="#civil" class="index-link"><i class="fas fa-hard-hat"></i> Ing. Civil</a>
+                <a href="#gamedev" class="index-link"><i class="fas fa-gamepad"></i> Game Dev</a>
+                <a href="#research" class="index-link"><i class="fas fa-flask"></i> Investigación</a>
+            </div>
+
             <!-- Proyectos Ingeniería Civil -->
-            <section class="section">
+            <section id="civil" class="section">
                 <h2 class="section-title">Proyectos de Ingeniería Civil</h2>
                 <div class="grid">
                     <a href="steel.html" class="project-card">
                         <div class="card-image">
-                            <img src="./assets/images/Steel_icon.png" alt="Steel">
+                            <i class="fas fa-building"></i>
                         </div>
                         <div class="card-content">
                             <h3>STEEL</h3>
@@ -393,7 +442,7 @@ layout: null
 
                     <a href="concrete.html" class="project-card">
                         <div class="card-image">
-                            <img src="./assets/images/Concrete_icon.png" alt="Concrete">
+                            <i class="fas fa-archway"></i>
                         </div>
                         <div class="card-content">
                             <h3>CONCRETE</h3>
@@ -408,7 +457,7 @@ layout: null
 
                     <a href="seismic.html" class="project-card">
                         <div class="card-image">
-                            <img src="./assets/images/Seismic_icon.png" alt="Seismic">
+                            <i class="fas fa-mountain"></i>
                         </div>
                         <div class="card-content">
                             <h3>SEISMIC</h3>
@@ -423,13 +472,13 @@ layout: null
                 </div>
             </section>
 
-            <!-- Proyectos Aparte (Gamedev) -->
-            <section class="section">
+            <!-- Proyectos Game Development -->
+            <section id="gamedev" class="section">
                 <h2 class="section-title">Game Development & Otros</h2>
                 <div class="grid">
                     <a href="pokemon.html" class="project-card">
                         <div class="card-image">
-                            <img src="./assets/images/PokemonGodot_icon.png" alt="Pokemon">
+                            <i class="fas fa-dragon"></i>
                         </div>
                         <div class="card-content">
                             <h3>POKEMON GODOT</h3>
@@ -444,7 +493,7 @@ layout: null
 
                     <a href="friends.html" class="project-card">
                         <div class="card-image">
-                            <img src="./assets/images/MyFriend_icon.png" alt="Friends">
+                            <i class="fas fa-users"></i>
                         </div>
                         <div class="card-content">
                             <h3>MY FRIENDS</h3>
@@ -459,7 +508,7 @@ layout: null
 
                     <a href="kurai.html" class="project-card">
                         <div class="card-image">
-                            <img src="./assets/images/KuraiEko_icon.png" alt="Kurai">
+                            <i class="fas fa-leaf"></i>
                         </div>
                         <div class="card-content">
                             <h3>KURAI EKO</h3>
@@ -475,12 +524,12 @@ layout: null
             </section>
 
             <!-- Investigación Académica -->
-            <section class="section">
+            <section id="research" class="section">
                 <h2 class="section-title">Investigación Académica</h2>
                 <div class="grid">
                     <a href="nanosteel.html" class="project-card">
                         <div class="card-image">
-                            <img src="./assets/images/Nanosteel_icon.png" alt="NanoSteel">
+                            <i class="fas fa-atom"></i>
                         </div>
                         <div class="card-content">
                             <h3>NANOSTEEL</h3>
@@ -495,7 +544,7 @@ layout: null
 
                     <a href="ecoconcreto.html" class="project-card">
                         <div class="card-image">
-                            <img src="./assets/images/Ecoconcreto_icon.png" alt="EcoConcreto">
+                            <i class="fas fa-recycle"></i>
                         </div>
                         <div class="card-content">
                             <h3>ECOCONCRETO</h3>
@@ -511,6 +560,7 @@ layout: null
             </section>
         </main>
 
+        <!-- Footer ANCLADO (sticky) -->
         <footer class="footer">
             <div class="footer-links">
                 <a href="mailto:tu-correo@gmail.com"><i class="fas fa-envelope"></i> tu-correo@gmail.com</a>

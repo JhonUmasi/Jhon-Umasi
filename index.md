@@ -429,7 +429,7 @@ layout: null
                 <div class="grid">
                     <a href="pokemon.html" class="project-card">
                         <div class="card-image">
-                            <img src="./assets/images/Pokemon_icon.png" alt="Pokemon">
+                            <img src="./assets/images/PokemonGodot_icon.png" alt="Pokemon">
                         </div>
                         <div class="card-content">
                             <h3>POKEMON GODOT</h3>
@@ -444,7 +444,7 @@ layout: null
 
                     <a href="friends.html" class="project-card">
                         <div class="card-image">
-                            <img src="./assets/images/Friends_icon.png" alt="Friends">
+                            <img src="./assets/images/MyFriend_icon.png" alt="Friends">
                         </div>
                         <div class="card-content">
                             <h3>MY FRIENDS</h3>
@@ -459,7 +459,7 @@ layout: null
 
                     <a href="kurai.html" class="project-card">
                         <div class="card-image">
-                            <img src="./assets/images/Kurai_icon.png" alt="Kurai">
+                            <img src="./assets/images/KuraiEko_icon.png" alt="Kurai">
                         </div>
                         <div class="card-content">
                             <h3>KURAI EKO</h3>

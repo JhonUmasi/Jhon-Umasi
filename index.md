@@ -26,20 +26,28 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: var(--dark);
             line-height: 1.6;
             min-height: 100vh;
         }
 
-        /* Fondo con overlay profesional - CLARO */
+        /* Ocultar el contenido por defecto de Jekyll */
+        .main-content h1, 
+        .main-content h2, 
+        .main-content p,
+        .main-content a,
+        .main-content .btn {
+            display: none;
+        }
+
+        /* Fondo con overlay profesional - usando tu imagen local */
         .hero-bg {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80') no-repeat center center/cover;
+            background: url('./assets/images/Background.png') no-repeat center center/cover;
             filter: brightness(0.7);
             z-index: -1;
         }
@@ -74,7 +82,7 @@
         }
 
         .nav-container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 0.5rem 2rem;
             display: flex;
@@ -132,7 +140,7 @@
             color: var(--primary);
         }
 
-        /* Hero section */
+        /* Hero section - ANCHO COMPLETO */
         .hero {
             background: rgba(255,255,255,0.2);
             backdrop-filter: blur(5px);
@@ -140,6 +148,7 @@
             text-align: center;
             padding: 4rem 2rem;
             margin-bottom: 2rem;
+            width: 100%;
         }
 
         .hero h2 {
@@ -149,6 +158,9 @@
             letter-spacing: 2px;
             color: white;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .hero h2 strong {
@@ -163,7 +175,7 @@
             opacity: 0.95;
         }
 
-        .btn-cv {
+        .btn-info {
             background: var(--accent);
             color: white;
             border: none;
@@ -181,15 +193,16 @@
             border: none;
         }
 
-        .btn-cv:hover {
+        .btn-info:hover {
             background: #d35400;
             transform: translateY(-2px);
             box-shadow: var(--shadow-hover);
         }
 
-        /* Main content */
+        /* Main content - ANCHO COMPLETO */
         .main-content {
-            max-width: 1200px;
+            width: 100%;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 0 2rem 4rem;
             flex: 1;
@@ -224,7 +237,8 @@
 
         .section {
             margin-bottom: 4rem;
-            scroll-margin-top: 80px; /* Para que al navegar con el índice no quede tapado por el header */
+            scroll-margin-top: 80px;
+            width: 100%;
         }
 
         .section-title {
@@ -243,6 +257,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
+            width: 100%;
         }
 
         .project-card {
@@ -261,7 +276,7 @@
         }
 
         .card-image {
-            height: 160px;
+            height: 180px;
             background: linear-gradient(45deg, var(--primary), var(--primary-dark));
             display: flex;
             align-items: center;
@@ -270,10 +285,11 @@
             overflow: hidden;
         }
 
-        /* ICONOS MÁS GRANDES */
-        .card-image i {
-            font-size: 5rem;
-            color: white;
+        /* IMÁGENES LOCALES */
+        .card-image img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
             filter: drop-shadow(2px 4px 4px rgba(0,0,0,0.2));
         }
 
@@ -328,6 +344,9 @@
             gap: 2rem;
             margin-bottom: 0.5rem;
             flex-wrap: wrap;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .footer-links a {
@@ -345,7 +364,7 @@
         }
 
         .footer-links i {
-            font-size: 1.3rem; /* Iconos del footer un poco más grandes */
+            font-size: 1.3rem;
         }
 
         .copyright {
@@ -375,7 +394,7 @@
             }
 
             .footer {
-                position: relative; /* En móvil, mejor que no sea flotante para no ocupar mucho espacio */
+                position: relative;
             }
         }
     </style>
@@ -407,8 +426,7 @@
         <section class="hero">
             <h2><strong>Estructuras</strong> que inspiran · <strong>Código</strong> que transforma</h2>
             <p>Ingeniero Civil Estructural · Desarrollador de Videojuegos · Investigador</p>
-            <!-- Botón cambiado a "Información Personal" -->
-            <a href="#" class="btn-cv" onclick="alert('Sección de Información Personal (próximamente)'); return false;">
+            <a href="#" class="btn-info" onclick="alert('Sección de Información Personal (próximamente)'); return false;">
                 <i class="fas fa-user"></i> INFORMACIÓN PERSONAL
             </a>
         </section>
@@ -427,7 +445,7 @@
                 <div class="grid">
                     <a href="steel.html" class="project-card">
                         <div class="card-image">
-                            <i class="fas fa-building"></i>
+                            <img src="./assets/images/Steel_icon.png" alt="Steel">
                         </div>
                         <div class="card-content">
                             <h3>STEEL</h3>
@@ -442,7 +460,7 @@
 
                     <a href="concrete.html" class="project-card">
                         <div class="card-image">
-                            <i class="fas fa-archway"></i>
+                            <img src="./assets/images/Concrete_icon.png" alt="Concrete">
                         </div>
                         <div class="card-content">
                             <h3>CONCRETE</h3>
@@ -457,7 +475,7 @@
 
                     <a href="seismic.html" class="project-card">
                         <div class="card-image">
-                            <i class="fas fa-mountain"></i>
+                            <img src="./assets/images/Seismic_icon.png" alt="Seismic">
                         </div>
                         <div class="card-content">
                             <h3>SEISMIC</h3>
@@ -478,7 +496,7 @@
                 <div class="grid">
                     <a href="pokemon.html" class="project-card">
                         <div class="card-image">
-                            <i class="fas fa-dragon"></i>
+                            <img src="./assets/images/PokemonGodot_icon.png" alt="Pokemon">
                         </div>
                         <div class="card-content">
                             <h3>POKEMON GODOT</h3>
@@ -493,7 +511,7 @@
 
                     <a href="friends.html" class="project-card">
                         <div class="card-image">
-                            <i class="fas fa-users"></i>
+                            <img src="./assets/images/MyFriend_icon.png" alt="Friends">
                         </div>
                         <div class="card-content">
                             <h3>MY FRIENDS</h3>
@@ -508,7 +526,7 @@
 
                     <a href="kurai.html" class="project-card">
                         <div class="card-image">
-                            <i class="fas fa-leaf"></i>
+                            <img src="./assets/images/KuraiEko_icon.png" alt="Kurai">
                         </div>
                         <div class="card-content">
                             <h3>KURAI EKO</h3>
@@ -529,7 +547,7 @@
                 <div class="grid">
                     <a href="nanosteel.html" class="project-card">
                         <div class="card-image">
-                            <i class="fas fa-atom"></i>
+                            <img src="./assets/images/Nanosteel_icon.png" alt="NanoSteel">
                         </div>
                         <div class="card-content">
                             <h3>NANOSTEEL</h3>
@@ -544,7 +562,7 @@
 
                     <a href="ecoconcreto.html" class="project-card">
                         <div class="card-image">
-                            <i class="fas fa-recycle"></i>
+                            <img src="./assets/images/Ecoconcreto_icon.png" alt="EcoConcreto">
                         </div>
                         <div class="card-content">
                             <h3>ECOCONCRETO</h3>

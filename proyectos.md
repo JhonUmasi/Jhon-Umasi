@@ -1,20 +1,13 @@
 ---
 layout: default
-title: Mis Proyectos
 ---
+<link rel="stylesheet" href="./assets/css/style.css">
 
-# 🚀 Mis Proyectos y Trabajos
+<nav class="navbar">
+  <a href="./index.html" class="nav-item">INICIO</a>
+  <a href="./proyectos.html" class="nav-item">PROYECTOS</a>
+  <a href="./sobre-mi.html" class="nav-item">SOBRE MÍ</a>
+</nav>
 
-### 1. Nombre del Proyecto Alfa
-![Imagen del Proyecto](./assets/images/proyecto1.png)
-* **Descripción**: Explica qué problema resolviste.
-* **Herramientas**: Excel, SQL, Diseño.
-* **Resultado**: "Logré optimizar el tiempo en un 20%".
-
----
-
-### 2. Nombre del Proyecto Beta
-* **Descripción**: Breve resumen.
-* [Ver archivo del proyecto](./assets/docs/archivo-beta.pdf)
-
-[⬅️ Volver al Inicio](./index.md)
+# Mis Proyectos
+Aquí puedes listar tus trabajos. GitHub convertirá esto en una página web limpia.

@@ -1,6 +1,4 @@
 theme: jekyll-theme-cayman
-title: Mi Perfil de Ingeniería
-description: Portafolio profesional y archivos de proyectos.
-# Esto asegura que GitHub procese bien tus estilos
-sass:
-  style: :compressed
+title: [TU NOMBRE O MARCA]
+description: [UNA FRASE CORTA E IMPACTANTE]
+show_downloads: false 

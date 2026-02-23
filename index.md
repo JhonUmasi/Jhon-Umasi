@@ -6,176 +6,521 @@ layout: null
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portafolio de Ingeniería | Estructuras y Desarrollo</title>
+    <title>Ing. Estructural & Developer | Portafolio Profesional</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         :root {
-            --accent-color: #007acc;
-            --bg-overlay: rgba(0, 0, 0, 0.75);
+            --primary: #0077be;
+            --primary-dark: #005a92;
+            --secondary: #2c3e50;
+            --accent: #e67e22;
+            --light: #ecf0f1;
+            --dark: #1a1a1a;
+            --gray: #7f8c8d;
+            --success: #27ae60;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-hover: 0 10px 25px rgba(0,0,0,0.2);
         }
 
         body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: url('./assets/images/Background.png') no-repeat center center fixed;
-            background-size: cover;
-            color: white;
-            scroll-behavior: smooth; /* Para que al bajar se sienta fluido */
-        }
-
-        /* Capa oscura que permite el scroll */
-        .content-wrapper {
-            background: var(--bg-overlay);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--dark);
+            line-height: 1.6;
             min-height: 100vh;
-            padding-bottom: 100px; /* Espacio para el footer */
         }
 
-        header {
-            text-align: center;
-            padding: 60px 20px;
+        /* Fondo con overlay profesional */
+        .hero-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('./assets/images/Background.png') no-repeat center center/cover;
+            filter: brightness(0.3);
+            z-index: -1;
         }
 
-        h1 { font-size: 2.5rem; letter-spacing: 3px; border-bottom: 2px solid var(--accent-color); display: inline-block; padding-bottom: 10px; }
+        .hero-bg::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(0,119,190,0.4), rgba(0,0,0,0.7));
+        }
 
-        /* SECCIONES */
-        .section-container {
-            max-width: 1100px;
+        .wrapper {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header profesional */
+        .header {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 0.5rem 0;
+        }
+
+        .nav-container {
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding: 0.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .logo-text h1 {
+            font-size: 1.2rem;
+            color: var(--secondary);
+            margin: 0;
+        }
+
+        .logo-text p {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin: 0;
+        }
+
+        .contact-header {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .contact-header a {
+            color: var(--secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            transition: color 0.3s;
+        }
+
+        .contact-header a:hover {
+            color: var(--primary);
+        }
+
+        /* Hero section */
+        .hero {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(5px);
+            color: white;
+            text-align: center;
+            padding: 4rem 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        .hero h2 strong {
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
+        }
+
+        .btn-cv {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 1rem 2.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-cv:hover {
+            background: #d35400;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* Main content */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem 4rem;
+            flex: 1;
+        }
+
+        .section {
+            margin-bottom: 4rem;
         }
 
         .section-title {
-            font-size: 1.8rem;
-            color: var(--accent-color);
-            border-left: 5px solid var(--accent-color);
-            padding-left: 15px;
-            margin-bottom: 30px;
+            font-size: 2rem;
+            color: white;
+            margin-bottom: 2rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--accent);
+            display: inline-block;
             text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
-        /* GRID DE BOTONES */
-        .menu-grid {
+        .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 30px;
-            margin-bottom: 60px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
         }
 
-        .menu-item {
-            text-decoration: none;
-            color: white;
-            text-align: center;
-            transition: transform 0.3s ease;
-        }
-
-        .menu-item:hover { transform: translateY(-10px); }
-
-        .circle-container {
-            width: 130px;
-            height: 130px;
-            border-radius: 50%;
-            border: 3px solid var(--accent-color);
-            margin: 0 auto 15px;
-            overflow: hidden;
+        .project-card {
             background: white;
-            box-shadow: 0 0 15px rgba(0,122,204,0.3);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+            text-decoration: none;
+            color: var(--dark);
         }
 
-        .circle-container img {
-            width: 100%;
-            height: 100%;
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .card-image {
+            height: 160px;
+            background: linear-gradient(45deg, var(--primary), var(--primary-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-image img {
+            width: 80px;
+            height: 80px;
             object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid white;
+            background: white;
         }
 
-        .label { font-weight: bold; font-size: 0.9rem; letter-spacing: 1px; }
+        .card-content {
+            padding: 1.5rem;
+        }
 
-        /* FOOTER DE CONTACTO */
-        footer {
-            background: #111;
-            padding: 20px;
+        .card-content h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--secondary);
+        }
+
+        .card-content p {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            background: var(--light);
+            color: var(--secondary);
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 2rem;
             text-align: center;
-            border-top: 2px solid var(--accent-color);
-            width: 100%;
+            margin-top: auto;
         }
 
-        .contact-links a {
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
             color: white;
             text-decoration: none;
-            margin: 0 15px;
-            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s;
         }
 
-        .contact-links a:hover { color: var(--accent-color); }
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        .copyright {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            
+            .contact-header {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+    <div class="hero-bg"></div>
+    
+    <div class="wrapper">
+        <header class="header">
+            <div class="nav-container">
+                <div class="logo">
+                    <div class="logo-img">IE</div>
+                    <div class="logo-text">
+                        <h1>Ingeniero Estructural</h1>
+                        <p>+ Developer</p>
+                    </div>
+                </div>
+                <div class="contact-header">
+                    <a href="mailto:tu-correo@gmail.com"><i class="fas fa-envelope"></i> Email</a>
+                    <a href="https://linkedin.com/in/tu-perfil" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                    <a href="https://wa.me/tu-numero" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                    <a href="https://github.com/tu-usuario" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+                </div>
+            </div>
+        </header>
 
-<div class="content-wrapper">
-    <header>
-        <h1>INGENIERÍA ESTRUCTURAL & DEV</h1>
-        <p>Portafolio Profesional de [Tu Nombre]</p>
-        <a href="./assets/docs/mi-cv.pdf" style="color:var(--accent-color); font-weight:bold; text-decoration:none; border:1px solid var(--accent-color); padding:10px 20px; border-radius:5px;">DESCARGAR CV COMPLETO</a>
-    </header>
+        <section class="hero">
+            <h2><strong>Estructuras</strong> que inspiran · <strong>Código</strong> que transforma</h2>
+            <p>Ingeniero Civil Estructural · Desarrollador de Videojuegos · Investigador</p>
+            <a href="./assets/docs/mi-cv.pdf" class="btn-cv">
+                <i class="fas fa-download"></i> DESCARGAR CV COMPLETO
+            </a>
+        </section>
 
-    <section class="section-container">
-        <h2 class="section-title">Proyectos de Ing. Civil</h2>
-        <div class="menu-grid">
-            <a href="steel.html" class="menu-item">
-                <div class="circle-container"><img src="./assets/images/Steel_icon.png" alt="Steel"></div>
-                <div class="label">STEEL</div>
-            </a>
-            <a href="concrete.html" class="menu-item">
-                <div class="circle-container"><img src="./assets/images/Concrete_icon.png" alt="Concrete"></div>
-                <div class="label">CONCRETE</div>
-            </a>
-            <a href="seismic.html" class="menu-item">
-                <div class="circle-container"><img src="./assets/images/Seismic_icon.png" alt="Seismic"></div>
-                <div class="label">SEISMIC</div>
-            </a>
-        </div>
-    </section>
+        <main class="main-content">
+            <!-- Proyectos Ingeniería Civil -->
+            <section class="section">
+                <h2 class="section-title">Proyectos de Ingeniería Civil</h2>
+                <div class="grid">
+                    <a href="steel.html" class="project-card">
+                        <div class="card-image">
+                            <img src="./assets/images/Steel_icon.png" alt="Steel">
+                        </div>
+                        <div class="card-content">
+                            <h3>STEEL</h3>
+                            <p>Diseño y análisis de estructuras metálicas complejas</p>
+                            <div class="tags">
+                                <span class="tag">AISC</span>
+                                <span class="tag">FEA</span>
+                                <span class="tag">3D Modeling</span>
+                            </div>
+                        </div>
+                    </a>
 
-    <section class="section-container">
-        <h2 class="section-title">Proyectos Aparte (Gamedev & Otros)</h2>
-        <div class="menu-grid">
-            <a href="pokemon.html" class="menu-item">
-                <div class="circle-container"><img src="./assets/images/Pokemon_icon.png" alt="Pokemon"></div>
-                <div class="label">POKEMON GODOT</div>
-            </a>
-            <a href="friends.html" class="menu-item">
-                <div class="circle-container"><img src="./assets/images/Friends_icon.png" alt="Friends"></div>
-                <div class="label">MY FRIENDS</div>
-            </a>
-            <a href="kurai.html" class="menu-item">
-                <div class="circle-container"><img src="./assets/images/Kurai_icon.png" alt="Kurai"></div>
-                <div class="label">KURAI EKO</div>
-            </a>
-        </div>
-    </section>
+                    <a href="concrete.html" class="project-card">
+                        <div class="card-image">
+                            <img src="./assets/images/Concrete_icon.png" alt="Concrete">
+                        </div>
+                        <div class="card-content">
+                            <h3>CONCRETE</h3>
+                            <p>Estructuras de hormigón armado y pretensado</p>
+                            <div class="tags">
+                                <span class="tag">ACI 318</span>
+                                <span class="tag">ETABS</span>
+                                <span class="tag">SAFE</span>
+                            </div>
+                        </div>
+                    </a>
 
-    <section class="section-container">
-        <h2 class="section-title">Investigación Académica</h2>
-        <div class="menu-grid">
-            <a href="nanosteel.html" class="menu-item">
-                <div class="circle-container"><img src="./assets/images/Nanosteel_icon.png" alt="NanoSteel"></div>
-                <div class="label">NANOSTEEL</div>
-            </a>
-            <a href="ecoconcreto.html" class="menu-item">
-                <div class="circle-container"><img src="./assets/images/Ecoconcreto_icon.png" alt="EcoConcreto"></div>
-                <div class="label">ECOCONCRETO</div>
-            </a>
-        </div>
-    </section>
+                    <a href="seismic.html" class="project-card">
+                        <div class="card-image">
+                            <img src="./assets/images/Seismic_icon.png" alt="Seismic">
+                        </div>
+                        <div class="card-content">
+                            <h3>SEISMIC</h3>
+                            <p>Análisis sísmico avanzado y diseño por desempeño</p>
+                            <div class="tags">
+                                <span class="tag">Pushover</span>
+                                <span class="tag">Time History</span>
+                                <span class="tag">FEMA P-58</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </section>
 
-    <footer>
-        <div class="contact-links">
-            <a href="mailto:tu-correo@gmail.com">📧 tu-correo@gmail.com</a>
-            <a href="https://linkedin.com/in/tu-perfil" target="_blank">🔗 LinkedIn</a>
-            <a href="https://wa.me/tu-numero" target="_blank">📱 WhatsApp</a>
-        </div>
-        <p style="font-size: 0.7rem; margin-top: 10px; opacity: 0.5;">© 2026 | Diseñado para Ingeniería</p>
-    </footer>
-</div>
+            <!-- Proyectos Aparte (Gamedev) -->
+            <section class="section">
+                <h2 class="section-title">Game Development & Otros</h2>
+                <div class="grid">
+                    <a href="pokemon.html" class="project-card">
+                        <div class="card-image">
+                            <img src="./assets/images/Pokemon_icon.png" alt="Pokemon">
+                        </div>
+                        <div class="card-content">
+                            <h3>POKEMON GODOT</h3>
+                            <p>Fan game desarrollado en Godot Engine con mecánicas clásicas</p>
+                            <div class="tags">
+                                <span class="tag">Godot</span>
+                                <span class="tag">GDScript</span>
+                                <span class="tag">RPG</span>
+                            </div>
+                        </div>
+                    </a>
 
+                    <a href="friends.html" class="project-card">
+                        <div class="card-image">
+                            <img src="./assets/images/Friends_icon.png" alt="Friends">
+                        </div>
+                        <div class="card-content">
+                            <h3>MY FRIENDS</h3>
+                            <p>Red social temática para comunidades de ingeniería</p>
+                            <div class="tags">
+                                <span class="tag">React</span>
+                                <span class="tag">Node.js</span>
+                                <span class="tag">MongoDB</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="kurai.html" class="project-card">
+                        <div class="card-image">
+                            <img src="./assets/images/Kurai_icon.png" alt="Kurai">
+                        </div>
+                        <div class="card-content">
+                            <h3>KURAI EKO</h3>
+                            <p>Videojuego indie de plataformas con temática ambiental</p>
+                            <div class="tags">
+                                <span class="tag">Unity</span>
+                                <span class="tag">C#</span>
+                                <span class="tag">2D Art</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Investigación Académica -->
+            <section class="section">
+                <h2 class="section-title">Investigación Académica</h2>
+                <div class="grid">
+                    <a href="nanosteel.html" class="project-card">
+                        <div class="card-image">
+                            <img src="./assets/images/Nanosteel_icon.png" alt="NanoSteel">
+                        </div>
+                        <div class="card-content">
+                            <h3>NANOSTEEL</h3>
+                            <p>Materiales nanoestructurados para aplicaciones estructurales</p>
+                            <div class="tags">
+                                <span class="tag">Nanotecnología</span>
+                                <span class="tag">Metalurgia</span>
+                                <span class="tag">Publicación Q1</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="ecoconcreto.html" class="project-card">
+                        <div class="card-image">
+                            <img src="./assets/images/Ecoconcreto_icon.png" alt="EcoConcreto">
+                        </div>
+                        <div class="card-content">
+                            <h3>ECOCONCRETO</h3>
+                            <p>Hormigones ecológicos con materiales reciclados</p>
+                            <div class="tags">
+                                <span class="tag">Sostenibilidad</span>
+                                <span class="tag">Materiales</span>
+                                <span class="tag">Durabilidad</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-links">
+                <a href="mailto:tu-correo@gmail.com"><i class="fas fa-envelope"></i> tu-correo@gmail.com</a>
+                <a href="https://linkedin.com/in/tu-perfil" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                <a href="https://wa.me/tu-numero" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                <a href="https://github.com/tu-usuario" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+                <a href="https://t.me/tu-usuario" target="_blank"><i class="fab fa-telegram"></i> Telegram</a>
+            </div>
+            <p class="copyright">© 2026 Ingeniero Estructural & Developer · Todos los derechos reservados</p>
+        </footer>
+    </div>
 </body>
 </html>

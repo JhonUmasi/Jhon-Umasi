@@ -1,3 +1,6 @@
 theme: jekyll-theme-cayman
-title: Mi Portafolio Profesional
-description: Bienvenido a mi espacio de proyectos y trayectoria.
+title: Mi Perfil de Ingeniería
+description: Portafolio profesional y archivos de proyectos.
+# Esto asegura que GitHub procese bien tus estilos
+sass:
+  style: :compressed

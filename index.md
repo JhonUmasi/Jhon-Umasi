@@ -51,17 +51,17 @@ layout: default
 <div class="menu-container">
 
   <a href="./proyectos.html" class="menu-item">
-    <img src="./assets/images/steel_icon.png" alt="Proyectos">
+    <img src="./assets/images/Steel_icon.png" alt="Proyectos">
     <span>PROYECTOS</span>
   </a>
 
   <a href="./trabajos.html" class="menu-item">
-    <img src="./assets/images/concrete_icon.png" alt="Trabajos">
+    <img src="./assets/images/Concrete_icon.png" alt="Trabajos">
     <span>EXPERIENCIA</span>
   </a>
 
   <a href="./assets/docs/mi-cv.pdf" class="menu-item">
-    <img src="./assets/images/cv_icon.png" alt="Curriculum">
+    <img src="./assets/images/Cv_icon.png" alt="Curriculum">
     <span>MI CV</span>
   </a>
 

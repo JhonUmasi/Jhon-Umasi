@@ -3,592 +3,532 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ing. Estructural & Developer | Portafolio Profesional</title>
+    <title>Portafolio de Ingeniería | Estructuras y Desarrollo</title>
+    <!-- Configuración global -->
+    <script src="config.js"></script>
     <style>
+        :root {
+            --accent-color: #007acc;
+            --accent-hover: #005f9e;
+            --bg-overlay: rgba(0, 0, 0, 0.65);
+            --text-light: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.8);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        :root {
-            --primary: #0077be;
-            --primary-dark: #005a92;
-            --secondary: #2c3e50;
-            --accent: #e67e22;
-            --light: #ecf0f1;
-            --dark: #1a1a1a;
-            --gray: #7f8c8d;
-            --success: #27ae60;
-            --shadow: 0 4px 6px rgba(0,0,0,0.1);
-            --shadow-hover: 0 10px 25px rgba(0,0,0,0.2);
-        }
-
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            color: var(--dark);
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: url('./assets/images/Background.png') no-repeat center center fixed;
+            background-size: cover;
+            color: var(--text-light);
             line-height: 1.6;
-            min-height: 100vh;
+            scroll-behavior: smooth;
         }
 
-        /* Ocultar el contenido por defecto de Jekyll */
-        .main-content h1, 
-        .main-content h2, 
-        .main-content p,
-        .main-content a,
-        .main-content .btn {
-            display: none;
-        }
-
-        /* Fondo con overlay profesional - usando tu imagen local */
-        .hero-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('./assets/images/Background.png') no-repeat center center/cover;
-            filter: brightness(0.7);
-            z-index: -1;
-        }
-
-        .hero-bg::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, rgba(0,119,190,0.2), rgba(255,255,255,0.3));
-        }
-
-        .wrapper {
-            position: relative;
-            z-index: 1;
+        .content-wrapper {
+            background: var(--bg-overlay);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            backdrop-filter: blur(3px);
         }
 
-        /* Header profesional - STICKY */
-        .header {
-            background: rgba(255,255,255,0.95);
+        .top-bar {
+            background: rgba(0, 0, 0, 0.2);
             backdrop-filter: blur(10px);
-            box-shadow: var(--shadow);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.8rem 0;
             position: sticky;
             top: 0;
             z-index: 100;
-            padding: 0.5rem 0;
         }
 
-        .nav-container {
-            max-width: 1400px;
+        .top-bar-content {
+            max-width: 1100px;
             margin: 0 auto;
-            padding: 0.5rem 2rem;
+            padding: 0 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
+            flex-wrap: wrap;
             gap: 1rem;
         }
 
-        .logo-img {
-            width: 40px;
-            height: 40px;
-            background: var(--primary);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-
-        .logo-text h1 {
-            font-size: 1.2rem;
-            color: var(--secondary);
-            margin: 0;
-        }
-
-        .logo-text p {
-            font-size: 0.8rem;
-            color: var(--gray);
-            margin: 0;
-        }
-
-        .contact-header {
+        .quick-contact {
             display: flex;
             gap: 1.5rem;
+            flex-wrap: wrap;
         }
 
-        .contact-header a {
-            color: var(--secondary);
+        .quick-contact a {
+            color: var(--text-light);
             text-decoration: none;
             font-size: 0.9rem;
             display: flex;
             align-items: center;
-            gap: 0.3rem;
+            gap: 0.5rem;
             transition: color 0.3s;
+            opacity: 0.9;
         }
 
-        .contact-header a:hover {
-            color: var(--primary);
+        .quick-contact a:hover {
+            color: var(--accent-color);
+            opacity: 1;
         }
 
-        /* Hero section - ANCHO COMPLETO */
-        .hero {
-            background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(5px);
+        .badge {
+            background: var(--accent-color);
             color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        header {
             text-align: center;
-            padding: 4rem 2rem;
-            margin-bottom: 2rem;
-            width: 100%;
+            padding: 40px 20px 30px;
         }
 
-        .hero h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
+        h1 { 
+            font-size: 2.5rem; 
+            letter-spacing: 3px; 
+            border-bottom: 2px solid var(--accent-color); 
+            display: inline-block; 
+            padding-bottom: 10px;
+            margin-bottom: 15px;
             font-weight: 300;
-            letter-spacing: 2px;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            max-width: 1200px;
-            margin-left: auto;
-            margin-right: auto;
         }
 
-        .hero h2 strong {
-            font-weight: 700;
-            color: var(--accent);
-        }
-
-        .hero p {
+        .subtitle {
+            color: var(--text-muted);
             font-size: 1.1rem;
-            max-width: 700px;
-            margin: 0 auto 2rem;
-            opacity: 0.95;
+            margin-bottom: 25px;
         }
 
         .btn-info {
-            background: var(--accent);
-            color: white;
-            border: none;
-            padding: 1rem 2.5rem;
-            font-size: 1rem;
-            font-weight: 600;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
             display: inline-block;
+            background: transparent;
+            color: var(--accent-color);
+            font-weight: 600;
+            text-decoration: none;
+            border: 2px solid var(--accent-color);
+            padding: 12px 30px;
+            border-radius: 30px;
+            transition: all 0.3s;
             text-transform: uppercase;
             letter-spacing: 1px;
-            box-shadow: var(--shadow);
-            border: none;
+            font-size: 0.9rem;
         }
 
         .btn-info:hover {
-            background: #d35400;
+            background: var(--accent-color);
+            color: white;
             transform: translateY(-2px);
-            box-shadow: var(--shadow-hover);
+            box-shadow: 0 5px 15px rgba(0,122,204,0.3);
         }
 
-        /* Main content - ANCHO COMPLETO */
-        .main-content {
-            width: 100%;
-            max-width: 1400px;
+        .index-nav {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5px);
+            padding: 1rem 0;
+            margin: 20px 0;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .index-container {
+            max-width: 1100px;
             margin: 0 auto;
-            padding: 0 2rem 4rem;
-            flex: 1;
-        }
-
-        /* INDICE DE NAVEGACIÓN */
-        .section-index {
+            padding: 0 20px;
             display: flex;
             justify-content: center;
-            gap: 1rem;
-            margin: 2rem 0 3rem;
             flex-wrap: wrap;
+            gap: 2rem;
         }
 
-        .index-link {
-            background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(5px);
-            color: white;
+        .index-item {
+            color: var(--text-light);
             text-decoration: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 50px;
-            font-weight: 600;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
             transition: all 0.3s;
-            border: 1px solid rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid transparent;
         }
 
-        .index-link:hover {
-            background: var(--accent);
-            border-color: var(--accent);
+        .index-item:hover {
+            background: rgba(0, 122, 204, 0.2);
+            border-color: var(--accent-color);
             transform: translateY(-2px);
         }
 
-        .section {
-            margin-bottom: 4rem;
-            scroll-margin-top: 80px;
+        .index-item i {
+            color: var(--accent-color);
+            font-size: 0.9rem;
+        }
+
+        .index-indicator {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        .index-indicator i {
+            color: var(--accent-color);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
+
+        .section-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px;
             width: 100%;
+            scroll-margin-top: 80px;
         }
 
         .section-title {
-            font-size: 2rem;
-            color: white;
-            margin-bottom: 2rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 3px solid var(--accent);
-            display: inline-block;
+            font-size: 1.8rem;
+            color: var(--accent-color);
+            border-left: 5px solid var(--accent-color);
+            padding-left: 15px;
+            margin-bottom: 30px;
             text-transform: uppercase;
             letter-spacing: 2px;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            width: 100%;
-        }
-
-        .project-card {
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            transition: all 0.3s;
-            text-decoration: none;
-            color: var(--dark);
-        }
-
-        .project-card:hover {
-            transform: translateY(-10px);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .card-image {
-            height: 180px;
-            background: linear-gradient(45deg, var(--primary), var(--primary-dark));
             display: flex;
             align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
+            gap: 1rem;
         }
 
-        /* IMÁGENES LOCALES */
-        .card-image img {
-            width: 100px;
-            height: 100px;
-            object-fit: contain;
-            filter: drop-shadow(2px 4px 4px rgba(0,0,0,0.2));
+        .section-title i {
+            font-size: 1.5rem;
+            opacity: 0.8;
         }
 
-        .card-content {
-            padding: 1.5rem;
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 30px;
+            margin-bottom: 20px;
         }
 
-        .card-content h3 {
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-            color: var(--secondary);
-        }
-
-        .card-content p {
-            color: var(--gray);
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-        }
-
-        .tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .tag {
-            background: var(--light);
-            color: var(--secondary);
-            padding: 0.2rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: 600;
-        }
-
-        /* Footer FLOTANTE (ANCLADO) */
-        .footer {
-            background: var(--dark);
+        .menu-item {
+            text-decoration: none;
             color: white;
-            padding: 1rem 2rem;
             text-align: center;
-            position: sticky;
-            bottom: 0;
-            width: 100%;
-            z-index: 90;
-            box-shadow: 0 -5px 15px rgba(0,0,0,0.2);
-            border-top: 2px solid var(--accent);
+            transition: all 0.3s ease;
+            display: block;
         }
 
-        .footer-links {
+        .menu-item:hover { 
+            transform: translateY(-10px); 
+        }
+
+        .menu-item:hover .circle-container {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 25px rgba(0,122,204,0.5);
+        }
+
+        .circle-container {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            margin: 0 auto 15px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 15px rgba(0,122,204,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .circle-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .label { 
+            font-weight: 600; 
+            font-size: 0.95rem; 
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text-light);
+        }
+
+        footer {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 30px 20px;
+            text-align: center;
+            border-top: 2px solid var(--accent-color);
+            margin-top: auto;
+        }
+
+        .contact-links {
             display: flex;
             justify-content: center;
             gap: 2rem;
-            margin-bottom: 0.5rem;
             flex-wrap: wrap;
-            max-width: 1400px;
-            margin-left: auto;
-            margin-right: auto;
+            margin-bottom: 15px;
         }
 
-        .footer-links a {
+        .contact-links a {
             color: white;
             text-decoration: none;
+            font-size: 1rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
             transition: color 0.3s;
-            font-size: 1rem;
+            opacity: 0.9;
         }
 
-        .footer-links a:hover {
-            color: var(--accent);
-        }
-
-        .footer-links i {
-            font-size: 1.3rem;
+        .contact-links a:hover { 
+            color: var(--accent-color); 
+            opacity: 1;
         }
 
         .copyright {
             font-size: 0.8rem;
-            opacity: 0.7;
+            opacity: 0.5;
         }
 
-        /* Responsive */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--accent-color);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            z-index: 99;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            background: var(--accent-hover);
+        }
+
         @media (max-width: 768px) {
-            .nav-container {
+            .top-bar-content {
                 flex-direction: column;
-                gap: 1rem;
-                padding: 1rem;
+                text-align: center;
             }
             
-            .contact-header {
-                flex-wrap: wrap;
+            .quick-contact {
                 justify-content: center;
             }
             
-            .hero h2 {
+            h1 {
                 font-size: 2rem;
             }
             
-            .grid {
-                grid-template-columns: 1fr;
+            .menu-grid {
+                gap: 20px;
+            }
+            
+            .circle-container {
+                width: 110px;
+                height: 110px;
+            }
+            
+            .contact-links {
+                gap: 1rem;
+                flex-direction: column;
             }
 
-            .footer {
-                position: relative;
+            .index-container {
+                gap: 1rem;
+            }
+
+            .index-item {
+                font-size: 0.9rem;
+                padding: 0.3rem 0.8rem;
+            }
+
+            .back-to-top {
+                bottom: 20px;
+                right: 20px;
+                width: 40px;
+                height: 40px;
             }
         }
     </style>
-    <!-- Font Awesome para iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <div class="hero-bg"></div>
-    
-    <div class="wrapper">
-        <header class="header">
-            <div class="nav-container">
-                <div class="logo">
-                    <div class="logo-img">IE</div>
-                    <div class="logo-text">
-                        <h1>Ingeniero Estructural</h1>
-                        <p>+ Developer</p>
-                    </div>
-                </div>
-                <div class="contact-header">
-                    <a href="mailto:tu-correo@gmail.com"><i class="fas fa-envelope"></i> Email</a>
-                    <a href="https://linkedin.com/in/tu-perfil" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
-                    <a href="https://wa.me/tu-numero" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-                    <a href="https://github.com/tu-usuario" target="_blank"><i class="fab fa-github"></i> GitHub</a>
-                </div>
-            </div>
-        </header>
 
-        <section class="hero">
-            <h2><strong>Estructuras</strong> que inspiran · <strong>Código</strong> que transforma</h2>
-            <p>Ingeniero Civil Estructural · Desarrollador de Videojuegos · Investigador</p>
-            <a href="#" class="btn-info" onclick="alert('Sección de Información Personal (próximamente)'); return false;">
-                <i class="fas fa-user"></i> INFORMACIÓN PERSONAL
-            </a>
+<div class="content-wrapper">
+    <div class="top-bar">
+        <div class="top-bar-content">
+            <div class="quick-contact" id="quick-contact">
+                <!-- Se llenará con JavaScript -->
+            </div>
+            <span class="badge">Disponible para proyectos</span>
+        </div>
+    </div>
+
+    <header>
+        <h1>INGENIERÍA ESTRUCTURAL & DEV</h1>
+        <div class="subtitle">Portafolio Profesional de <span id="nombre-header"></span></div>
+        <a href="info-personal.html" class="btn-info">
+            <i class="fas fa-user"></i> INFORMACIÓN PERSONAL
+        </a>
+    </header>
+
+    <nav class="index-nav">
+        <div class="index-container">
+            <a href="#civil" class="index-item"><i class="fas fa-hard-hat"></i> Ing. Civil</a>
+            <a href="#investigacion" class="index-item"><i class="fas fa-flask"></i> Investigación</a>
+            <a href="#gamedev" class="index-item"><i class="fas fa-gamepad"></i> Gamedev</a>
+            <a href="#contacto" class="index-item"><i class="fas fa-address-card"></i> Contacto</a>
+        </div>
+        <div class="index-indicator">
+            <i class="fas fa-chevron-down"></i> Navega por las secciones <i class="fas fa-chevron-down"></i>
+        </div>
+    </nav>
+
+    <main>
+        <section id="civil" class="section-container">
+            <h2 class="section-title"><i class="fas fa-hard-hat"></i> Proyectos de Ing. Civil</h2>
+            <div class="menu-grid">
+                <a href="steel.html" class="menu-item">
+                    <div class="circle-container"><img src="./assets/images/Steel_icon.png" alt="Steel"></div>
+                    <div class="label">STEEL</div>
+                </a>
+                <a href="concrete.html" class="menu-item">
+                    <div class="circle-container"><img src="./assets/images/Concrete_icon.png" alt="Concrete"></div>
+                    <div class="label">CONCRETE</div>
+                </a>
+                <a href="seismic.html" class="menu-item">
+                    <div class="circle-container"><img src="./assets/images/Seismic_icon.png" alt="Seismic"></div>
+                    <div class="label">SEISMIC</div>
+                </a>
+                <a href="Automatizacion.html" class="menu-item">
+                    <div class="circle-container"><img src="./assets/images/Seismic_icon.png" alt="Automatizacion"></div>
+                    <div class="label">AUTOMATIZACION</div>
+                </a>
+                <a href="Puente.html" class="menu-item">
+                    <div class="circle-container"><img src="./assets/images/Seismic_icon.png" alt="Puente"></div>
+                    <div class="label">PUENTES</div>
+                </a>
+            </div>
         </section>
 
-        <main class="main-content">
-            <!-- ÍNDICE DE NAVEGACIÓN -->
-            <div class="section-index">
-                <a href="#civil" class="index-link"><i class="fas fa-hard-hat"></i> Ing. Civil</a>
-                <a href="#gamedev" class="index-link"><i class="fas fa-gamepad"></i> Game Dev</a>
-                <a href="#research" class="index-link"><i class="fas fa-flask"></i> Investigación</a>
+        <section id="investigacion" class="section-container">
+            <h2 class="section-title"><i class="fas fa-flask"></i> Investigación Académica</h2>
+            <div class="menu-grid">
+                <a href="nanosteel.html" class="menu-item">
+                    <div class="circle-container"><img src="./assets/images/Nanosteel_icon.png" alt="NanoSteel"></div>
+                    <div class="label">NANOSTEEL</div>
+                </a>
+                <a href="ecoconcreto.html" class="menu-item">
+                    <div class="circle-container"><img src="./assets/images/Ecoconcreto_icon.png" alt="EcoConcreto"></div>
+                    <div class="label">ECOCONCRETO</div>
+                </a>
             </div>
+        </section>
 
-            <!-- Proyectos Ingeniería Civil -->
-            <section id="civil" class="section">
-                <h2 class="section-title">Proyectos de Ingeniería Civil</h2>
-                <div class="grid">
-                    <a href="steel.html" class="project-card">
-                        <div class="card-image">
-                            <img src="./assets/images/Steel_icon.png" alt="Steel">
-                        </div>
-                        <div class="card-content">
-                            <h3>STEEL</h3>
-                            <p>Diseño y análisis de estructuras metálicas complejas</p>
-                            <div class="tags">
-                                <span class="tag">AISC</span>
-                                <span class="tag">FEA</span>
-                                <span class="tag">3D Modeling</span>
-                            </div>
-                        </div>
-                    </a>
-
-                    <a href="concrete.html" class="project-card">
-                        <div class="card-image">
-                            <img src="./assets/images/Concrete_icon.png" alt="Concrete">
-                        </div>
-                        <div class="card-content">
-                            <h3>CONCRETE</h3>
-                            <p>Estructuras de hormigón armado y pretensado</p>
-                            <div class="tags">
-                                <span class="tag">ACI 318</span>
-                                <span class="tag">ETABS</span>
-                                <span class="tag">SAFE</span>
-                            </div>
-                        </div>
-                    </a>
-
-                    <a href="seismic.html" class="project-card">
-                        <div class="card-image">
-                            <img src="./assets/images/Seismic_icon.png" alt="Seismic">
-                        </div>
-                        <div class="card-content">
-                            <h3>SEISMIC</h3>
-                            <p>Análisis sísmico avanzado y diseño por desempeño</p>
-                            <div class="tags">
-                                <span class="tag">Pushover</span>
-                                <span class="tag">Time History</span>
-                                <span class="tag">FEMA P-58</span>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </section>
-
-            <!-- Proyectos Game Development -->
-            <section id="gamedev" class="section">
-                <h2 class="section-title">Game Development & Otros</h2>
-                <div class="grid">
-                    <a href="pokemon.html" class="project-card">
-                        <div class="card-image">
-                            <img src="./assets/images/PokemonGodot_icon.png" alt="Pokemon">
-                        </div>
-                        <div class="card-content">
-                            <h3>POKEMON GODOT</h3>
-                            <p>Fan game desarrollado en Godot Engine con mecánicas clásicas</p>
-                            <div class="tags">
-                                <span class="tag">Godot</span>
-                                <span class="tag">GDScript</span>
-                                <span class="tag">RPG</span>
-                            </div>
-                        </div>
-                    </a>
-
-                    <a href="friends.html" class="project-card">
-                        <div class="card-image">
-                            <img src="./assets/images/MyFriend_icon.png" alt="Friends">
-                        </div>
-                        <div class="card-content">
-                            <h3>MY FRIENDS</h3>
-                            <p>Red social temática para comunidades de ingeniería</p>
-                            <div class="tags">
-                                <span class="tag">React</span>
-                                <span class="tag">Node.js</span>
-                                <span class="tag">MongoDB</span>
-                            </div>
-                        </div>
-                    </a>
-
-                    <a href="kurai.html" class="project-card">
-                        <div class="card-image">
-                            <img src="./assets/images/KuraiEko_icon.png" alt="Kurai">
-                        </div>
-                        <div class="card-content">
-                            <h3>KURAI EKO</h3>
-                            <p>Videojuego indie de plataformas con temática ambiental</p>
-                            <div class="tags">
-                                <span class="tag">Unity</span>
-                                <span class="tag">C#</span>
-                                <span class="tag">2D Art</span>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </section>
-
-            <!-- Investigación Académica -->
-            <section id="research" class="section">
-                <h2 class="section-title">Investigación Académica</h2>
-                <div class="grid">
-                    <a href="nanosteel.html" class="project-card">
-                        <div class="card-image">
-                            <img src="./assets/images/Nanosteel_icon.png" alt="NanoSteel">
-                        </div>
-                        <div class="card-content">
-                            <h3>NANOSTEEL</h3>
-                            <p>Materiales nanoestructurados para aplicaciones estructurales</p>
-                            <div class="tags">
-                                <span class="tag">Nanotecnología</span>
-                                <span class="tag">Metalurgia</span>
-                                <span class="tag">Publicación Q1</span>
-                            </div>
-                        </div>
-                    </a>
-
-                    <a href="ecoconcreto.html" class="project-card">
-                        <div class="card-image">
-                            <img src="./assets/images/Ecoconcreto_icon.png" alt="EcoConcreto">
-                        </div>
-                        <div class="card-content">
-                            <h3>ECOCONCRETO</h3>
-                            <p>Hormigones ecológicos con materiales reciclados</p>
-                            <div class="tags">
-                                <span class="tag">Sostenibilidad</span>
-                                <span class="tag">Materiales</span>
-                                <span class="tag">Durabilidad</span>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </section>
-        </main>
-
-        <!-- Footer ANCLADO (sticky) -->
-        <footer class="footer">
-            <div class="footer-links">
-                <a href="mailto:tu-correo@gmail.com"><i class="fas fa-envelope"></i> tu-correo@gmail.com</a>
-                <a href="https://linkedin.com/in/tu-perfil" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
-                <a href="https://wa.me/tu-numero" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-                <a href="https://github.com/tu-usuario" target="_blank"><i class="fab fa-github"></i> GitHub</a>
-                <a href="https://t.me/tu-usuario" target="_blank"><i class="fab fa-telegram"></i> Telegram</a>
+        <section id="gamedev" class="section-container">
+            <h2 class="section-title"><i class="fas fa-gamepad"></i> Proyectos Aparte (Gamedev & Otros)</h2>
+            <div class="menu-grid">
+                <a href="pokemon.html" class="menu-item">
+                    <div class="circle-container"><img src="./assets/images/PokemonGodot_icon.png" alt="Pokemon"></div>
+                    <div class="label">POKEMON GODOT</div>
+                </a>
+                <a href="friends.html" class="menu-item">
+                    <div class="circle-container"><img src="./assets/images/MyFriend_icon.png" alt="Friends"></div>
+                    <div class="label">MY FRIENDS</div>
+                </a>
+                <a href="kurai.html" class="menu-item">
+                    <div class="circle-container"><img src="./assets/images/KuraiEko_icon.png" alt="Kurai"></div>
+                    <div class="label">KURAI EKO</div>
+                </a>
             </div>
-            <p class="copyright">© 2026 Ingeniero Estructural & Developer · Todos los derechos reservados</p>
-        </footer>
-    </div>
+        </section>
+    </main>
+
+    <footer id="contacto">
+        <div class="contact-links" id="footer-contact">
+            <!-- Se llenará con JavaScript -->
+        </div>
+        <p class="copyright" id="copyright"></p>
+    </footer>
+</div>
+
+<a href="#" class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></a>
+
+<script>
+    // Script para llenar todos los datos dinámicos
+    document.addEventListener('DOMContentLoaded', function() {
+        // 1. Nombre en el header
+        document.getElementById('nombre-header').textContent = SITE_CONFIG.nombre;
+        
+        // 2. Quick contact (barra superior)
+        const quickContact = document.getElementById('quick-contact');
+        quickContact.innerHTML = `
+            <a href="mailto:${SITE_CONFIG.email}"><i class="fas fa-envelope"></i> Email</a>
+            <a href="${SITE_CONFIG.social.linkedin}" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
+            <a href="${SITE_CONFIG.social.whatsapp}" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+            <a href="${SITE_CONFIG.social.github}" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+        `;
+        
+        // 3. Footer contactos
+        const footerContact = document.getElementById('footer-contact');
+        footerContact.innerHTML = `
+            <a href="mailto:${SITE_CONFIG.email}"><i class="fas fa-envelope"></i> ${SITE_CONFIG.email}</a>
+            <a href="${SITE_CONFIG.social.linkedin}" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
+            <a href="${SITE_CONFIG.social.whatsapp}" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+            <a href="${SITE_CONFIG.social.github}" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+        `;
+        
+        // 4. Copyright
+        document.getElementById('copyright').textContent = 
+            `© ${SITE_CONFIG.año} | Diseñado para Ingeniería · Todos los derechos reservados`;
+    });
+
+    // Botón volver arriba
+    window.onscroll = function() {
+        const backToTop = document.getElementById('backToTop');
+        if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+            backToTop.classList.add('visible');
+        } else {
+            backToTop.classList.remove('visible');
+        }
+    };
+</script>
+
 </body>
 </html>

@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyectos en Acero | Ing. Estructural</title>
+    <!-- Configuración global -->
+    <script src="config.js"></script>
+    <style>
+        :root {
+            --accent-color: #007acc;
+            --accent-hover: #005f9e;
+            --bg-overlay: rgba(0, 0, 0, 0.65);
+            --text-light: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: url('./assets/images/Background.png') no-repeat center center fixed;
+            background-size: cover;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .content-wrapper {
+            background: var(--bg-overlay);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(3px);
+        }
+
+        .top-bar {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.8rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .top-bar-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .quick-contact {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .quick-contact a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s;
+            opacity: 0.9;
+        }
+
+        .quick-contact a:hover {
+            color: var(--accent-color);
+            opacity: 1;
+        }
+
+        .badge {
+            background: var(--accent-color);
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-back {
+            display: inline-block;
+            background: transparent;
+            color: var(--accent-color);
+            font-weight: 600;
+            text-decoration: none;
+            border: 2px solid var(--accent-color);
+            padding: 8px 20px;
+            border-radius: 30px;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            margin-left: 20px;
+        }
+
+        .btn-back:hover {
+            background: var(--accent-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,122,204,0.3);
+        }
+
+        .btn-cv-top {
+            display: inline-block;
+            background: var(--accent-color);
+            color: white;
+            text-decoration: none;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-left: 10px;
+            border: 2px solid var(--accent-color);
+            transition: all 0.3s;
+        }
+
+        .btn-cv-top:hover {
+            background: transparent;
+            color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,122,204,0.3);
+        }
+
+        .page-header {
+            text-align: center;
+            padding: 40px 20px 20px;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .page-header h1 i {
+            font-size: 2rem;
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 50%;
+        }
+
+        .page-header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .projects-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+            flex: 1;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .project-card {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent-color);
+            box-shadow: 0 10px 30px rgba(0,122,204,0.3);
+        }
+
+        .project-image {
+            height: 180px;
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .project-card:hover .project-image img {
+            transform: scale(1.05);
+        }
+
+        .project-image i {
+            font-size: 4rem;
+            color: var(--accent-color);
+            opacity: 0.5;
+        }
+
+        .project-content {
+            padding: 20px;
+            flex: 1;
+        }
+
+        .project-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--accent-color);
+        }
+
+        .project-content p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .project-tag {
+            background: rgba(0,122,204,0.2);
+            border: 1px solid var(--accent-color);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .project-footer {
+            padding: 15px 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--accent-color);
+            font-size: 0.9rem;
+        }
+
+        .project-footer i {
+            transition: transform 0.3s;
+        }
+
+        .project-card:hover .project-footer i {
+            transform: translateX(5px);
+        }
+
+        .category-info {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px 0;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        footer {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 30px 20px;
+            text-align: center;
+            border-top: 2px solid var(--accent-color);
+            margin-top: auto;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .contact-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s;
+            opacity: 0.9;
+        }
+
+        .contact-links a:hover { 
+            color: var(--accent-color); 
+            opacity: 1;
+        }
+
+        .copyright {
+            font-size: 0.8rem;
+            opacity: 0.5;
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--accent-color);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            z-index: 99;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            background: var(--accent-hover);
+        }
+
+        @media (max-width: 768px) {
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            
+            .back-to-top {
+                bottom: 20px;
+                right: 20px;
+                width: 40px;
+                height: 40px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+<div class="content-wrapper">
+    <div class="top-bar">
+        <div class="top-bar-content">
+            <div class="quick-contact" id="quick-contact">
+                <!-- Se llenará con JavaScript -->
+            </div>
+            <div>
+                <span class="badge">Proyectos en Acero</span>
+                <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i> Volver</a>
+                <a href="" download class="btn-cv-top" id="btn-cv-top">
+                    <i class="fas fa-download"></i> CV
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-header">
+        <h1>
+            <i class="fas fa-hard-hat"></i>
+            Proyectos en Acero Estructural
+            <i class="fas fa-hard-hat"></i>
+        </h1>
+        <p>Diseño y cálculo de estructuras metálicas para diversos tipos de proyectos</p>
+    </div>
+
+    <div class="projects-container">
+        <!-- Información de la categoría -->
+        <div class="category-info">
+            <p><i class="fas fa-info-circle" style="color: var(--accent-color);"></i> Especialidad en acero estructural: naves industriales, techos metálicos, estructuras mixtas, puentes peatonales, torres y más.</p>
+        </div>
+
+        <!-- Grid de proyectos -->
+        <div class="projects-grid">
+            <!-- Proyecto 1: Nave Industrial -->
+            <a href="nave-industrial.html" class="project-card">
+                <div class="project-image">
+                    <img src="./assets/images/projects/nave-industrial.png" alt="Nave Industrial" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-industry\'></i>';">
+                </div>
+                <div class="project-content">
+                    <h3>Nave Industrial</h3>
+                    <p>Diseño estructural de nave industrial de 30m de luz con puentes grúa. Análisis sísmico y de viento.</p>
+                    <div class="project-tags">
+                        <span class="project-tag">ETABS</span>
+                        <span class="project-tag">SAP2000</span>
+                        <span class="project-tag">Puente Grúa</span>
+                        <span class="project-tag">AISC</span>
+                    </div>
+                </div>
+                <div class="project-footer">
+                    <span><i class="fas fa-calendar"></i> 2024</span>
+                    <span>Ver proyecto <i class="fas fa-arrow-right"></i></span>
+                </div>
+            </a>
+
+            <!-- Proyecto 2: Techos Metálicos -->
+            <a href="techos-metalicos.html" class="project-card">
+                <div class="project-image">
+                    <img src="./assets/images/projects/techos-metalicos.jpg" alt="Techos Metálicos" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-home\'></i>';">
+                </div>
+                <div class="project-content">
+                    <h3>Techos Metálicos</h3>
+                    <p>Diseño de cubiertas metálicas para centro comercial. Estructura de acero con luces de hasta 25m.</p>
+                    <div class="project-tags">
+                        <span class="project-tag">Revit</span>
+                        <span class="project-tag">Tekla</span>
+                        <span class="project-tag">Cubiertas</span>
+                    </div>
+                </div>
+                <div class="project-footer">
+                    <span><i class="fas fa-calendar"></i> 2023</span>
+                    <span>Ver proyecto <i class="fas fa-arrow-right"></i></span>
+                </div>
+            </a>
+
+            <!-- Proyecto 3: Estructura Mixta (Acero-Concreto) -->
+            <a href="estructura-mixta.html" class="project-card">
+                <div class="project-image">
+                    <img src="./assets/images/projects/estructura-mixta.jpg" alt="Estructura Mixta" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-building\'></i>';">
+                </div>
+                <div class="project-content">
+                    <h3>Estructura Mixta</h3>
+                    <p>Diseño de edificio de 8 pisos con estructura mixta acero-concreto. Conexiones viga-columna.</p>
+                    <div class="project-tags">
+                        <span class="project-tag">ETABS</span>
+                        <span class="project-tag">SAFE</span>
+                        <span class="project-tag">Conexiones</span>
+                    </div>
+                </div>
+                <div class="project-footer">
+                    <span><i class="fas fa-calendar"></i> 2023</span>
+                    <span>Ver proyecto <i class="fas fa-arrow-right"></i></span>
+                </div>
+            </a>
+
+            <!-- Proyecto 4: Puente Peatonal -->
+            <a href="puente-peatonal.html" class="project-card">
+                <div class="project-image">
+                    <img src="./assets/images/projects/puente-peatonal.jpg" alt="Puente Peatonal" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-bridge\'></i>';">
+                </div>
+                <div class="project-content">
+                    <h3>Puente Peatonal</h3>
+                    <p>Diseño de puente peatonal de 40m de longitud. Análisis dinámico por paso de peatones.</p>
+                    <div class="project-tags">
+                        <span class="project-tag">SAP2000</span>
+                        <span class="project-tag">Análisis Modal</span>
+                        <span class="project-tag">AASHTO</span>
+                    </div>
+                </div>
+                <div class="project-footer">
+                    <span><i class="fas fa-calendar"></i> 2022</span>
+                    <span>Ver proyecto <i class="fas fa-arrow-right"></i></span>
+                </div>
+            </a>
+
+            <!-- Proyecto 5: Torre de Telecomunicaciones -->
+            <a href="torre-telecom.html" class="project-card">
+                <div class="project-image">
+                    <img src="./assets/images/projects/torre-telecom.jpg" alt="Torre Telecomunicaciones" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-tower-broadcast\'></i>';">
+                </div>
+                <div class="project-content">
+                    <h3>Torre Telecomunicaciones</h3>
+                    <p>Diseño de torre arriostrada de 60m para antenas de telecomunicaciones.</p>
+                    <div class="project-tags">
+                        <span class="project-tag">TIA-222</span>
+                        <span class="project-tag">Viento</span>
+                        <span class="project-tag">SAP2000</span>
+                    </div>
+                </div>
+                <div class="project-footer">
+                    <span><i class="fas fa-calendar"></i> 2022</span>
+                    <span>Ver proyecto <i class="fas fa-arrow-right"></i></span>
+                </div>
+            </a>
+
+            <!-- Proyecto 6: Mezzanine Industrial -->
+            <a href="mezzanine.html" class="project-card">
+                <div class="project-image">
+                    <img src="./assets/images/projects/mezzanine.jpg" alt="Mezzanine Industrial" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-warehouse\'></i>';">
+                </div>
+                <div class="project-content">
+                    <h3>Mezzanine Industrial</h3>
+                    <p>Diseño de entrepiso metálico para almacén. Capacidad de carga: 500 kg/m².</p>
+                    <div class="project-tags">
+                        <span class="project-tag">Acero</span>
+                        <span class="project-tag">Losacero</span>
+                        <span class="project-tag">ETABS</span>
+                    </div>
+                </div>
+                <div class="project-footer">
+                    <span><i class="fas fa-calendar"></i> 2021</span>
+                    <span>Ver proyecto <i class="fas fa-arrow-right"></i></span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <footer>
+        <div class="contact-links" id="footer-contact">
+            <!-- Se llenará con JavaScript -->
+        </div>
+        <p class="copyright" id="copyright"></p>
+    </footer>
+</div>
+
+<a href="#" class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></a>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Quick contact
+        document.getElementById('quick-contact').innerHTML = `
+            <a href="mailto:${SITE_CONFIG.email}"><i class="fas fa-envelope"></i> Email</a>
+            <a href="${SITE_CONFIG.social.linkedin}" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
+            <a href="${SITE_CONFIG.social.whatsapp}" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+            <a href="${SITE_CONFIG.social.github}" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+        `;
+
+        // Botón CV
+        document.getElementById('btn-cv-top').href = SITE_CONFIG.rutas.cv;
+
+        // Footer contactos
+        document.getElementById('footer-contact').innerHTML = `
+            <a href="mailto:${SITE_CONFIG.email}"><i class="fas fa-envelope"></i> ${SITE_CONFIG.email}</a>
+            <a href="${SITE_CONFIG.social.linkedin}" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
+            <a href="${SITE_CONFIG.social.whatsapp}" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+            <a href="${SITE_CONFIG.social.github}" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+        `;
+
+        // Copyright
+        document.getElementById('copyright').textContent = 
+            `© ${SITE_CONFIG.año} | Proyectos en Acero · ${SITE_CONFIG.nombre}`;
+    });
+
+    // Botón volver arriba
+    window.onscroll = function() {
+        const backToTop = document.getElementById('backToTop');
+        if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+            backToTop.classList.add('visible');
+        } else {
+            backToTop.classList.remove('visible');
+        }
+    };
+</script>
+
+</body>
+</html>

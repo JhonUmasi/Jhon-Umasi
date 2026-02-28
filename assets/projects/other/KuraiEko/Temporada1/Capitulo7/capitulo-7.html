@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kurai Eko - Capítulo 7 | Viaje a las cuevas oscuras</title>
+
+    <script src="../../../../../../config.js"></script>
+
+    <style>
+        :root {
+            --accent-color: #f2f2f2;
+            --secondary-color: #666;
+            --bg-dark: #050505;
+            --text-light: #e0e0e0;
+            --overlay: rgba(0, 0, 0, 0.95);
+            --border-light: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Garamond', 'Times New Roman', serif;
+            background: url('../../../../../../assets/images/Background.png') no-repeat center center fixed;
+            background-size: cover;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+
+        .content-wrapper {
+            background: var(--overlay);
+            min-height: 100vh;
+            backdrop-filter: grayscale(100%) blur(5px);
+        }
+
+        .nav-header {
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-light);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-nav, .btn-back {
+            color: var(--text-light);
+            text-decoration: none;
+            letter-spacing: 1px;
+            font-size: 0.8rem;
+            border: 1px solid var(--secondary-color);
+            padding: 8px 15px;
+            transition: 0.4s;
+            display: inline-block;
+        }
+
+        .btn-nav:hover, .btn-back:hover {
+            background: var(--text-light);
+            color: black;
+        }
+
+        .chapter-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px 80px 20px;
+        }
+
+        .chapter-header {
+            text-align: center;
+            margin-bottom: 50px;
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 30px;
+        }
+
+        .chapter-header h1 {
+            font-size: 2.5rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 900;
+            margin-bottom: 10px;
+            color: var(--accent-color);
+        }
+
+        .chapter-header .chapter-sub {
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+            font-style: italic;
+        }
+
+        .chapter-content {
+            font-size: 1.15rem;
+            text-align: justify;
+            white-space: pre-wrap;
+        }
+
+        .chapter-content p {
+            margin-bottom: 1.5em;
+            text-indent: 2em;
+        }
+
+        .dialogue b {
+            color: var(--accent-color);
+            letter-spacing: 1px;
+        }
+
+        .event-note {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-left: 3px solid var(--secondary-color);
+            margin: 30px 0;
+            font-style: italic;
+        }
+
+        .chapter-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            opacity: 0.4;
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border-light);
+        }
+
+        @media (max-width: 768px) {
+            .chapter-header h1 { font-size: 1.8rem; }
+            .nav-header { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="content-wrapper">
+    <nav class="nav-header">
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <a href="../Temporada1.html" class="btn-back">← VOLVER A SAGA</a>
+            <span style="color: var(--secondary-color); letter-spacing: 2px;">KURAI EKO</span>
+        </div>
+        <div class="nav-links">
+            <a href="../Capitulo6/capitulo-6.html" class="btn-nav">← ANTERIOR</a>
+            <a href="../Capitulo8/capitulo-8.html" class="btn-nav">SIGUIENTE →</a>
+        </div>
+    </nav>
+
+    <main class="chapter-container">
+        <header class="chapter-header">
+            <h1>Capítulo 7</h1>
+            <div class="chapter-sub">Viaje a las cuevas oscuras</div>
+        </header>
+
+        <article class="chapter-content">
+            <p>Tras el torneo, Enkiro despertó en el hospital rodeado de sus amigos. Aunque lamentaba no haber ganado, Eliza lo consoló recordándole que mañana sería su primera incursión oficial a las <b>Cuevas Oscuras</b>.</p>
+
+            <div class="event-note">
+                Enkiro notó que el mango de su espada, que creía destruida, comenzó a brillar. En un instante, la hoja se regeneró por completo, luciendo más afilada y poderosa que nunca. Era el arma del encapuchado.
+            </div>
+
+            <p>Más tarde, Enkiro y Eliza pasearon por la zona comercial de <b>Yokawa</b>. Enkiro compró un escudo triangular, mientras Eliza lo guiaba por los mercados de animales, objetos valiosos y la misteriosa "Villa". Al final, ella compró dos collares como "amuletos de la amistad".</p>
+
+            <p class="dialogue"><b>Eliza:</b> Me divertí mucho. Como princesa, casi nunca puedo ir de compras yo misma.</p>
+            <p class="dialogue"><b>Enkiro:</b> Yo igual. Sin ti me hubiera perdido.</p>
+
+            <hr style="margin: 30px 0; opacity: 0.1;">
+
+            <p>Al día siguiente, bajo la guía del profesor <b>Arion</b>, el grupo se adentró en las húmedas Cuevas Oscuras. El ambiente era tenso, cargado con el eco de sus pasos y el misterio de las bestias que allí habitaban.</p>
+
+            <p class="dialogue"><b>Arion:</b> No se preocupen, chicos. Las <i>brelas</i> son débiles ante la luz. ¡Formen grupos de dos!</p>
+
+            <p>Enkiro y Rikuto hicieron equipo, ganando confianza rápidamente al derrotar a las criaturas y a los <i>Carkos</i> (gusanos resistentes). Nana, fascinada por la historia, descubrió inscripciones de civilizaciones de vampiros en las paredes.</p>
+
+            <p>De repente, un rugido aterrador sacudió la cueva. Un <b>Glass</b>, una bestia de garras feroces, emergió de las sombras.</p>
+
+            <p class="dialogue"><b>Arion:</b> ¡Vamos, Eliza! Es un Glass, tú misma dijiste que su fuerza no era mucha...</p>
+
+            <p>Pero Eliza se quedó paralizada por el miedo. Sin pensarlo dos veces, Enkiro corrió hacia ella, bloqueando el ataque de la bestia. La lucha fue encarnizada en la penumbra. Eliza, viendo a Enkiro defenderla con valentía, sintió cómo sus sentimientos por él se profundizaban.</p>
+
+            <p>Tras una intensa batalla, el grupo logró abatir a la criatura.</p>
+
+            <p class="dialogue"><b>Arion:</b> (Sonriendo) Sabía que podrían. No iba a intervenir porque estaba 100% seguro de que Enkiro iría al rescate de Eliza, jajaja.</p>
+            <p class="dialogue"><b>Eliza:</b> (Sonrojada) Aaa...</p>
+
+            <p>La incursión terminó entre risas y una pesada broma del profesor, pero para Eliza, algo había cambiado para siempre. Se había enamorado de verdad.</p>
+        </article>
+
+        <div class="chapter-navigation">
+            <a href="../Capitulo6/capitulo-6.html" class="btn-nav">← CAPÍTULO ANTERIOR</a>
+            <a href="../Temporada1.html" class="btn-nav">ÍNDICE</a>
+            <a href="../Capitulo8/capitulo-8.html" class="btn-nav">SIGUIENTE CAPÍTULO →</a>
+        </div>
+    </main>
+
+    <footer>
+        <p id="copyright"></p>
+    </footer>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof SITE_CONFIG !== 'undefined') {
+            document.getElementById('copyright').textContent = 
+                `© ${SITE_CONFIG.año} | ${SITE_CONFIG.nombre} · Writer & Creator`;
+        }
+    });
+</script>
+
+</body>
+</html>

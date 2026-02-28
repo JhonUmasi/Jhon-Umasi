@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kurai Eko - Capítulo 6 | El concurso del Caballero Qhenta</title>
+
+    <script src="../../../../../../config.js"></script>
+
+    <style>
+        :root {
+            --accent-color: #f2f2f2;
+            --secondary-color: #666;
+            --bg-dark: #050505;
+            --text-light: #e0e0e0;
+            --overlay: rgba(0, 0, 0, 0.95);
+            --border-light: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Garamond', 'Times New Roman', serif;
+            background: url('../../../../../../assets/images/Background.png') no-repeat center center fixed;
+            background-size: cover;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+
+        .content-wrapper {
+            background: var(--overlay);
+            min-height: 100vh;
+            backdrop-filter: grayscale(100%) blur(5px);
+        }
+
+        .nav-header {
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-light);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-nav, .btn-back {
+            color: var(--text-light);
+            text-decoration: none;
+            letter-spacing: 1px;
+            font-size: 0.8rem;
+            border: 1px solid var(--secondary-color);
+            padding: 8px 15px;
+            transition: 0.4s;
+            display: inline-block;
+        }
+
+        .btn-nav:hover, .btn-back:hover {
+            background: var(--text-light);
+            color: black;
+        }
+
+        .chapter-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px 80px 20px;
+        }
+
+        .chapter-header {
+            text-align: center;
+            margin-bottom: 50px;
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 30px;
+        }
+
+        .chapter-header h1 {
+            font-size: 2.5rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 900;
+            margin-bottom: 10px;
+            color: var(--accent-color);
+        }
+
+        .chapter-header .chapter-sub {
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+            font-style: italic;
+        }
+
+        .chapter-content {
+            font-size: 1.15rem;
+            text-align: justify;
+            white-space: pre-wrap;
+        }
+
+        .chapter-content p {
+            margin-bottom: 1.5em;
+            text-indent: 2em;
+        }
+
+        .battle-title {
+            color: var(--accent-color);
+            font-weight: bold;
+            text-transform: uppercase;
+            border-left: 3px solid var(--secondary-color);
+            padding-left: 10px;
+            margin: 30px 0 15px 0;
+            letter-spacing: 1px;
+        }
+
+        .dialogue b {
+            color: var(--accent-color);
+            letter-spacing: 1px;
+        }
+
+        .chapter-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            opacity: 0.4;
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border-light);
+        }
+
+        @media (max-width: 768px) {
+            .chapter-header h1 { font-size: 1.8rem; }
+            .nav-header { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="content-wrapper">
+    <nav class="nav-header">
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <a href="../Temporada1.html" class="btn-back">← VOLVER A SAGA</a>
+            <span style="color: var(--secondary-color); letter-spacing: 2px;">KURAI EKO</span>
+        </div>
+        <div class="nav-links">
+            <a href="../Capitulo5/capitulo-5.html" class="btn-nav">← ANTERIOR</a>
+            <a href="../Capitulo7/capitulo-7.html" class="btn-nav">SIGUIENTE →</a>
+        </div>
+    </nav>
+
+    <main class="chapter-container">
+        <header class="chapter-header">
+            <h1>Capítulo 6</h1>
+            <div class="chapter-sub">El concurso del Caballero Qhenta</div>
+        </header>
+
+        <article class="chapter-content">
+            <p>Tras la preselección, la Academia de Magia Joltran presentó a sus tres representantes: <b>Thishiro</b>, <b>Enkiro</b> y <b>Mowuo</b>. Las miradas estaban puestas en Thishiro, quien había completado el circuito con una velocidad asombrosa, pero Enkiro, motivado por su promesa a Eliza, no pensaba quedarse atrás.</p>
+
+            <h3 class="battle-title">Primera Ronda</h3>
+
+            <p><b>Thishiro vs Kraigil:</b> El elfo Thishiro demostró una técnica superior lanzando su espada y aprovechando la inercia para expulsar al robusto Kraigil de la plataforma.</p>
+
+            <p><b>Romy vs Emerson:</b> Aunque Romy de Quixera mostró una agilidad envidiable, la resistencia de Emerson de la Escuela Viva Qhenta fue infranqueable. Tras agotar a su rival, Emerson destrozó la espada de Romy con un contraataque preciso.</p>
+
+            <p>Antes de su turno, Enkiro conversó con Nana. Ella le confesó que falló el circuito debido a una ilusión que le recordó el traumático secuestro de su padre elfo años atrás. Tras despedirse de ella y de una sonrojada Eliza, Enkiro se preparó para su duelo.</p>
+
+            <p class="battle-title">Enkiro vs Hakio</p>
+            <p>El combate contra Hakio, de la Universidad Cintista de Nyxaris, fue intenso. Hakio, motivado por una promesa familiar, activó una habilidad especial de los <b>Kiyoko</b> que envolvió su espada en un aura rojiza magistral.</p>
+            <p>Cuando todo parecía perdido para Enkiro ante la velocidad de Hakio, ocurrió algo inexplicable: en el choque final, la espada de Hakio se rompió. Enkiro ganó por defecto, aunque sintió que su propia arma se había movido sola para defenderlo.</p>
+
+            <p>El resto de la primera ronda vio las victorias de <b>Rauther</b> (con fuerza bruta), <b>Rox</b>, <b>Emilia</b>, <b>Alex</b> y <b>Hitoshi</b>.</p>
+
+            <hr style="margin: 30px 0; opacity: 0.1;">
+
+            <h3 class="battle-title">Segunda Ronda</h3>
+
+            <p><b>Thishiro vs Emerson:</b> Thishiro intentó usar una habilidad de "Espada Independiente" para aumentar el peso en las piernas de su rival mediante ráfagas de viento. Sin embargo, Emerson leyó el ataque y contraatacó con una velocidad de reacción superior, sacando al elfo de la arena.</p>
+
+            <p class="battle-title">Enkiro vs Rauther</p>
+            <p>Enkiro se enfrentó al coloso Rauther. Fue una batalla de desgaste. Rauther generaba ondas de choque que casi expulsan a Enkiro, pero este resistió con tenacidad. En un choque brutal, la espada de Rauther se quebró, pero el guerrero, enfurecido, continuó el ataque hasta dejar a Enkiro gravemente herido. Aunque Rauther fue declarado ganador, un fenómeno extraño ocurrió: ambas espadas se desintegraron como polvo al caer al suelo.</p>
+
+            <p><b>Rox vs Emilia:</b> Rox de Quixera utilizó su imponente físico y destreza para desarmar a Emilia tras un duelo de fatiga extrema.</p>
+
+            <p><b>Alex vs Hitochi:</b> Alex aseguró su pase a la siguiente fase mediante una técnica refinada que desequilibró a Hitochi fuera del círculo reglamentario.</p>
+
+            <hr style="margin: 30px 0; opacity: 0.1;">
+
+            <h3 class="battle-title">Cuartos y Gran Final</h3>
+
+            <p>En las semifinales, <b>Emerson</b> superó a Rox con una velocidad de finta magistral, mientras que <b>Rauther</b> aplastó la estrategia de Alex con su fuerza sobrehumana.</p>
+
+            <p class="battle-title">La Final: Emerson vs Rauther</p>
+            <p>El coliseo vibraba. Era el duelo definitivo entre la resistencia absoluta y la fuerza bruta. Ambos luchadores, cubiertos de heridas y agotamiento, intercambiaron golpes épicos que mantuvieron a la audiencia en un silencio sepulcral.</p>
+            <p>En el momento culminante, Rauther desplegó un último ataque de poder masivo que derribó a Emerson. El juez alzó la mano del guerrero de la Universidad de Quixera, proclamándolo oficialmente como el nuevo <b>Caballero Qhenta</b>.</p>
+
+            <p>Enkiro, viendo el final desde el hospital, comprendió que el camino para volverse fuerte apenas comenzaba.</p>
+        </article>
+
+        <div class="chapter-navigation">
+            <a href="../Capitulo5/capitulo-5.html" class="btn-nav">← CAPÍTULO ANTERIOR</a>
+            <a href="../Temporada1.html" class="btn-nav">ÍNDICE</a>
+            <a href="../Capitulo7/capitulo-7.html" class="btn-nav">SIGUIENTE CAPÍTULO →</a>
+        </div>
+    </main>
+
+    <footer>
+        <p id="copyright"></p>
+    </footer>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof SITE_CONFIG !== 'undefined') {
+            document.getElementById('copyright').textContent = 
+                `© ${SITE_CONFIG.año} | ${SITE_CONFIG.nombre} · Writer & Creator`;
+        }
+    });
+</script>
+
+</body>
+</html>

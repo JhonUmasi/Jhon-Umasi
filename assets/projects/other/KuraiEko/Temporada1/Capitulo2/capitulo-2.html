@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kurai Eko - Capítulo 2 | Quiero ser fuerte</title>
+
+    <script src="../../../../../../config.js"></script>
+
+    <style>
+        :root {
+            --accent-color: #f2f2f2;
+            --secondary-color: #666;
+            --bg-dark: #050505;
+            --text-light: #e0e0e0;
+            --overlay: rgba(0, 0, 0, 0.95);
+            --border-light: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Garamond', 'Times New Roman', serif;
+            /* Sube 6 niveles para la imagen de fondo */
+            background: url('../../../../../../assets/images/Background.png') no-repeat center center fixed;
+            background-size: cover;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+
+        .content-wrapper {
+            background: var(--overlay);
+            min-height: 100vh;
+            backdrop-filter: grayscale(100%) blur(5px);
+        }
+
+        .nav-header {
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-light);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-nav, .btn-back {
+            color: var(--text-light);
+            text-decoration: none;
+            letter-spacing: 1px;
+            font-size: 0.8rem;
+            border: 1px solid var(--secondary-color);
+            padding: 8px 15px;
+            transition: 0.4s;
+            display: inline-block;
+        }
+
+        .btn-nav:hover, .btn-back:hover {
+            background: var(--text-light);
+            color: black;
+        }
+
+        .chapter-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px 80px 20px;
+        }
+
+        .chapter-header {
+            text-align: center;
+            margin-bottom: 50px;
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 30px;
+        }
+
+        .chapter-header h1 {
+            font-size: 2.5rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 900;
+            margin-bottom: 10px;
+            color: var(--accent-color);
+        }
+
+        .chapter-header .chapter-sub {
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+            font-style: italic;
+        }
+
+        .chapter-content {
+            font-size: 1.15rem;
+            text-align: justify;
+            white-space: pre-wrap;
+        }
+
+        .chapter-content p {
+            margin-bottom: 1.5em;
+            text-indent: 2em;
+        }
+
+        .chapter-content i, .chapter-content em {
+            color: #ccc;
+        }
+
+        .dialogue b {
+            color: var(--accent-color);
+            letter-spacing: 1px;
+        }
+
+        .chapter-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            opacity: 0.4;
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border-light);
+        }
+
+        @media (max-width: 768px) {
+            .chapter-header h1 { font-size: 1.8rem; }
+            .nav-header { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="content-wrapper">
+    <nav class="nav-header">
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <a href="../Temporada1.html" class="btn-back">← VOLVER A SAGA</a>
+            <span style="color: var(--secondary-color); letter-spacing: 2px;">KURAI EKO</span>
+        </div>
+        <div class="nav-links">
+            <a href="../Capitulo1/capitulo-1.html" class="btn-nav">← ANTERIOR</a>
+            <a href="../Capitulo3/capitulo-3.html" class="btn-nav">SIGUIENTE →</a>
+        </div>
+    </nav>
+
+    <main class="chapter-container">
+        <header class="chapter-header">
+            <h1>Capítulo 2</h1>
+            <div class="chapter-sub">Quiero ser fuerte</div>
+        </header>
+
+        <article class="chapter-content">
+            <p>Enkiro despertó al día siguiente después de recibir la ayuda de Kayto, el hábil hechicero sanador. A pesar de su aparente mejoría, emocionalmente no se había recuperado por completo. Se levantó de la cama y decidió salir para evaluar el estado de su pueblo. La devastación era evidente: pocos habían logrado sobrevivir, y aquellos que regresaban lo hacían con miradas aterrorizadas, como si aún estuvieran atrapados en sus peores pesadillas.</p>
+
+            <p>Mientras Enkiro observaba la desoladora situación, Kayto se le acercó con una sonrisa que reflejaba una extraña sensación de victoria.</p>
+
+            <p class="dialogue"><b>Kayto:</b> ¡Hey! ¿Ya despertaste?</p>
+            <p class="dialogue"><b>Enkiro:</b> Sí, gracias por curarme.</p>
+            <p class="dialogue"><b>Kayto:</b> Es lo menos que puedo hacer por ti.</p>
+
+            <p>Kayto, con una expresión más seria, añadió:</p>
+            <p class="dialogue"><b>Kayto:</b> Casi se me olvida, el alcalde quiere verte.</p>
+
+            <p>Enkiro, con una expresión de confusión, se preguntó interiormente: <i>"¿El alcalde?"</i></p>
+
+            <p>Antes de llegar al asentamiento del alcalde, Enkiro se cuestionaba el motivo detrás del ataque perpetrado por el encapuchado y, aún más intrigante, quién era ese misterioso personaje. Kayto tocó la puerta de la casa del alcalde, quien adoptó una expresión más seria y permitió la entrada.</p>
+
+            <p class="dialogue"><b>Mo Isamuto:</b> Pase.</p>
+            <p>Kayto hizo una reverencia hacia el alcalde y lo anunció.</p>
+            <p class="dialogue"><b>Kayto:</b> Buenos días, alcalde Isamuto.</p>
+            <p class="dialogue"><b>Mo Isamuto:</b> Ya llegaste, Kayto.</p>
+            <p class="dialogue"><b>Kayto:</b> Sí, señor. Traje conmigo al Héroe Enkiro.</p>
+
+            <p>Apenas Enkiro escuchó la palabra "Héroe", quedó asombrado. No comprendía por qué lo llamaban así, y su rostro reflejaba su confusión cuando pronunció con voz temblorosa:</p>
+            <p class="dialogue"><b>Enkiro:</b> ¿Héroe yo? ¿Por qué?</p>
+
+            <p>Mo Isamuto, con notable sabiduría, respondió:</p>
+            <p class="dialogue"><b>Mo Isamuto:</b> ¿No recuerdas? Tú mataste al encapuchado.</p>
+
+            <p>En ese preciso instante, Enkiro quedó perplejo. No entendía cómo él, un joven común, podría haber derrotado a un ser tan poderoso como el encapuchado. Mo Isamuto comenzó a relatar los sucesos con detalle:</p>
+
+            <p>— Cuando nuestro pueblo estaba en pleno ataque, algunas tropas llegaron para auxiliarnos, pero para su sorpresa, el ataque ya había cesado. Fue entonces cuando te descubrieron; yacías en el suelo, aún con vida, sosteniendo una espada manchada de sangre. A tu lado, el encapuchado muerto con una herida propia de la espada que tenías en la mano.</p>
+
+            <p>Enkiro, asombrado, trató de recordar qué había pasado en esa batalla. Se quedó quieto durante unos segundos, intentando crear una imagen de cómo había pasado ese suceso. Mo Isamuto, comprendiendo su silencio, continuó relatando cómo quemaron el cuerpo del encapuchado y cómo Kayto acudió a curarlo.</p>
+
+            <p class="dialogue"><b>Mo Isamuto:</b> Enkiro, sabemos de tus habilidades, tienes un gran potencial. La fuerza del encapuchado era abismal, pero tú lograste matarlo. Es por eso que te propongo una beca para que vayas a estudiar a la <b>Academia de Magia Joltran</b>, en la ciudad de Yokowa.</p>
+
+            <p>Enkiro pensó: <i>"Otra vez la academia"</i>. Un poco enojado por su impotencia inicial frente al enemigo, se convenció de ir para fortalecerse y proteger a sus seres queridos en el futuro.</p>
+
+            <p class="dialogue"><b>Enkiro:</b> Acepto, señor.</p>
+
+            <p>Mientras eso ocurría, Danna observaba desde una ventana. Al escuchar la aceptación de Enkiro, se enojó un poco y se marchó. El alcalde le indicó que partiría mañana con las tropas y que la academia proveería dormitorios y uniformes.</p>
+
+            <p>Al llegar a su casa destrozada, Enkiro tuvo un momento melancólico. Mirando las estrellas, creyó ver la figura de su madre, Aithe.</p>
+
+            <p class="dialogue"><b>Enkiro:</b> Gracias, mamá. Te prometo que me esforzaré y vengaré tu muerte. Regresaré para cuidar este lugar.</p>
+
+            <p>Más tarde, Enkiro buscó a Danna y Percy. Tras preguntar a los guardias y no obtener respuesta, fue a la casa de Danna cerca de las montañas. Allí, vio su silueta en un acantilado.</p>
+
+            <p class="dialogue"><b>Enkiro:</b> Danna, ¿estás bien? ¿Sabes dónde está Percy?</p>
+            <p class="dialogue"><b>Danna (llorando):</b> Percy está... Percy está muerto.</p>
+
+            <p>La noticia golpeó a Enkiro. Danna, alterada, le recriminó que se marchara mientras la ciudad estaba destruida. Enkiro, con determinación, le explicó que precisamente se iba para evitar que algo así volviera a ocurrir.</p>
+
+            <p class="dialogue"><b>Enkiro:</b> Te prometo que me esforzaré para ser muy poderoso. Cuando me gradúe, volveré aquí para estar contigo.</p>
+            <p class="dialogue"><b>Danna:</b> Está bien, pero prométeme que volverás.</p>
+
+            <p>Tras la promesa, Danna le dio un beso en la mejilla, dejando a Enkiro sonrojado antes de despedirse por esa noche.</p>
+        </article>
+
+        <div class="chapter-navigation">
+            <a href="../Capitulo1/capitulo-1.html" class="btn-nav">← CAPÍTULO ANTERIOR</a>
+            <a href="../Temporada1.html" class="btn-nav">ÍNDICE</a>
+            <a href="../Capitulo3/capitulo-3.html" class="btn-nav">SIGUIENTE CAPÍTULO →</a>
+        </div>
+    </main>
+
+    <footer>
+        <p id="copyright"></p>
+    </footer>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof SITE_CONFIG !== 'undefined') {
+            document.getElementById('copyright').textContent = 
+                `© ${SITE_CONFIG.año} | ${SITE_CONFIG.nombre} · Writer & Creator`;
+        }
+    });
+</script>
+
+</body>
+</html>

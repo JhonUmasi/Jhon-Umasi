@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kurai Eko - Temporada 1</title>
+    
+    <script src="../../../../../config.js"></script>
+    
+    <style>
+        :root {
+            --accent-color: #f2f2f2;
+            --secondary-color: #666;
+            --bg-dark: #050505;
+            --text-light: #e0e0e0;
+            --overlay: rgba(0, 0, 0, 0.95);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Garamond', serif;
+            background: url('../../../../../assets/images/Background.png') no-repeat center center fixed;
+            background-size: cover;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .content-wrapper {
+            background: var(--overlay);
+            min-height: 100vh;
+            backdrop-filter: grayscale(100%) blur(8px);
+        }
+
+        .nav-header {
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .btn-back {
+            color: var(--text-light);
+            text-decoration: none;
+            letter-spacing: 1px;
+            font-size: 0.8rem;
+            border: 1px solid var(--secondary-color);
+            padding: 5px 15px;
+            transition: 0.3s;
+        }
+
+        .btn-back:hover { background: white; color: black; }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        header { text-align: center; margin-bottom: 60px; }
+        header h1 { font-size: 3rem; letter-spacing: 10px; text-transform: uppercase; }
+        header p { color: var(--secondary-color); font-style: italic; margin-top: 10px; }
+
+        /* Lista de Capítulos */
+        .chapters-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .chapter-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            text-decoration: none;
+            color: inherit;
+            transition: 0.3s;
+        }
+
+        .chapter-item:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: var(--accent-color);
+            transform: translateX(10px);
+        }
+
+        .chapter-info h3 { font-size: 1.1rem; letter-spacing: 2px; color: var(--accent-color); }
+        .chapter-info p { font-size: 0.85rem; color: var(--secondary-color); }
+
+        .chapter-number { font-size: 1.5rem; font-weight: 900; opacity: 0.1; }
+
+        footer { text-align: center; padding: 40px; opacity: 0.3; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+
+<div class="content-wrapper">
+    <nav class="nav-header">
+        <a href="../KuraiEko.html" class="btn-back">← VOLVER</a>
+        <span style="font-size: 0.8rem; letter-spacing: 3px; color: var(--secondary-color);">TEMPORADA 1</span>
+    </nav>
+
+    <main class="container">
+        <header>
+            <h1>SAGA I</h1>
+            <p>El Despertar de la Espada</p>
+        </header>
+
+        <div class="chapters-list">
+            <a href="Capitulo1/capitulo-1.html" class="chapter-item">
+                <div class="chapter-info">
+                    <h3>CAPÍTULO 1</h3>
+                    <p>Soy Enkiro Mikiojiro</p>
+                </div>
+                <div class="chapter-number">01</div>
+            </a>
+
+            <a href="Capitulo2/capitulo-2.html" class="chapter-item">
+                <div class="chapter-info">
+                    <h3>CAPÍTULO 2</h3>
+                    <p>Quiero ser fuerte</p>
+                </div>
+                <div class="chapter-number">02</div>
+            </a>
+
+            <a href="Capitulo3/capitulo-3.html" class="chapter-item">
+                <div class="chapter-info">
+                    <h3>CAPÍTULO 3</h3>
+                    <p>Vamos a la academia</p>
+                </div>
+                <div class="chapter-number">03</div>
+            </a>
+            <a href="Capitulo4/capitulo-4.html" class="chapter-item">
+                <div class="chapter-info">
+                    <h3>CAPÍTULO 4</h3>
+                    <p>Que aburrido es la academia</p>
+                </div>
+                <div class="chapter-number">03</div>
+            </a>
+            <a href="Capitulo5/capitulo-5.html" class="chapter-item">
+                <div class="chapter-info">
+                    <h3>CAPÍTULO 5</h3>
+                    <p>El Circuito</p>
+                </div>
+                <div class="chapter-number">03</div>
+            </a>
+            <a href="Capitulo6/capitulo-6.html" class="chapter-item">
+                <div class="chapter-info">
+                    <h3>CAPÍTULO 6</h3>
+                    <p>El Concurso del Caballero Qhenta</p>
+                </div>
+                <div class="chapter-number">03</div>
+            </a>
+            <a href="Capitulo7/capitulo-7.html" class="chapter-item">
+                <div class="chapter-info">
+                    <h3>CAPÍTULO 7</h3>
+                    <p>Viaje a las Cuevas Oscuras</p>
+                </div>
+                <div class="chapter-number">03</div>
+            </a>
+            <a href="Capitulo8/capitulo-8.html" class="chapter-item">
+                <div class="chapter-info">
+                    <h3>CAPÍTULO 8</h3>
+                    <p>El Nevado Bunkatsu</p>
+                </div>
+                <div class="chapter-number">03</div>
+            </a>
+            <a href="Capitulo9/capitulo-9.html" class="chapter-item">
+                <div class="chapter-info">
+                    <h3>CAPÍTULO 9</h3>
+                    <p>Enkiro el Dracónico</p>
+                </div>
+                <div class="chapter-number">03</div>
+            </a>
+            <a href="Capitulo10/capitulo-10.html" class="chapter-item">
+                <div class="chapter-info">
+                    <h3>CAPÍTULO 10</h3>
+                    <p>Reinos en Conflictos</p>
+                </div>
+                <div class="chapter-number">03</div>
+            </a>
+            <a href="Capitulo11/capitulo-11.html" class="chapter-item">
+                <div class="chapter-info">
+                    <h3>CAPÍTULO 11</h3>
+                    <p>Vista Temporal</p>
+                </div>
+                <div class="chapter-number">03</div>
+            </a>
+            <a href="Capitulo12/capitulo-12.html" class="chapter-item">
+                <div class="chapter-info">
+                    <h3>CAPÍTULO 12 - final</h3>
+                    <p>El viaje de Enkiro</p>
+                </div>
+                <div class="chapter-number">03</div>
+            </a>
+            
+
+            
+            </div>
+    </main>
+
+    <footer>
+        <p id="copyright"></p>
+    </footer>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof SITE_CONFIG !== 'undefined') {
+            document.getElementById('copyright').textContent = 
+                `© ${SITE_CONFIG.año} | ${SITE_CONFIG.nombre}`;
+        }
+    });
+</script>
+
+</body>
+</html>

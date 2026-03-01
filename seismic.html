@@ -26,9 +26,8 @@
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: url('./assets/images/Background.png') no-repeat center center fixed;
+            background: url('./assets/images/Background.avif') no-repeat center center fixed;
             background-size: cover;
-            background-color: #1a1a1a;
             color: var(--text-light);
             line-height: 1.6;
         }
@@ -348,9 +347,24 @@
             opacity: 1;
         }
 
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            background: var(--accent-hover);
+        }
+
         @media (max-width: 768px) {
-            .projects-grid { grid-template-columns: 1fr; }
-            .page-header h1 { font-size: 2rem; }
+            .projects-grid { 
+                grid-template-columns: 1fr; 
+            }
+            .page-header h1 { 
+                font-size: 2rem; 
+            }
+            .back-to-top {
+                bottom: 20px;
+                right: 20px;
+                width: 40px;
+                height: 40px;
+            }
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -406,7 +420,7 @@
                 </div>
             </a>
             <!-- Proyecto 2 -->
-            <a href="ora urcl" class="project-card" style="opacity: 0.7; pointer-events: none;">
+            <a href="#" class="project-card" style="opacity: 0.7; pointer-events: none;">
                 <div class="project-image">
                     <i class="fas fa-shield-alt"></i>
                 </div>
@@ -437,19 +451,27 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         if (typeof SITE_CONFIG !== 'undefined') {
+            // Quick contact
             const contactHTML = `
                 <a href="mailto:${SITE_CONFIG.email}"><i class="fas fa-envelope"></i> Email</a>
                 <a href="${SITE_CONFIG.social.linkedin}" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
                 <a href="${SITE_CONFIG.social.whatsapp}" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                <a href="${SITE_CONFIG.social.github}" target="_blank"><i class="fab fa-github"></i> GitHub</a>
             `;
+            
             document.getElementById('quick-contact').innerHTML = contactHTML;
             document.getElementById('footer-contact').innerHTML = contactHTML;
+            
+            // Botón CV
             document.getElementById('btn-cv-top').href = SITE_CONFIG.rutas.cv;
+            
+            // Copyright
             document.getElementById('copyright').textContent = 
                 `© ${SITE_CONFIG.año} | Ingeniería Sísmica · ${SITE_CONFIG.nombre}`;
         }
     });
 
+    // Botón volver arriba
     window.onscroll = function() {
         const backToTop = document.getElementById('backToTop');
         if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {

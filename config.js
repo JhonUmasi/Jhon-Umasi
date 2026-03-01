@@ -25,8 +25,8 @@ const SITE_CONFIG = {
     // Rutas de archivos
     rutas: {
         cv: "./assets/docs/CV_jhon.pdf",
-        foto_perfil: "./assets/images/profile.jpg",
-        background: "./assets/images/Background.png"
+        foto_perfil: "./assets/images/profile.avif",
+        background: "./assets/images/Background.avif"
     },
     
     // Año actual (automático)

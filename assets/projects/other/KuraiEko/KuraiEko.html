@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kurai Eko | Las Aventuras de Enkiro</title>
+    
+    <script src="../../../config.js"></script>
+    
+    <style>
+        :root {
+            --accent-color: #f2f2f2;
+            --secondary-color: #666;
+            --bg-dark: #050505;
+            --text-light: #e0e0e0;
+            --overlay: rgba(0, 0, 0, 0.9);
+            --border-soft: rgba(255, 255, 255, 0.05);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Garamond', serif;
+            /* Ruta a assets desde KuraiEko/ */
+            background: url('../../../assets/images/Background.png') no-repeat center center fixed;
+            background-size: cover;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+
+        .content-wrapper {
+            background: var(--overlay);
+            min-height: 100vh;
+            backdrop-filter: grayscale(100%) blur(5px);
+        }
+
+        .nav-header {
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-back {
+            color: var(--text-light);
+            text-decoration: none;
+            letter-spacing: 2px;
+            font-size: 0.8rem;
+            border: 1px solid var(--secondary-color);
+            padding: 8px 20px;
+            transition: 0.4s;
+        }
+
+        .btn-back:hover {
+            background: var(--text-light);
+            color: black;
+        }
+
+        .manga-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .manga-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .manga-header h1 {
+            font-size: clamp(3.5rem, 10vw, 6rem);
+            letter-spacing: 15px;
+            text-transform: uppercase;
+            font-weight: 900;
+            margin-bottom: 10px;
+            color: var(--accent-color);
+            text-shadow: 0 0 20px rgba(255,255,255,0.1);
+        }
+
+        .manga-header p {
+            font-style: italic;
+            color: var(--secondary-color);
+            letter-spacing: 5px;
+            text-transform: uppercase;
+        }
+
+        section { margin-bottom: 80px; }
+
+        h2.section-title {
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--secondary-color);
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        .synopsis-box {
+            background: rgba(255,255,255,0.02);
+            border-left: 4px solid var(--accent-color);
+            padding: 40px;
+        }
+
+        .world-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .island-card {
+            background: rgba(255,255,255,0.03);
+            padding: 30px;
+            border: 1px solid var(--border-soft);
+            transition: 0.3s;
+            text-align: center;
+        }
+
+        .island-card:hover {
+            border-color: var(--accent-color);
+            background: rgba(255,255,255,0.06);
+            transform: translateY(-5px);
+        }
+
+        .island-card h3 { 
+            color: var(--accent-color); 
+            margin-bottom: 10px; 
+            letter-spacing: 3px; 
+            text-transform: uppercase;
+        }
+
+        .island-card p {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+        }
+
+        .chapter-link {
+            text-decoration: none;
+            display: block;
+            color: inherit;
+        }
+
+        /* SISTEMA DE PODER */
+        .info-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .info-block {
+            background: rgba(255,255,255,0.02);
+            padding: 30px;
+            border: 1px solid var(--border-soft);
+        }
+
+        .tag-container { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; }
+        .tag { font-size: 0.7rem; padding: 3px 8px; border: 1px solid #444; color: var(--secondary-color); text-transform: uppercase; }
+
+        .character-highlight {
+            background: linear-gradient(to right, #0a0a0a, transparent);
+            padding: 40px;
+            border: 1px solid var(--border-soft);
+        }
+
+        footer {
+            text-align: center;
+            padding: 60px;
+            opacity: 0.4;
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border-soft);
+        }
+
+        @media (max-width: 768px) {
+            .info-split { grid-template-columns: 1fr; }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+<div class="content-wrapper">
+    <nav class="nav-header">
+        <a href="../../../../index.html" class="btn-back">RETURN TO PORTFOLIO</a>
+        <div id="social-header"></div>
+    </nav>
+
+    <main class="manga-container">
+        <header class="manga-header">
+            <h1>KURAI EKO</h1>
+            <p>LAS AVENTURAS DE ENKIRO</p>
+        </header>
+
+        <section>
+            <h2 class="section-title">La Premisa</h2>
+            <div class="synopsis-box">
+                <p>
+                    Enkiro Mikiojiro, un joven de 16 años de la aldea de Gaungio, ve su mundo colapsar cuando un misterioso encapuchado masacra a su familia. 
+                    Tras una victoria inexplicable y traumática, Enkiro ingresa a la <strong>Academia de Magia Joltran</strong> con una beca que esconde más de lo que promete.
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="section-title">Leer la Historia</h2>
+            <div class="world-grid">
+                
+                <a href="Temporada1/Temporada1.html" class="chapter-link">
+                    <div class="island-card">
+                        <span style="font-size: 0.7rem; color: var(--secondary-color); letter-spacing: 2px;">SAGA I</span>
+                        <h3>Temporada 1</h3>
+                        <p>El Despertar de la Espada</p>
+                    </div>
+                </a>
+
+                <div class="island-card" style="opacity: 0.4;">
+                    <span style="font-size: 0.7rem; color: var(--secondary-color); letter-spacing: 2px;">SAGA II</span>
+                    <h3>Temporada 2</h3>
+                    <p>En Desarrollo...</p>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="info-split">
+            <div class="info-block">
+                <h3>Sistema de Magia</h3>
+                <div class="tag-container">
+                    <span class="tag">Aeloria</span><span class="tag">Llama Sagrada</span>
+                    <span class="tag">Invocación</span><span class="tag">Grenda</span>
+                </div>
+            </div>
+            <div class="info-block">
+                <h3>Creencias</h3>
+                <div class="tag-container">
+                    <span class="tag">Cientismo Sagrado</span><span class="tag">Culto del Dragón</span>
+                    <span class="tag">Gaiarum</span>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="section-title">Elenco</h2>
+            <div class="character-highlight">
+                <span style="color: var(--secondary-color); font-size: 0.7rem; letter-spacing: 3px;">PROTAGONISTA</span>
+                <h3 style="font-size: 2rem; letter-spacing: 5px; color: var(--accent-color);">ENKIRO MIKIOJIRO</h3>
+                <p style="margin-top: 10px; max-width: 600px;">
+                    Determinado, leal e impulsivo. Su viaje lo lleva de ser un simple campesino a convertirse en la pieza clave de un conflicto que abarca todos los reinos.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p id="copyright"></p>
+    </footer>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof SITE_CONFIG !== 'undefined') {
+            document.getElementById('copyright').textContent = 
+                `© ${SITE_CONFIG.año} | ${SITE_CONFIG.nombre} · Writer & Creator`;
+            
+            document.getElementById('social-header').innerHTML = `
+                <a href="${SITE_CONFIG.social.github}" target="_blank" style="color:white; opacity:0.6;"><i class="fab fa-github"></i></a>
+            `;
+        }
+    });
+</script>
+
+</body>
+</html>

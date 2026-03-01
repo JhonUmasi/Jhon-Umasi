@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kurai Eko - Capítulo 10 | Reinos en Conflictos</title>
+
+    <script src="../../../../../../config.js"></script>
+
+    <style>
+        :root {
+            --accent-color: #f2f2f2;
+            --secondary-color: #666;
+            --bg-dark: #050505;
+            --text-light: #e0e0e0;
+            --overlay: rgba(0, 0, 0, 0.95);
+            --border-light: rgba(255, 255, 255, 0.1);
+            --magic-cyan: #00ffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Garamond', 'Times New Roman', serif;
+            background: url('../../../../../../assets/images/Background.png') no-repeat center center fixed;
+            background-size: cover;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+
+        .content-wrapper {
+            background: var(--overlay);
+            min-height: 100vh;
+            backdrop-filter: grayscale(100%) blur(5px);
+        }
+
+        .nav-header {
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-light);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-nav, .btn-back {
+            color: var(--text-light);
+            text-decoration: none;
+            letter-spacing: 1px;
+            font-size: 0.8rem;
+            border: 1px solid var(--secondary-color);
+            padding: 8px 15px;
+            transition: 0.4s;
+            display: inline-block;
+        }
+
+        .btn-nav:hover, .btn-back:hover {
+            background: var(--text-light);
+            color: black;
+        }
+
+        .chapter-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px 80px 20px;
+        }
+
+        .chapter-header {
+            text-align: center;
+            margin-bottom: 50px;
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 30px;
+        }
+
+        .chapter-header h1 {
+            font-size: 2.5rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 900;
+            margin-bottom: 10px;
+            color: var(--accent-color);
+        }
+
+        .chapter-header .chapter-sub {
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+            font-style: italic;
+        }
+
+        .chapter-content {
+            font-size: 1.15rem;
+            text-align: justify;
+            white-space: pre-wrap;
+        }
+
+        .chapter-content p {
+            margin-bottom: 1.5em;
+            text-indent: 2em;
+        }
+
+        .training-note {
+            background: rgba(0, 255, 255, 0.03);
+            border-left: 2px solid var(--magic-cyan);
+            padding: 25px;
+            margin: 35px 0;
+            font-style: italic;
+        }
+
+        .dialogue b {
+            color: var(--accent-color);
+            letter-spacing: 1px;
+        }
+
+        .spell-highlight {
+            color: var(--magic-cyan);
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+        }
+
+        .chapter-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            opacity: 0.4;
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border-light);
+        }
+
+        @media (max-width: 768px) {
+            .chapter-header h1 { font-size: 1.8rem; }
+            .nav-header { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="content-wrapper">
+    <nav class="nav-header">
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <a href="../Temporada1.html" class="btn-back">← VOLVER A SAGA</a>
+            <span style="color: var(--secondary-color); letter-spacing: 2px;">KURAI EKO</span>
+        </div>
+        <div class="nav-links">
+            <a href="../Capitulo9/capitulo-9.html" class="btn-nav">← ANTERIOR</a>
+            <span class="btn-nav" style="opacity: 0.5; cursor: not-allowed;">SIGUIENTE →</span>
+        </div>
+    </nav>
+
+    <main class="chapter-container">
+        <header class="chapter-header">
+            <h1>Capítulo 10</h1>
+            <div class="chapter-sub">Reinos en Conflictos</div>
+        </header>
+
+        <article class="chapter-content">
+            <p>Han pasado cuatro meses desde que Enkiro comenzó su vida como aventurero. Sin embargo, los artefactos de las Ruinas Ono trajeron consigo una maldición: el envejecimiento prematuro. Su cabello comenzó a tornarse blanco y su piel perdió vitalidad, aunque su fuerza permanecía intacta.</p>
+
+            <p>Durante una peligrosa misión en los <b>Manantiales del Dragón</b>, Enkiro fue gravemente herido por un <i>Kacpi</i>. Arrastrado por la corriente de un río subterráneo y al borde de la muerte, fue rescatado por Arck (un Naju) y llevado ante <b>Chan Ryoma</b>, un misterioso comerciante de medicinas y objetos antiguos.</p>
+
+            <div class="training-note">
+                <p><b>La Purificación y el Entrenamiento:</b></p>
+                <p>Chan identificó la maldición como agentes patógenos que consumían el color del cabello. Tras una dolorosa purificación, Enkiro pidió ser su discípulo. Durante dos años intensivos, Enkiro aprendió que la magia era manipulación molecular. Dominó hechizos arcanos como <span class="spell-highlight">Room</span> (un sistema aislado de energía) y técnicas avanzadas de esgrima.</p>
+                <p>Chan reveló su pasado: perteneció a la organización del <b>Dios Dragón</b> en el reino de Suzakumura, la misma que robó la espada de Enkiro. Ahora, ambos son considerados traidores por la organización liderada por Hiromi.</p>
+            </div>
+
+            <p>Ascendido al rango <i>Samma</i>, Enkiro aceptó una misión real: participar en la guerra del reino de <b>Mistsora</b> contra la opresión de Yokawa y las incursiones de Suzakumura. Al llegar, encontró un reino devastado por el hambre tras el cese del comercio de alimentos por parte del Rey de Yokawa.</p>
+
+            <p>En el pueblo de <b>Rore</b>, Enkiro presenció las atrocidades del tráfico de personas. Desafiando las leyes internacionales de combate en ríos, corrió sobre el agua con una velocidad asombrosa para rescatar a un grupo de secuestrados en un barco enemigo.</p>
+
+            <p class="dialogue"><b>Comandante:</b> ¡Es imposible correr sobre el agua sin un barco!</p>
+            <p class="dialogue"><b>Enkiro:</b> (Para sí mismo) Es solo comprensión de los elementos.</p>
+
+            <p>Tras destruir el barco y salvar a los civiles mediante una plataforma de tierra perfectamente modelada, Enkiro regresó a la costa. Allí, una joven llamada <b>Yumi Merrod</b>, que lo había perdido todo en el ataque, le suplicó que la tomara como aprendiz.</p>
+
+            <p class="dialogue"><b>Yumi:</b> Por favor... no tengo a dónde ir. Enséñame a ser fuerte.</p>
+            <p class="dialogue"><b>Enkiro:</b> (Recordando su propio pasado) Está bien, Yumi. Puedes venir conmigo.</p>
+
+            <p>Con un nuevo propósito y una aprendiz a su cargo, Enkiro se prepara para los oscuros días de guerra que se avecinan en el continente.</p>
+        </article>
+
+        <div class="chapter-navigation">
+            <a href="../Capitulo9/capitulo-9.html" class="btn-nav">← CAPÍTULO ANTERIOR</a>
+            <a href="../Temporada1.html" class="btn-nav">ÍNDICE</a>
+            <span class="btn-nav" style="opacity: 0.5;">PRÓXIMAMENTE →</span>
+        </div>
+    </main>
+
+    <footer>
+        <p id="copyright"></p>
+    </footer>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof SITE_CONFIG !== 'undefined') {
+            document.getElementById('copyright').textContent = 
+                `© ${SITE_CONFIG.año} | ${SITE_CONFIG.nombre} · Writer & Creator`;
+        }
+    });
+</script>
+
+</body>
+</html>

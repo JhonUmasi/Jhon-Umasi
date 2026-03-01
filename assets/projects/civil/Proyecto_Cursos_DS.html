@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis Dinámico | Proyecto de Curso DS</title>
+    
+    <script src="../../../config.js"></script>
+    
+    <style>
+        :root {
+            --accent-color: #e63946; /* Rojo Sismo */
+            --accent-hover: #ba1a26;
+            --bg-overlay: rgba(0, 0, 0, 0.7);
+            --text-light: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.8);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* Fondo desde la raíz */
+            background: url('../../../assets/images/Background.png') no-repeat center center fixed;
+            background-size: cover;
+            background-color: #1a1a1a;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .content-wrapper {
+            background: var(--bg-overlay);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(4px);
+        }
+
+        .top-bar {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.8rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .top-bar-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .badge {
+            background: var(--accent-color);
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .btn-back {
+            display: inline-block;
+            background: transparent;
+            color: var(--accent-color);
+            font-weight: 600;
+            text-decoration: none;
+            border: 2px solid var(--accent-color);
+            padding: 8px 20px;
+            border-radius: 30px;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            margin-left: 20px;
+        }
+
+        .btn-back:hover {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .project-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+            flex: 1;
+        }
+
+        .project-header { text-align: center; margin-bottom: 40px; }
+        .project-header h1 { font-size: 2.5rem; color: var(--accent-color); margin-bottom: 10px; }
+
+        .project-main-image {
+            width: 100%;
+            height: 400px;
+            background: #2a2a2a;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .project-main-image img { width: 100%; height: 100%; object-fit: cover; }
+
+        .project-description {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .project-details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .detail-card { background: rgba(255,255,255,0.05); border-radius: 10px; padding: 20px; }
+        .detail-card h3 { color: var(--accent-color); margin-bottom: 15px; font-size: 1.2rem; }
+        .detail-card ul { list-style: none; }
+        .detail-card li { margin-bottom: 10px; padding-left: 15px; border-left: 2px solid var(--accent-color); }
+
+        footer {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            text-align: center;
+            border-top: 2px solid var(--accent-color);
+            margin-top: auto;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 { font-size: 2rem; }
+            .project-main-image { height: 250px; }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+<div class="content-wrapper">
+    <div class="top-bar">
+        <div class="top-bar-content">
+            <div id="quick-contact"></div>
+            <div>
+                <span class="badge">Curso: Diseño Sismorresistente</span>
+                <a href="../../../Seismic.html" class="btn-back"><i class="fas fa-arrow-left"></i> Volver</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="project-container">
+        <div class="project-header">
+            <h1>Análisis de Irregularidades y Cortante Basal</h1>
+            <div style="color: var(--text-muted); margin-top: 10px;">
+                <i class="fas fa-university"></i> Facultad de Ingeniería Civil
+            </div>
+        </div>
+
+        <div class="project-main-image">
+            <img src="imagen/sismo_ds/modelado_3d.png" alt="Modelado Sísmico" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'display: flex; align-items: center; justify-content: center; height: 100%;\'><i class=\'fas fa-braille\' style=\'font-size: 5rem; color: #e63946;\'></i></div>';">
+        </div>
+
+        <div class="project-description">
+            <h2 style="color: var(--accent-color); margin-bottom: 15px;">Enfoque del Proyecto</h2>
+            <p>Este trabajo se centra en la identificación cualitativa y cuantitativa de irregularidades estructurales (torsión, piso blando y discontinuidad de sistemas verticales). Se evaluó el impacto del factor de irregularidad (Ia e Ip) en el coeficiente de reducción de fuerza sísmica (R).</p>
+        </div>
+
+        <div class="project-details-grid">
+            <div class="detail-card">
+                <h3><i class="fas fa-check-circle"></i> Análisis Estático</h3>
+                <ul>
+                    <li>Cálculo del Peso Sísmico de la edificación.</li>
+                    <li>Determinación del periodo fundamental (T).</li>
+                    <li>Distribución de fuerzas laterales por altura.</li>
+                    <li>Verificación del Cortante Basal mínimo.</li>
+                </ul>
+            </div>
+
+            <div class="detail-card">
+                <h3><i class="fas fa-chart-line"></i> Análisis Dinámico</h3>
+                <ul>
+                    <li>Superposición modal (CQC).</li>
+                    <li>Espectro de pseudo-aceleraciones.</li>
+                    <li>Determinación de Modos de Vibración.</li>
+                    <li>Escalamiento de cortantes dinámicos.</li>
+                </ul>
+            </div>
+
+            <div class="detail-card">
+                <h3><i class="fas fa-exclamation-triangle"></i> Control de Daños</h3>
+                <ul>
+                    <li>Cálculo de derivas de entrepiso inelasticas.</li>
+                    <li>Verificación de separación entre edificios (Junta).</li>
+                    <li>Efectos P-Delta (Estabilidad).</li>
+                </ul>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px;">
+            <div style="display: inline-block; padding: 20px; background: rgba(230, 57, 70, 0.1); border-radius: 10px; border: 1px solid var(--accent-color);">
+                <p style="font-size: 0.9rem;"><i class="fas fa-file-pdf"></i> Archivos de memoria de cálculo y modelos en ETABS disponibles para consulta académica.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p class="copyright" id="copyright"></p>
+    </footer>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof SITE_CONFIG !== 'undefined') {
+            document.getElementById('quick-contact').innerHTML = `
+                <a href="mailto:${SITE_CONFIG.email}" style="color:white; text-decoration:none; margin-right:20px;"><i class="fas fa-envelope"></i> Email</a>
+                <a href="${SITE_CONFIG.social.linkedin}" target="_blank" style="color:white; text-decoration:none;"><i class="fab fa-linkedin"></i> LinkedIn</a>
+            `;
+            document.getElementById('copyright').textContent = 
+                `© ${SITE_CONFIG.año} | ${SITE_CONFIG.nombre} · Proyecto Académico DS`;
+        }
+    });
+</script>
+
+</body>
+</html>

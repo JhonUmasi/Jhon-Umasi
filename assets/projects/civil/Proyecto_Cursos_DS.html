@@ -238,6 +238,32 @@
             margin-right: 10px;
         }
 
+        .resource-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+
+        .resource-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s;
+            font-size: 1rem;
+        }
+
+        .resource-link:hover {
+            color: var(--accent-color);
+        }
+
+        .resource-link i {
+            font-size: 1.2rem;
+        }
+
         .team-mini {
             display: flex;
             flex-wrap: wrap;
@@ -272,6 +298,7 @@
             .project-main-image { height: 250px; }
             .project-stats { grid-template-columns: repeat(2, 1fr); }
             .team-mini { flex-direction: column; text-align: center; border-radius: 20px; }
+            .resource-links { flex-direction: column; align-items: center; gap: 15px; }
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -300,10 +327,10 @@
             </div>
         </div>
 
-        <!-- IMAGEN PRINCIPAL -->
+        <!-- IMAGEN PRINCIPAL (sismo1.avif) -->
         <div class="project-main-image">
             <img src="assets/projects/civil/imagen/sismo/proyecto_curso/sismo1.avif" 
-                 alt="Modelado 3D ETABS" 
+                 alt="Vista 3D del teatro - Modelado ETABS" 
                  onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'display: flex; align-items: center; justify-content: center; height: 100%;\'><i class=\'fas fa-cube\' style=\'font-size: 5rem; color: #e63946;\'></i><span style=\'margin-left: 15px; font-size: 1.2rem;\'>Modelado Estructural en ETABS</span></div>';">
         </div>
 
@@ -378,24 +405,27 @@
             </div>
         </div>
 
-        <!-- SECCIÓN DE DESCARGA -->
-        <div class="download-section">
-            <a href="https://docs.google.com/document/d/18KSO40TeAhSQvFYC96cJbWpYseC4AsUiibxArGuTrYE/edit?usp=sharing" class="btn-download" download>
-                <i class="fas fa-file-pdf"></i> DESCARGAR INFORME COMPLETO (PDF)
+        <!-- ENLACES DE RECURSOS (DOCUMENTOS, HOJAS DE CÁLCULO, PLANOS) -->
+        <div class="resource-links">
+            <a href="https://docs.google.com/document/d/1c7yuGiecnOnZ-lQnt3I4ZlfTzJhvWWY9V6yqMX4oILE/edit?usp=sharing" target="_blank" class="resource-link">
+                <i class="fas fa-file-alt"></i> Informe Completo
             </a>
-            <p style="margin-top: 15px; color: var(--text-muted); font-size: 0.9rem;">
-                <i class="fas fa-folder-open"></i> Memoria de cálculo, planos y modelo ETABS incluidos
-            </p>
+            <a href="https://drive.google.com/drive/folders/1qrLaorKfTy7vc-KNFVdNJ4TtrFY8iYI8?usp=sharing" target="_blank" class="resource-link">
+                <i class="fas fa-table"></i> Hojas de Cálculo
+            </a>
+            <a href="https://drive.google.com/drive/folders/1BxLwC3a46mNBKzP1LtOnXaGx5lWouS4T?usp=sharing" target="_blank" class="resource-link">
+                <i class="fas fa-draw-polygon"></i> Planos Estructurales
+            </a>
         </div>
 
-        <!-- ENLACES ADICIONALES (opcional) -->
-        <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 20px;">
-            <a href="#" style="color: var(--accent-color); text-decoration: none;" onclick="alert('Enlace a Google Drive con los archivos')">
-                <i class="fas fa-drive"></i> Ver en Drive
+        <!-- SECCIÓN DE DESCARGA (opcional, como respaldo) -->
+        <div class="download-section">
+            <a href="https://docs.google.com/document/d/1c7yuGiecnOnZ-lQnt3I4ZlfTzJhvWWY9V6yqMX4oILE/export?format=pdf" target="_blank" class="btn-download">
+                <i class="fas fa-file-pdf"></i> DESCARGAR INFORME EN PDF
             </a>
-            <a href="#" style="color: var(--accent-color); text-decoration: none;" onclick="alert('Enlace a los planos en PDF')">
-                <i class="fas fa-draw-polygon"></i> Planos
-            </a>
+            <p style="margin-top: 15px; color: var(--text-muted); font-size: 0.9rem;">
+                <i class="fas fa-folder-open"></i> Memoria de cálculo, planos y modelo ETABS en los enlaces superiores
+            </p>
         </div>
     </div>
 
@@ -410,7 +440,7 @@
             const contactDiv = document.getElementById('quick-contact');
             if (contactDiv) {
                 contactDiv.innerHTML = `
-                    <a href="mailto:${SITE_CONFIG.email || '#'}" style="color:white; text-decoration:none; margin-right:20px;"><i class="fas fa-envelope"></i> Email</a>
+                    <a href="mailto:${SITE_CONFIG.email || 'grupo3@uni.edu.pe'}" style="color:white; text-decoration:none; margin-right:20px;"><i class="fas fa-envelope"></i> Email</a>
                     <a href="${SITE_CONFIG.social?.linkedin || '#'}" target="_blank" style="color:white; text-decoration:none;"><i class="fab fa-linkedin"></i> LinkedIn</a>
                 `;
             }
@@ -421,11 +451,10 @@
         } else {
             // Fallback
             document.getElementById('quick-contact').innerHTML = `<span style="color:white;">grupo3@uni.edu.pe</span>`;
-            document.getElementById('copyright').textContent = `© 2025 | Grupo 3 · Proyecto Académico DS`;
+            document.getElementById('copyright').textContent = `© 2025 | Grupo 3 · Proyecto Académico DS · Teatro Carabaya, Puno`;
         }
     });
 </script>
 
 </body>
 </html>
-

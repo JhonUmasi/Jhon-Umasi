@@ -3,19 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nave Industrial · Alma llena vs Tijerales · Equipo</title>
-    
-    <!-- subir 3 niveles para cargar config.js (igual que ejemplo) -->
+    <title>Nave Industrial · Alma llena vs Tijerales · Diseño en Acero</title>
+
     <script src="../../../config.js"></script>
-    
+
     <style>
         :root {
-            --accent-color: #007acc;
+            --accent-color: #007acc;      /* Azul estructuras metálicas */
             --accent-hover: #005f9e;
             --bg-overlay: rgba(0, 0, 0, 0.8);
             --text-light: #ffffff;
             --text-muted: rgba(255, 255, 255, 0.8);
-            --card-bg: rgba(20, 20, 30, 0.7);
+            --card-bg: rgba(255, 255, 255, 0.07);
         }
 
         * {
@@ -27,10 +26,10 @@
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: url('../../images/Background.avif') no-repeat center center fixed;
             background-size: cover;
-            background-color: #0f1217;
+            background-color: #1a1a1a;
             color: var(--text-light);
             line-height: 1.6;
         }
@@ -45,38 +44,30 @@
 
         .top-bar {
             background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 0.7rem 0;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.8rem 0;
             position: sticky;
             top: 0;
-            z-index: 200;
+            z-index: 100;
         }
 
         .top-bar-content {
-            max-width: 1200px;
+            max-width: 1100px;
             margin: 0 auto;
             padding: 0 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
         }
-
-        .quick-contact { display: flex; gap: 1.8rem; flex-wrap: wrap; }
-        .quick-contact a { color: var(--text-light); text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem; opacity: 0.85; transition: 0.2s; }
-        .quick-contact a:hover { color: var(--accent-color); opacity: 1; }
 
         .badge {
             background: var(--accent-color);
             color: white;
-            padding: 0.3rem 1.2rem;
-            border-radius: 30px;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
             font-size: 0.8rem;
             font-weight: 600;
-            letter-spacing: 0.4px;
-            margin-right: 10px;
         }
 
         .btn-back {
@@ -84,495 +75,352 @@
             background: transparent;
             color: var(--accent-color);
             font-weight: 600;
-            border: 2px solid var(--accent-color);
-            padding: 6px 18px;
-            border-radius: 30px;
-            transition: 0.25s;
-            font-size: 0.9rem;
             text-decoration: none;
+            border: 2px solid var(--accent-color);
+            padding: 8px 20px;
+            border-radius: 30px;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            margin-left: 20px;
         }
+
         .btn-back:hover {
             background: var(--accent-color);
             color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 18px rgba(0,122,204,0.25);
-        }
-
-        .btn-cv-top {
-            background: var(--accent-color);
-            color: white;
-            border: 2px solid var(--accent-color);
-            padding: 6px 20px;
-            border-radius: 30px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            margin-left: 8px;
-            transition: 0.25s;
-            text-decoration: none;
-            display: inline-block;
-        }
-        .btn-cv-top:hover {
-            background: transparent;
-            color: var(--accent-color);
         }
 
         .project-container {
-            max-width: 1100px;
-            margin: 40px auto 50px;
+            max-width: 1000px;
+            margin: 40px auto;
             padding: 0 20px;
             flex: 1;
         }
 
-        .project-header {
-            text-align: center;
-            margin-bottom: 35px;
+        .project-header { 
+            text-align: center; 
+            margin-bottom: 30px; 
         }
-        .project-header h1 {
-            font-size: 2.4rem;
-            font-weight: 600;
-            background: linear-gradient(145deg, #fff, #b0d4f0);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 12px;
+        
+        .project-header h1 { 
+            font-size: 2.8rem; 
+            color: var(--accent-color); 
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
-        .project-meta {
-            display: flex;
-            justify-content: center;
-            gap: 35px;
+        
+        .project-header h3 {
+            font-weight: 300;
             color: var(--text-muted);
-            font-size: 1.1rem;
-            flex-wrap: wrap;
+            font-size: 1.3rem;
         }
-        .project-meta i { margin-right: 5px; color: var(--accent-color); }
 
         .project-main-image {
             width: 100%;
             height: 380px;
-            background: linear-gradient(135deg, #1e2a3a, #1b1e2a);
-            border-radius: 22px;
-            margin-bottom: 35px;
+            background: #2a2a2a;
+            border-radius: 15px;
+            margin-bottom: 30px;
             overflow: hidden;
             border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 20px 30px -10px rgba(0,0,0,0.7);
         }
-        .project-main-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-        .project-main-image .fallback {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            background: #1c212e;
-            color: var(--accent-color);
-            font-size: 5rem;
+
+        .project-main-image img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
         }
 
         .project-description {
-            background: var(--card-bg);
-            backdrop-filter: blur(12px);
-            border-radius: 24px;
-            padding: 30px 35px;
-            margin-bottom: 35px;
-            border-left: 5px solid var(--accent-color);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--accent-color);
         }
 
         .project-description h2 {
             color: var(--accent-color);
-            margin-bottom: 18px;
-            font-weight: 500;
-            letter-spacing: -0.3px;
+            margin-bottom: 15px;
+            font-size: 1.8rem;
         }
-        .project-description p {
-            font-size: 1.1rem;
-            color: rgba(255,255,255,0.9);
+
+        .project-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px 10px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .stat-card i {
+            font-size: 2rem;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+        }
+
+        .stat-card .value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .stat-card .label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
         }
 
         .project-details-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 25px;
-            margin-bottom: 35px;
+            margin-bottom: 30px;
         }
 
-        .detail-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 22px 20px;
-            border: 1px solid rgba(255,255,255,0.05);
-            transition: 0.2s;
+        .detail-card { 
+            background: var(--card-bg); 
+            border-radius: 12px; 
+            padding: 20px; 
+            border: 1px solid rgba(255,255,255,0.1);
         }
-        .detail-card:hover {
-            border-color: var(--accent-color);
-            box-shadow: 0 8px 18px rgba(0,122,204,0.2);
-        }
-        .detail-card h3 {
-            color: var(--accent-color);
-            font-size: 1.3rem;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border-bottom: 1px dashed rgba(255,255,255,0.1);
+        
+        .detail-card h3 { 
+            color: var(--accent-color); 
+            margin-bottom: 15px; 
+            font-size: 1.3rem; 
+            border-bottom: 1px solid rgba(255,255,255,0.1);
             padding-bottom: 8px;
         }
-        .detail-card ul {
-            list-style: none;
-            padding: 0;
+        
+        .detail-card ul { 
+            list-style: none; 
         }
-        .detail-card li {
-            margin-bottom: 12px;
-            padding-left: 20px;
-            border-left: 3px solid var(--accent-color);
-            font-size: 0.98rem;
-            color: rgba(255,255,255,0.85);
-        }
-        .detail-card li strong { color: white; font-weight: 600; }
-
-        .section-title {
-            color: var(--accent-color);
-            font-size: 1.8rem;
-            margin: 40px 0 20px;
-            font-weight: 500;
-            border-bottom: 2px solid rgba(0,122,204,0.4);
-            padding-bottom: 8px;
+        
+        .detail-card li { 
+            margin-bottom: 10px; 
+            padding-left: 15px; 
+            border-left: 2px solid var(--accent-color); 
         }
 
-        .team-section {
-            background: rgba(0, 40, 70, 0.6);
-            backdrop-filter: blur(8px);
-            border-radius: 28px;
-            padding: 30px;
-            margin: 40px 0;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-        .team-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-            gap: 25px;
-            margin-top: 20px;
-        }
-        .team-card {
-            background: rgba(0,0,0,0.4);
-            border-radius: 18px;
-            padding: 20px 15px;
-            text-align: center;
-            border-bottom: 3px solid var(--accent-color);
-        }
-        .team-card i {
-            font-size: 2.5rem;
-            color: var(--accent-color);
-            margin-bottom: 10px;
-        }
-        .team-card h4 {
-            font-size: 1.25rem;
-            margin-bottom: 5px;
-        }
-        .team-card p {
-            font-size: 0.9rem;
-            opacity: 0.8;
-            background: rgba(0,122,204,0.15);
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 40px;
-            margin-top: 8px;
-        }
-
-        .comparison-badge {
-            display: inline-block;
-            background: rgba(0,122,204,0.2);
-            color: #a0d0ff;
-            padding: 4px 12px;
-            border-radius: 40px;
-            font-size: 0.8rem;
-            border: 1px solid rgba(0,122,204,0.6);
-            margin-left: 12px;
-            vertical-align: middle;
-        }
-
-        .results-highlight {
-            background: rgba(0, 20, 40, 0.7);
-            backdrop-filter: blur(8px);
-            border-radius: 20px;
-            padding: 20px 25px;
-            margin: 30px 0;
+        .team-mini {
             display: flex;
             flex-wrap: wrap;
+            justify-content: center;
             gap: 25px;
-            justify-content: space-around;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-        .stat-item {
-            text-align: center;
-        }
-        .stat-number {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: var(--accent-color);
-            line-height: 1.2;
-        }
-        .stat-label {
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            opacity: 0.7;
-        }
-
-        .mini-table {
-            background: rgba(0,0,0,0.25);
-            border-radius: 14px;
-            padding: 10px 15px;
-            font-size: 0.95rem;
-            border-collapse: collapse;
-            width: 100%;
-            margin: 12px 0;
-        }
-        .mini-table td {
-            padding: 6px 5px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .mini-table tr:last-child td { border-bottom: none; }
-
-        .anexos-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 20px;
-            margin: 25px 0;
-        }
-        .anexo-card {
-            background: rgba(0, 30, 50, 0.7);
-            border-radius: 20px;
-            padding: 20px;
-            border: 1px solid rgba(255,255,255,0.06);
-            transition: 0.2s;
-            text-decoration: none;
-            color: inherit;
-            display: block;
-        }
-        .anexo-card:hover {
-            border-color: var(--accent-color);
-            transform: translateY(-5px);
-            background: rgba(0, 50, 80, 0.8);
-        }
-        .anexo-card i {
-            font-size: 2rem;
-            color: var(--accent-color);
-            margin-bottom: 12px;
-        }
-        .anexo-card h4 {
-            font-size: 1.3rem;
-            margin-bottom: 8px;
-        }
-        .anexo-card p {
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-
-        .project-gallery {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 18px;
             margin: 30px 0;
+            background: rgba(0,0,0,0.3);
+            padding: 18px 20px;
+            border-radius: 50px;
         }
-        .gallery-item {
-            aspect-ratio: 16 / 10;
-            background: #232633;
-            border-radius: 16px;
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.1);
-            transition: 0.2s;
-            cursor: default;
+
+        .team-mini span {
+            color: var(--text-muted);
+            font-size: 1rem;
         }
-        .gallery-item .inner {
-            width: 100%;
-            height: 100%;
+
+        .team-mini strong {
+            color: white;
+            margin-left: 6px;
+            font-weight: 600;
+        }
+
+        .resource-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+
+        .resource-link {
+            color: var(--text-muted);
+            text-decoration: none;
             display: flex;
             align-items: center;
-            justify-content: center;
+            gap: 8px;
+            transition: color 0.3s;
+            font-size: 1rem;
+        }
+
+        .resource-link:hover {
             color: var(--accent-color);
-            font-size: 2.8rem;
-            background: #1f2430;
+        }
+
+        .resource-link i {
+            font-size: 1.2rem;
+        }
+
+        .download-section {
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .btn-download {
+            display: inline-block;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            border: 2px solid transparent;
+            text-decoration: none;
+        }
+
+        .btn-download:hover {
+            background: transparent;
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .btn-download i {
+            margin-right: 10px;
         }
 
         footer {
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(12px);
-            padding: 25px 20px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 25px;
             text-align: center;
             border-top: 2px solid var(--accent-color);
+            margin-top: auto;
         }
-        .copyright { font-size: 0.8rem; opacity: 0.6; }
 
-        @media (max-width: 650px) {
-            .project-header h1 { font-size: 1.9rem; }
-            .project-meta { gap: 15px; flex-direction: column; }
-            .project-gallery { grid-template-columns: 1fr; }
+        @media (max-width: 768px) {
+            .project-header h1 { font-size: 2rem; }
+            .project-main-image { height: 250px; }
+            .project-stats { grid-template-columns: repeat(2, 1fr); }
+            .team-mini { flex-direction: column; text-align: center; border-radius: 20px; gap: 10px; }
+            .resource-links { flex-direction: column; align-items: center; gap: 15px; }
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+
 <div class="content-wrapper">
     <div class="top-bar">
         <div class="top-bar-content">
-            <div class="quick-contact" id="quick-contact"></div>
+            <div id="quick-contact"></div>
             <div>
-                <span class="badge">Estructuras Metálicas</span>
-                <a href="../../../steel.html" class="btn-back"><i class="fas fa-arrow-left"></i> Volver a Acero</a>
-                <a href="" download class="btn-cv-top" id="btn-cv-top">
-                    <i class="fas fa-download"></i> CV
-                </a>
+                <span class="badge">CI5313 · Estructuras Metálicas</span>
+                <a href="../../../steel.html" class="btn-back"><i class="fas fa-arrow-left"></i> Volver</a>
             </div>
         </div>
     </div>
 
     <div class="project-container">
+        <!-- ENCABEZADO -->
         <div class="project-header">
-            <h1>Nave Industrial · Alma llena vs Tijerales <span class="comparison-badge">comparativa</span></h1>
-            <div class="project-meta">
-                <span><i class="fas fa-calendar-alt"></i> 2025</span>
-                <span><i class="fas fa-map-pin"></i> Lurigancho-Chosica, Lima</span>
-                <span><i class="fas fa-arrows-alt-h"></i> 85m x 35m</span>
-                <span><i class="fas fa-users"></i> 3 integrantes</span>
+            <span class="badge" style="font-size: 1rem; margin-bottom: 15px; display: inline-block;">Proyecto final · Diseño comparativo</span>
+            <h1>NAVE INDUSTRIAL METÁLICA</h1>
+            <h3>Vigas de Alma llena vs Tijerales · Lurigancho-Chosica, Lima</h3>
+            <div style="margin-top: 15px; color: var(--text-muted);">
+                <i class="fas fa-chalkboard-teacher"></i> Curso: Diseño de Estructuras Metálicas
             </div>
         </div>
 
-        <!-- Imagen principal (fallback icon si no existe) -->
+        <!-- IMAGEN PRINCIPAL (fallback amigable) -->
         <div class="project-main-image">
-            <img src="imagen/nave_industrial/portico_principal.png" alt="Modelo 3D Nave Industrial" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=fallback><i class=\'fas fa-archway\'></i><span style=\'font-size:1.2rem; margin-left:15px;\'>Estructura de acero · vista general</span></div>';">
+            <img src="imagen/nave_industrial/portico_principal.png" 
+                 alt="Vista 3D Nave Industrial - ETABS" 
+                 onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'display: flex; align-items: center; justify-content: center; height: 100%;\'><i class=\'fas fa-archway\' style=\'font-size: 5rem; color: #007acc;\'></i><span style=\'margin-left: 15px; font-size: 1.2rem;\'>Modelo estructural en ETABS</span></div>';">
         </div>
 
+        <!-- DESCRIPCIÓN CORTA -->
         <div class="project-description">
-            <h2><i class="fas fa-industry" style="margin-right: 10px;"></i> Resumen del proyecto final</h2>
-            <p>Diseño estructural completo de una nave industrial de gran luz (85x35 m, altura 12 m) desarrollado como proyecto final del curso Diseño de Estructuras Metálicas. Se elaboraron <strong>dos propuestas</strong>: vigas de alma llena (perfiles laminados/soldados) y sistema con <strong>tijerales + arriostres SCBF</strong>. El análisis incluye cargas de viento (E.020), sismo (E.030, suelo S1, zona 2), diseño de correas, cerchas, celosías, columnas compuestas y conexiones soldadas/empernadas A325. Todo verificado bajo AISC 360-22 y E.090 (ASD/LRFD).</p>
+            <h2><i class="fas fa-bullseye" style="margin-right: 10px;"></i> Resumen del Proyecto</h2>
+            <p style="font-size: 1.1rem;">Diseño estructural de una nave industrial de gran luz (85×35 m, altura 12 m) ubicada en Chosica. Se desarrollaron dos propuestas: <strong>vigas de alma llena</strong> (perfiles laminados/soldados) y <strong>sistema de tijerales con arriostres SCBF</strong>. Análisis según Normas E.020, E.030, E.090 y AISC 360-22. Se incluyen memorias, planos, modelos ETABS y Tekla.</p>
         </div>
 
-        <!-- EQUIPO INTEGRANTES con sus roles (solicitud específica) -->
-        <div class="team-section">
-            <h2 style="color: var(--accent-color); margin-bottom: 10px;"><i class="fas fa-user-friends"></i> Equipo de desarrollo</h2>
-            <div class="team-grid">
-                <div class="team-card">
-                    <i class="fas fa-user-graduate"></i>
-                    <h4>Jhon Alex Umasi Huisa</h4>
-                    <p><strong>Diseño de tijerales</strong> (SCBF, cerchas, conexiones)</p>
-                </div>
-                <div class="team-card">
-                    <i class="fas fa-user-cog"></i>
-                    <h4>Kevin Heymer Núñez Flores</h4>
-                    <p><strong>Diseño alma llena</strong> (vigas, columnas, correas)</p>
-                </div>
-                <div class="team-card">
-                    <i class="fas fa-user-astronaut"></i>
-                    <h4>Wilder David Salvador Tanta</h4>
-                    <p><strong>Diseño alma llena</strong> (pórticos, verificación)</p>
-                </div>
+        <!-- ESTADÍSTICAS RÁPIDAS (parámetros esenciales) -->
+        <div class="project-stats">
+            <div class="stat-card">
+                <i class="fas fa-arrows-alt-h"></i>
+                <div class="value">85×35 m</div>
+                <div class="label">Dimensiones</div>
             </div>
-            <p style="text-align: center; margin-top: 15px; opacity: 0.8;">Trabajo colaborativo · modelado ETABS, Tekla, hojas de cálculo · Febrero 2025</p>
+            <div class="stat-card">
+                <i class="fas fa-ruler-vertical"></i>
+                <div class="value">12 m</div>
+                <div class="label">Altura arranque</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-wind"></i>
+                <div class="value">75 km/h</div>
+                <div class="label">Viento básico</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-chart-line"></i>
+                <div class="value">0.84%</div>
+                <div class="label">Deriva máx. (tijeral)</div>
+            </div>
         </div>
 
-        <!-- parámetros rápidos en tarjetas -->
+        <!-- EQUIPO CON ROLES (tal como solicitaste) -->
+        <div class="team-mini">
+            <span><i class="fas fa-user-tie"></i> <strong>Jhon Umasi Huisa</strong> · Diseño de tijerales (SCBF, cerchas, Tekla)</span>
+            <span><i class="fas fa-user-cog"></i> <strong>Kevin Núñez Flores</strong> · Diseño alma llena (vigas, columnas)</span>
+            <span><i class="fas fa-user-astronaut"></i> <strong>Wilder Salvador Tanta</strong> · Diseño alma llena (pórticos, verificación)</span>
+        </div>
+
+        <!-- CARACTERÍSTICAS PRINCIPALES (dos tarjetas: alma llena + tijerales) -->
         <div class="project-details-grid">
             <div class="detail-card">
-                <h3><i class="fas fa-cog"></i> Parámetros básicos</h3>
+                <h3><i class="fas fa-bolt"></i> Propuesta: Alma llena</h3>
                 <ul>
-                    <li><strong>Ubicación:</strong> Chosica, suelo GW, capacidad 1.6–2.5 kg/cm²</li>
-                    <li><strong>Sismo:</strong> Tp=0.4s, TL=2.5s, S=1, R=7 (SCBF)</li>
-                    <li><strong>Viento:</strong> V=75 km/h, factor forma E.020</li>
-                    <li><strong>Carga viva techo:</strong> 65 kg/m² (inclinación 10%)</li>
+                    <li><strong>Viguetas:</strong> W4X13 · Zx=6.28 in³ · compacta</li>
+                    <li><strong>Vigas principales:</strong> W10X68 (Zx=85.3 in³)</li>
+                    <li><strong>Columnas:</strong> W12X72 (Ag=21.1 in²) · flexocompresión</li>
+                    <li><strong>Derivas:</strong> 0.90% (X) · 0.677% (Y) · Cumple</li>
+                    <li><span style="color: #8bc34a;">✓ Diseño por cortante, LTB, deflexión</span></li>
                 </ul>
             </div>
+
             <div class="detail-card">
-                <h3><i class="fas fa-bolt"></i> Alma llena (perfiles)</h3>
+                <h3><i class="fas fa-project-diagram"></i> Propuesta: Tijerales (SCBF)</h3>
                 <ul>
-                    <li>Vigueta <strong>W4X13</strong> · Zx=6.28 in³</li>
-                    <li>Viga principal <strong>W10X68</strong> · Zx=85.3 in³</li>
-                    <li>Columna <strong>W12X72</strong> (Ag=21.1 in²) · flexocompresión</li>
-                    <li>Deriva máxima: 0.90% (eje X) · Cumple</li>
-                </ul>
-            </div>
-            <div class="detail-card">
-                <h3><i class="fas fa-project-diagram"></i> Tijerales + SCBF</h3>
-                <ul>
-                    <li>Cercha: cordones HSS6x6x1/2 · montantes HSS2x2x3/16</li>
-                    <li>Celosía mixta: W5x19 (sup) + HSS (inf)</li>
-                    <li>Columna compuesta: 2 HSS 8x8x1/2 + HSS 12x12x1 central</li>
-                    <li>Deriva controlada: 0.84% (X) / 0.008% (Y)</li>
+                    <li><strong>Correas:</strong> W6x16 · deflexión L/300</li>
+                    <li><strong>Cerchas:</strong> Cordones HSS6x6x1/2 · montantes HSS2x2x3/16</li>
+                    <li><strong>Celosía:</strong> W5x19 (sup) + HSS6x6x1/2 (inf) + HSS2x2 internos</li>
+                    <li><strong>Columna compuesta:</strong> HSS8x8x1/2 + HSS12x12x1</li>
+                    <li><strong>Derivas controladas:</strong> 0.84% X / 0.008% Y</li>
                 </ul>
             </div>
         </div>
 
-        <!-- bloque de resultados destacados -->
-        <div class="results-highlight">
-            <div class="stat-item"><span class="stat-number">W6x16</span><span class="stat-label">Correa óptima</span></div>
-            <div class="stat-item"><span class="stat-number">0.84%</span><span class="stat-label">Deriva máxima (tijeral)</span></div>
-            <div class="stat-item"><span class="stat-number">A325</span><span class="stat-label">Pernos 5/8" · 3/4"</span></div>
-            <div class="stat-item"><span class="stat-number">75 km/h</span><span class="stat-label">Viento diseño</span></div>
-        </div>
-
-        <!-- sección detalles técnicos extraídos del PDF -->
-        <h2 class="section-title"><i class="fas fa-clipboard-list"></i> Verificaciones clave</h2>
-        <div style="display: flex; flex-wrap: wrap; gap: 25px; margin-bottom: 30px;">
-            <div style="flex:1; min-width:260px; background: rgba(0,0,0,0.2); border-radius: 24px; padding: 20px;">
-                <h3 style="color:var(--accent-color); margin-bottom: 15px;"><i class="fas fa-check-circle"></i> Alma llena</h3>
-                <table class="mini-table">
-                    <tr><td>Vigueta W4X13</td><td>✓ flexión, LTB, cortante</td></tr>
-                    <tr><td>Viga W10X68</td><td>✓ compacidad, L<sub>b</sub> < L<sub>p</sub></td></tr>
-                    <tr><td>Columna W12X72</td><td>✓ flexocompresión (Y, LTB)</td></tr>
-                    <tr><td>Conexiones</td><td>empernadas A325</td></tr>
-                </table>
-            </div>
-            <div style="flex:1; min-width:260px; background: rgba(0,0,0,0.2); border-radius: 24px; padding: 20px;">
-                <h3 style="color:var(--accent-color);"><i class="fas fa-check-circle"></i> Tijerales (SCBF)</h3>
-                <table class="mini-table">
-                    <tr><td>Correa W6x16</td><td>✓ compacidad · deflexión L/300</td></tr>
-                    <tr><td>Cercha HSS6x6x1/2</td><td>✓ fluencia, pandeo</td></tr>
-                    <tr><td>Columna compuesta</td><td>✓ flexotracción, AISC H</td></tr>
-                    <tr><td>Arriostres HSS</td><td>✓ SCBF, ductilidad</td></tr>
-                </table>
-            </div>
-        </div>
-
-        <!-- SECCIÓN ANEXOS CON ENLCES SOLICITADOS -->
-        <h2 class="section-title" id="anexos"><i class="fas fa-paperclip"></i> Anexos · Documentación completa</h2>
-        <div class="anexos-grid">
-            <a href="https://drive.google.com/file/d/1vUZ6lRWT6poC8oPPMpZGdfTttfpmxfAf/view?usp=sharing" target="_blank" class="anexo-card">
-                <i class="fas fa-file-pdf"></i>
-                <h4>Informe final PDF</h4>
-                <p>Memoria descriptiva, cálculos, normas, conclusiones.</p>
+        <!-- ENLACES DE RECURSOS (documentos, hojas de cálculo, planos, modelos) -->
+        <div class="resource-links">
+            <a href="https://drive.google.com/file/d/1vUZ6lRWT6poC8oPPMpZGdfTttfpmxfAf/view?usp=sharing" target="_blank" class="resource-link">
+                <i class="fas fa-file-alt"></i> Informe final PDF
             </a>
-            <a href="https://drive.google.com/file/d/1uRDqpmvzPjvrUBM8CkScoJKaVG3a_8X-/view?usp=sharing" target="_blank" class="anexo-card">
-                <i class="fas fa-file-powerpoint"></i>
-                <h4>Presentación PDF</h4>
-                <p>Diapositivas de sustentación · resumen ejecutivo.</p>
+            <a href="https://drive.google.com/file/d/1uRDqpmvzPjvrUBM8CkScoJKaVG3a_8X-/view?usp=sharing" target="_blank" class="resource-link">
+                <i class="fas fa-file-powerpoint"></i> Presentación PDF
             </a>
-            <a href="https://drive.google.com/drive/folders/1tv2yH8_-EWwrY-ea20n_K2sQl7s6Bbll?usp=sharing" target="_blank" class="anexo-card">
-                <i class="fas fa-folder-open"></i>
-                <h4>Carpeta Alma llena</h4>
-                <p>Planos, hojas de cálculo, modelo ETABS. (Kevin, Wilder)</p>
+            <a href="https://drive.google.com/drive/folders/1tv2yH8_-EWwrY-ea20n_K2sQl7s6Bbll?usp=sharing" target="_blank" class="resource-link">
+                <i class="fas fa-folder-open"></i> Alma llena (planos, cálculos, ETABS)
             </a>
-            <a href="https://drive.google.com/drive/folders/1Ge8xbmiSJ7_p2U9_GdQiNJXrcFREYrHb?usp=sharing" target="_blank" class="anexo-card">
-                <i class="fas fa-folder-tree"></i>
-                <h4>Carpeta Tijerales</h4>
-                <p>Mejora de cálculo, planos, ETABS + Tekla. (Jhon Umasi)</p>
+            <a href="https://drive.google.com/drive/folders/1Ge8xbmiSJ7_p2U9_GdQiNJXrcFREYrHb?usp=sharing" target="_blank" class="resource-link">
+                <i class="fas fa-folder-tree"></i> Tijerales (cálculo, planos, ETABS+Tekla)
             </a>
         </div>
 
-        <h2 class="section-title"><i class="fas fa-images"></i> Galería del modelo</h2>
-        <div class="project-gallery">
-            <div class="gallery-item"><div class="inner"><i class="fas fa-draw-polygon"></i> Vista 3D</div></div>
-            <div class="gallery-item"><div class="inner"><i class="fas fa-border-all"></i> Planta pórticos</div></div>
-            <div class="gallery-item"><div class="inner"><i class="fas fa-tools"></i> Conexión viga-col</div></div>
-        </div>
-        <p style="text-align:center; opacity:0.7; margin-bottom: 30px;">(visualización conceptual — detalles completos en anexos)</p>
-
-        <!-- breve extra: conclusiones -->
-        <div style="background: rgba(0,122,204,0.1); border-radius: 20px; padding: 20px 30px; margin: 40px 0;">
-            <p style="font-style: italic; font-size: 1.1rem;"><i class="fas fa-quote-left" style="color:var(--accent-color); margin-right: 8px;"></i> Ambas alternativas cumplen RNE y AISC, pero el sistema con tijerales mostró mejor comportamiento lateral y control de derivas, recomendado para ejecución. Conexiones mixtas soldadas/empernadas garantizan seguridad sísmica.</p>
+        <!-- SECCIÓN DE DESCARGA (opcional, botón principal) -->
+        <div class="download-section">
+            <a href="https://drive.google.com/file/d/1vUZ6lRWT6poC8oPPMpZGdfTttfpmxfAf/view?usp=sharing" target="_blank" class="btn-download">
+                <i class="fas fa-file-pdf"></i> DESCARGAR INFORME COMPLETO
+            </a>
+            <p style="margin-top: 15px; color: var(--text-muted); font-size: 0.9rem;">
+                <i class="fas fa-folder-open"></i> Accede a las carpetas de Drive para ver planos, hojas de cálculo, modelos ETABS y Tekla
+            </p>
         </div>
     </div>
 
@@ -583,22 +431,25 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        if (typeof SITE_CONFIG !== 'undefined') {
-            document.getElementById('quick-contact').innerHTML = `
-                <a href="mailto:${SITE_CONFIG.email}"><i class="fas fa-envelope"></i> Email</a>
-                <a href="${SITE_CONFIG.social.linkedin}" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
-                <a href="${SITE_CONFIG.social.whatsapp}" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-            `;
-            document.getElementById('btn-cv-top').href = "../../../" + SITE_CONFIG.rutas.cv;
-            document.getElementById('copyright').textContent = 
-                `© ${SITE_CONFIG.año} · Nave Industrial · ${SITE_CONFIG.nombre} · Umasi · Núñez · Salvador`;
+        if (typeof SITE_CONFIG !== 'undefined' && SITE_CONFIG) {
+            const contactDiv = document.getElementById('quick-contact');
+            if (contactDiv) {
+                contactDiv.innerHTML = `
+                    <a href="mailto:${SITE_CONFIG.email || 'grupometalicas@uni.edu.pe'}" style="color:white; text-decoration:none; margin-right:20px;"><i class="fas fa-envelope"></i> Email</a>
+                    <a href="${SITE_CONFIG.social?.linkedin || '#'}" target="_blank" style="color:white; text-decoration:none;"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                `;
+            }
+            const copyEl = document.getElementById('copyright');
+            if (copyEl) {
+                copyEl.textContent = `© ${SITE_CONFIG.año || '2025'} | ${SITE_CONFIG.nombre || 'Grupo Metálicas'} · Nave Industrial · Umasi · Núñez · Salvador`;
+            }
         } else {
-            // fallback por si no carga config
-            document.getElementById('quick-contact').innerHTML = '<a href="#"><i class="fas fa-envelope"></i> jumasi@ejemplo.com</a>';
-            document.getElementById('copyright').textContent = '© 2025 · Proyecto acero · Umasi · Núñez · Salvador';
+            // Fallback si config no existe
+            document.getElementById('quick-contact').innerHTML = `<span style="color:white;">metalicas.grupo@uni.pe</span>`;
+            document.getElementById('copyright').textContent = `© 2025 | Grupo 3 · Nave Industrial · Umasi · Núñez · Salvador`;
         }
     });
 </script>
+
 </body>
 </html>
-

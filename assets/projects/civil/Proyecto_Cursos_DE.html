@@ -3,17 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Curso Electivo | Diseño de Estructuras</title>
+    <title>Nave Industrial · Alma llena vs Tijerales · Equipo</title>
     
+    <!-- subir 3 niveles para cargar config.js (igual que ejemplo) -->
     <script src="../../../config.js"></script>
     
     <style>
         :root {
             --accent-color: #007acc;
             --accent-hover: #005f9e;
-            --bg-overlay: rgba(0, 0, 0, 0.65);
+            --bg-overlay: rgba(0, 0, 0, 0.8);
             --text-light: #ffffff;
             --text-muted: rgba(255, 255, 255, 0.8);
+            --card-bg: rgba(20, 20, 30, 0.7);
         }
 
         * {
@@ -25,11 +27,10 @@
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            /* SUBIR 3 NIVELES para llegar a la raíz y entrar a assets/images/ */
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
             background: url('../../../assets/images/Background.png') no-repeat center center fixed;
             background-size: cover;
-            background-color: #1a1a1a;
+            background-color: #0f1217;
             color: var(--text-light);
             line-height: 1.6;
         }
@@ -39,21 +40,21 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            backdrop-filter: blur(3px);
+            backdrop-filter: blur(4px);
         }
 
         .top-bar {
-            background: rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 0.8rem 0;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 0.7rem 0;
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 200;
         }
 
         .top-bar-content {
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
             display: flex;
@@ -63,18 +64,19 @@
             gap: 1rem;
         }
 
-        .quick-contact { display: flex; gap: 1.5rem; flex-wrap: wrap; }
-        .quick-contact a { color: var(--text-light); text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem; transition: color 0.3s; opacity: 0.9; }
+        .quick-contact { display: flex; gap: 1.8rem; flex-wrap: wrap; }
+        .quick-contact a { color: var(--text-light); text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem; opacity: 0.85; transition: 0.2s; }
         .quick-contact a:hover { color: var(--accent-color); opacity: 1; }
 
         .badge {
-            background: #28a745; /* Color verde para diferenciar que es académico */
+            background: var(--accent-color);
             color: white;
-            padding: 0.3rem 1rem;
-            border-radius: 20px;
+            padding: 0.3rem 1.2rem;
+            border-radius: 30px;
             font-size: 0.8rem;
             font-weight: 600;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.4px;
+            margin-right: 10px;
         }
 
         .btn-back {
@@ -82,132 +84,345 @@
             background: transparent;
             color: var(--accent-color);
             font-weight: 600;
-            text-decoration: none;
             border: 2px solid var(--accent-color);
-            padding: 8px 20px;
+            padding: 6px 18px;
             border-radius: 30px;
-            transition: all 0.3s;
+            transition: 0.25s;
             font-size: 0.9rem;
-            margin-left: 20px;
+            text-decoration: none;
         }
-
         .btn-back:hover {
             background: var(--accent-color);
             color: white;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,122,204,0.3);
+            box-shadow: 0 8px 18px rgba(0,122,204,0.25);
         }
 
         .btn-cv-top {
-            display: inline-block;
             background: var(--accent-color);
             color: white;
-            text-decoration: none;
-            padding: 8px 20px;
+            border: 2px solid var(--accent-color);
+            padding: 6px 20px;
             border-radius: 30px;
             font-weight: 600;
             font-size: 0.9rem;
-            margin-left: 10px;
-            border: 2px solid var(--accent-color);
-            transition: all 0.3s;
+            margin-left: 8px;
+            transition: 0.25s;
+            text-decoration: none;
+            display: inline-block;
         }
-
         .btn-cv-top:hover {
             background: transparent;
             color: var(--accent-color);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,122,204,0.3);
         }
 
         .project-container {
-            max-width: 1000px;
-            margin: 40px auto;
+            max-width: 1100px;
+            margin: 40px auto 50px;
             padding: 0 20px;
             flex: 1;
         }
 
-        .project-header { text-align: center; margin-bottom: 40px; }
-        .project-header h1 { font-size: 2.5rem; color: var(--accent-color); margin-bottom: 10px; }
-        .project-header .project-meta { display: flex; justify-content: center; gap: 30px; color: var(--text-muted); font-size: 1rem; }
+        .project-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+        .project-header h1 {
+            font-size: 2.4rem;
+            font-weight: 600;
+            background: linear-gradient(145deg, #fff, #b0d4f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+        }
+        .project-meta {
+            display: flex;
+            justify-content: center;
+            gap: 35px;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            flex-wrap: wrap;
+        }
+        .project-meta i { margin-right: 5px; color: var(--accent-color); }
 
         .project-main-image {
             width: 100%;
-            height: 400px;
-            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
-            border-radius: 15px;
-            margin-bottom: 30px;
+            height: 380px;
+            background: linear-gradient(135deg, #1e2a3a, #1b1e2a);
+            border-radius: 22px;
+            margin-bottom: 35px;
             overflow: hidden;
             border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 20px 30px -10px rgba(0,0,0,0.7);
+        }
+        .project-main-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .project-main-image .fallback {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            background: #1c212e;
+            color: var(--accent-color);
+            font-size: 5rem;
         }
 
-        .project-main-image img { width: 100%; height: 100%; object-fit: cover; }
-
         .project-description {
-            background: rgba(0,0,0,0.3);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 30px;
-            border-left: 4px solid #28a745;
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            padding: 30px 35px;
+            margin-bottom: 35px;
+            border-left: 5px solid var(--accent-color);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+        }
+
+        .project-description h2 {
+            color: var(--accent-color);
+            margin-bottom: 18px;
+            font-weight: 500;
+            letter-spacing: -0.3px;
+        }
+        .project-description p {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.9);
         }
 
         .project-details-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-bottom: 30px;
+            gap: 25px;
+            margin-bottom: 35px;
         }
 
-        .detail-card { background: rgba(255,255,255,0.05); border-radius: 10px; padding: 20px; }
-        .detail-card h3 { color: var(--accent-color); margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
-        .detail-card ul { list-style: none; padding: 0; }
-        .detail-card li { margin-bottom: 10px; padding-left: 20px; border-left: 2px solid var(--accent-color); }
+        .detail-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 22px 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: 0.2s;
+        }
+        .detail-card:hover {
+            border-color: var(--accent-color);
+            box-shadow: 0 8px 18px rgba(0,122,204,0.2);
+        }
+        .detail-card h3 {
+            color: var(--accent-color);
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px dashed rgba(255,255,255,0.1);
+            padding-bottom: 8px;
+        }
+        .detail-card ul {
+            list-style: none;
+            padding: 0;
+        }
+        .detail-card li {
+            margin-bottom: 12px;
+            padding-left: 20px;
+            border-left: 3px solid var(--accent-color);
+            font-size: 0.98rem;
+            color: rgba(255,255,255,0.85);
+        }
+        .detail-card li strong { color: white; font-weight: 600; }
+
+        .section-title {
+            color: var(--accent-color);
+            font-size: 1.8rem;
+            margin: 40px 0 20px;
+            font-weight: 500;
+            border-bottom: 2px solid rgba(0,122,204,0.4);
+            padding-bottom: 8px;
+        }
+
+        .team-section {
+            background: rgba(0, 40, 70, 0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 28px;
+            padding: 30px;
+            margin: 40px 0;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        .team-card {
+            background: rgba(0,0,0,0.4);
+            border-radius: 18px;
+            padding: 20px 15px;
+            text-align: center;
+            border-bottom: 3px solid var(--accent-color);
+        }
+        .team-card i {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+        }
+        .team-card h4 {
+            font-size: 1.25rem;
+            margin-bottom: 5px;
+        }
+        .team-card p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            background: rgba(0,122,204,0.15);
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 40px;
+            margin-top: 8px;
+        }
+
+        .comparison-badge {
+            display: inline-block;
+            background: rgba(0,122,204,0.2);
+            color: #a0d0ff;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(0,122,204,0.6);
+            margin-left: 12px;
+            vertical-align: middle;
+        }
+
+        .results-highlight {
+            background: rgba(0, 20, 40, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 20px;
+            padding: 20px 25px;
+            margin: 30px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            justify-content: space-around;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            line-height: 1.2;
+        }
+        .stat-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.7;
+        }
+
+        .mini-table {
+            background: rgba(0,0,0,0.25);
+            border-radius: 14px;
+            padding: 10px 15px;
+            font-size: 0.95rem;
+            border-collapse: collapse;
+            width: 100%;
+            margin: 12px 0;
+        }
+        .mini-table td {
+            padding: 6px 5px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .mini-table tr:last-child td { border-bottom: none; }
+
+        .anexos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        .anexo-card {
+            background: rgba(0, 30, 50, 0.7);
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.06);
+            transition: 0.2s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        .anexo-card:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-5px);
+            background: rgba(0, 50, 80, 0.8);
+        }
+        .anexo-card i {
+            font-size: 2rem;
+            color: var(--accent-color);
+            margin-bottom: 12px;
+        }
+        .anexo-card h4 {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+        }
+        .anexo-card p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
 
         .project-gallery {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
             margin: 30px 0;
         }
-
         .gallery-item {
-            height: 150px;
-            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
-            border-radius: 10px;
+            aspect-ratio: 16 / 10;
+            background: #232633;
+            border-radius: 16px;
             overflow: hidden;
-            cursor: pointer;
-            transition: transform 0.3s;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: 0.2s;
+            cursor: default;
         }
-
-        .gallery-item:hover { transform: scale(1.05); }
-        .gallery-item img { width: 100%; height: 100%; object-fit: cover; }
+        .gallery-item .inner {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-color);
+            font-size: 2.8rem;
+            background: #1f2430;
+        }
 
         footer {
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-            padding: 30px 20px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(12px);
+            padding: 25px 20px;
             text-align: center;
             border-top: 2px solid var(--accent-color);
-            margin-top: auto;
         }
+        .copyright { font-size: 0.8rem; opacity: 0.6; }
 
-        .copyright { font-size: 0.8rem; opacity: 0.5; }
-
-        @media (max-width: 768px) {
-            .project-header h1 { font-size: 2rem; }
-            .project-main-image { height: 250px; }
+        @media (max-width: 650px) {
+            .project-header h1 { font-size: 1.9rem; }
+            .project-meta { gap: 15px; flex-direction: column; }
+            .project-gallery { grid-template-columns: 1fr; }
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-
 <div class="content-wrapper">
     <div class="top-bar">
         <div class="top-bar-content">
             <div class="quick-contact" id="quick-contact"></div>
             <div>
-                <span class="badge">Curso Electivo</span>
+                <span class="badge">Estructuras Metálicas</span>
                 <a href="../../../steel.html" class="btn-back"><i class="fas fa-arrow-left"></i> Volver a Acero</a>
                 <a href="" download class="btn-cv-top" id="btn-cv-top">
                     <i class="fas fa-download"></i> CV
@@ -218,63 +433,146 @@
 
     <div class="project-container">
         <div class="project-header">
-            <h1>Proyecto Final: Diseño de Nave Industrial de Acero</h1>
+            <h1>Nave Industrial · Alma llena vs Tijerales <span class="comparison-badge">comparativa</span></h1>
             <div class="project-meta">
-                <span><i class="fas fa-university"></i> Ciclo X</span>
-                <span><i class="fas fa-book"></i> Diseño de Estructuras II</span>
-                <span><i class="fas fa-check-double"></i> Calificación: Sobresaliente</span>
+                <span><i class="fas fa-calendar-alt"></i> 2025</span>
+                <span><i class="fas fa-map-pin"></i> Lurigancho-Chosica, Lima</span>
+                <span><i class="fas fa-arrows-alt-h"></i> 85m x 35m</span>
+                <span><i class="fas fa-users"></i> 3 integrantes</span>
             </div>
         </div>
 
+        <!-- Imagen principal (fallback icon si no existe) -->
         <div class="project-main-image">
-            <img src="imagen/nave_electivo/main.png" alt="Nave Industrial Electivo" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'display: flex; align-items: center; justify-content: center; height: 100%;\'><i class=\'fas fa-graduation-cap\' style=\'font-size: 5rem; color: #007acc;\'></i></div>';">
+            <img src="imagen/nave_industrial/portico_principal.png" alt="Modelo 3D Nave Industrial" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=fallback><i class=\'fas fa-archway\'></i><span style=\'font-size:1.2rem; margin-left:15px;\'>Estructura de acero · vista general</span></div>';">
         </div>
 
         <div class="project-description">
-            <h2 style="color: #007acc; margin-bottom: 15px;">Resumen Académico</h2>
-            <p>Este proyecto consistió en el análisis y diseño integral de una nave industrial bajo las normas LRFD. Se desarrollaron modelos computacionales para evaluar el comportamiento bajo cargas gravitacionales y sísmicas, enfatizando el diseño de nudos rígidos y placas de base.</p>
+            <h2><i class="fas fa-industry" style="margin-right: 10px;"></i> Resumen del proyecto final</h2>
+            <p>Diseño estructural completo de una nave industrial de gran luz (85x35 m, altura 12 m) desarrollado como proyecto final del curso Diseño de Estructuras Metálicas. Se elaboraron <strong>dos propuestas</strong>: vigas de alma llena (perfiles laminados/soldados) y sistema con <strong>tijerales + arriostres SCBF</strong>. El análisis incluye cargas de viento (E.020), sismo (E.030, suelo S1, zona 2), diseño de correas, cerchas, celosías, columnas compuestas y conexiones soldadas/empernadas A325. Todo verificado bajo AISC 360-22 y E.090 (ASD/LRFD).</p>
         </div>
 
+        <!-- EQUIPO INTEGRANTES con sus roles (solicitud específica) -->
+        <div class="team-section">
+            <h2 style="color: var(--accent-color); margin-bottom: 10px;"><i class="fas fa-user-friends"></i> Equipo de desarrollo</h2>
+            <div class="team-grid">
+                <div class="team-card">
+                    <i class="fas fa-user-graduate"></i>
+                    <h4>Jhon Alex Umasi Huisa</h4>
+                    <p><strong>Diseño de tijerales</strong> (SCBF, cerchas, conexiones)</p>
+                </div>
+                <div class="team-card">
+                    <i class="fas fa-user-cog"></i>
+                    <h4>Kevin Heymer Núñez Flores</h4>
+                    <p><strong>Diseño alma llena</strong> (vigas, columnas, correas)</p>
+                </div>
+                <div class="team-card">
+                    <i class="fas fa-user-astronaut"></i>
+                    <h4>Wilder David Salvador Tanta</h4>
+                    <p><strong>Diseño alma llena</strong> (pórticos, verificación)</p>
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 15px; opacity: 0.8;">Trabajo colaborativo · modelado ETABS, Tekla, hojas de cálculo · Febrero 2025</p>
+        </div>
+
+        <!-- parámetros rápidos en tarjetas -->
         <div class="project-details-grid">
             <div class="detail-card">
-                <h3><i class="fas fa-microchip"></i> Metodología</h3>
+                <h3><i class="fas fa-cog"></i> Parámetros básicos</h3>
                 <ul>
-                    <li><strong>Norma:</strong> AISC 360-16 / ASCE 7-16</li>
-                    <li><strong>Modelado:</strong> Elementos frame y shell</li>
-                    <li><strong>Análisis:</strong> Estático lineal y P-Delta</li>
+                    <li><strong>Ubicación:</strong> Chosica, suelo GW, capacidad 1.6–2.5 kg/cm²</li>
+                    <li><strong>Sismo:</strong> Tp=0.4s, TL=2.5s, S=1, R=7 (SCBF)</li>
+                    <li><strong>Viento:</strong> V=75 km/h, factor forma E.020</li>
+                    <li><strong>Carga viva techo:</strong> 65 kg/m² (inclinación 10%)</li>
                 </ul>
             </div>
-
             <div class="detail-card">
-                <h3><i class="fas fa-list-check"></i> Componentes Diseñados</h3>
+                <h3><i class="fas fa-bolt"></i> Alma llena (perfiles)</h3>
                 <ul>
-                    <li>Tijerales y correas de techo</li>
-                    <li>Columnas de sección variable</li>
-                    <li>Sistemas de arriostramiento lateral</li>
-                    <li>Conexiones viga-columna precalificadas</li>
+                    <li>Vigueta <strong>W4X13</strong> · Zx=6.28 in³</li>
+                    <li>Viga principal <strong>W10X68</strong> · Zx=85.3 in³</li>
+                    <li>Columna <strong>W12X72</strong> (Ag=21.1 in²) · flexocompresión</li>
+                    <li>Deriva máxima: 0.90% (eje X) · Cumple</li>
                 </ul>
             </div>
-
             <div class="detail-card">
-                <h3><i class="fas fa-laptop-code"></i> Herramientas</h3>
+                <h3><i class="fas fa-project-diagram"></i> Tijerales + SCBF</h3>
                 <ul>
-                    <li>SAP2000 (Análisis Global)</li>
-                    <li>Mathcad (Memorias de cálculo)</li>
-                    <li>Revit Structure (Documentación BIM)</li>
+                    <li>Cercha: cordones HSS6x6x1/2 · montantes HSS2x2x3/16</li>
+                    <li>Celosía mixta: W5x19 (sup) + HSS (inf)</li>
+                    <li>Columna compuesta: 2 HSS 8x8x1/2 + HSS 12x12x1 central</li>
+                    <li>Deriva controlada: 0.84% (X) / 0.008% (Y)</li>
                 </ul>
             </div>
         </div>
 
-        <h2 style="color: #007acc; margin: 30px 0 20px;">Anexos y Gráficos</h2>
-        <div class="project-gallery">
-            <div class="gallery-item"><img src="imagen/nave_electivo/modelo.png" alt="Modelo SAP2000" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'display: flex; align-items: center; justify-content: center; height: 100%; background: #1a1a1a;\'><i class=\'fas fa-project-diagram\' style=\'font-size: 3rem; color: #007acc;\'></i></div>';"></div>
-            <div class="gallery-item"><img src="imagen/nave_electivo/plano.png" alt="Plano" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'display: flex; align-items: center; justify-content: center; height: 100%; background: #1a1a1a;\'><i class=\'fas fa-file-invoice\' style=\'font-size: 3rem; color: #007acc;\'></i></div>';"></div>
+        <!-- bloque de resultados destacados -->
+        <div class="results-highlight">
+            <div class="stat-item"><span class="stat-number">W6x16</span><span class="stat-label">Correa óptima</span></div>
+            <div class="stat-item"><span class="stat-number">0.84%</span><span class="stat-label">Deriva máxima (tijeral)</span></div>
+            <div class="stat-item"><span class="stat-number">A325</span><span class="stat-label">Pernos 5/8" · 3/4"</span></div>
+            <div class="stat-item"><span class="stat-number">75 km/h</span><span class="stat-label">Viento diseño</span></div>
         </div>
 
-        <div style="text-align: center; margin-top: 30px;">
-            <a href="javascript:void(0)" class="btn-download-project" style="cursor: default; opacity: 0.8; text-decoration:none; padding: 15px 30px; border-radius: 50px; border: 2px solid #28a745; color: white; display: inline-block; background: #28a745;">
-                <i class="fas fa-award"></i> Proyecto Académico - Finalizado
+        <!-- sección detalles técnicos extraídos del PDF -->
+        <h2 class="section-title"><i class="fas fa-clipboard-list"></i> Verificaciones clave</h2>
+        <div style="display: flex; flex-wrap: wrap; gap: 25px; margin-bottom: 30px;">
+            <div style="flex:1; min-width:260px; background: rgba(0,0,0,0.2); border-radius: 24px; padding: 20px;">
+                <h3 style="color:var(--accent-color); margin-bottom: 15px;"><i class="fas fa-check-circle"></i> Alma llena</h3>
+                <table class="mini-table">
+                    <tr><td>Vigueta W4X13</td><td>✓ flexión, LTB, cortante</td></tr>
+                    <tr><td>Viga W10X68</td><td>✓ compacidad, L<sub>b</sub> < L<sub>p</sub></td></tr>
+                    <tr><td>Columna W12X72</td><td>✓ flexocompresión (Y, LTB)</td></tr>
+                    <tr><td>Conexiones</td><td>empernadas A325</td></tr>
+                </table>
+            </div>
+            <div style="flex:1; min-width:260px; background: rgba(0,0,0,0.2); border-radius: 24px; padding: 20px;">
+                <h3 style="color:var(--accent-color);"><i class="fas fa-check-circle"></i> Tijerales (SCBF)</h3>
+                <table class="mini-table">
+                    <tr><td>Correa W6x16</td><td>✓ compacidad · deflexión L/300</td></tr>
+                    <tr><td>Cercha HSS6x6x1/2</td><td>✓ fluencia, pandeo</td></tr>
+                    <tr><td>Columna compuesta</td><td>✓ flexotracción, AISC H</td></tr>
+                    <tr><td>Arriostres HSS</td><td>✓ SCBF, ductilidad</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- SECCIÓN ANEXOS CON ENLCES SOLICITADOS -->
+        <h2 class="section-title" id="anexos"><i class="fas fa-paperclip"></i> Anexos · Documentación completa</h2>
+        <div class="anexos-grid">
+            <a href="https://drive.google.com/file/d/1vUZ6lRWT6poC8oPPMpZGdfTttfpmxfAf/view?usp=sharing" target="_blank" class="anexo-card">
+                <i class="fas fa-file-pdf"></i>
+                <h4>Informe final PDF</h4>
+                <p>Memoria descriptiva, cálculos, normas, conclusiones.</p>
             </a>
+            <a href="https://drive.google.com/file/d/1uRDqpmvzPjvrUBM8CkScoJKaVG3a_8X-/view?usp=sharing" target="_blank" class="anexo-card">
+                <i class="fas fa-file-powerpoint"></i>
+                <h4>Presentación PDF</h4>
+                <p>Diapositivas de sustentación · resumen ejecutivo.</p>
+            </a>
+            <a href="https://drive.google.com/drive/folders/1tv2yH8_-EWwrY-ea20n_K2sQl7s6Bbll?usp=sharing" target="_blank" class="anexo-card">
+                <i class="fas fa-folder-open"></i>
+                <h4>Carpeta Alma llena</h4>
+                <p>Planos, hojas de cálculo, modelo ETABS. (Kevin, Wilder)</p>
+            </a>
+            <a href="https://drive.google.com/drive/folders/1Ge8xbmiSJ7_p2U9_GdQiNJXrcFREYrHb?usp=sharing" target="_blank" class="anexo-card">
+                <i class="fas fa-folder-tree"></i>
+                <h4>Carpeta Tijerales</h4>
+                <p>Mejora de cálculo, planos, ETABS + Tekla. (Jhon Umasi)</p>
+            </a>
+        </div>
+
+        <h2 class="section-title"><i class="fas fa-images"></i> Galería del modelo</h2>
+        <div class="project-gallery">
+            <div class="gallery-item"><div class="inner"><i class="fas fa-draw-polygon"></i> Vista 3D</div></div>
+            <div class="gallery-item"><div class="inner"><i class="fas fa-border-all"></i> Planta pórticos</div></div>
+            <div class="gallery-item"><div class="inner"><i class="fas fa-tools"></i> Conexión viga-col</div></div>
+        </div>
+        <p style="text-align:center; opacity:0.7; margin-bottom: 30px;">(visualización conceptual — detalles completos en anexos)</p>
+
+        <!-- breve extra: conclusiones -->
+        <div style="background: rgba(0,122,204,0.1); border-radius: 20px; padding: 20px 30px; margin: 40px 0;">
+            <p style="font-style: italic; font-size: 1.1rem;"><i class="fas fa-quote-left" style="color:var(--accent-color); margin-right: 8px;"></i> Ambas alternativas cumplen RNE y AISC, pero el sistema con tijerales mostró mejor comportamiento lateral y control de derivas, recomendado para ejecución. Conexiones mixtas soldadas/empernadas garantizan seguridad sísmica.</p>
         </div>
     </div>
 
@@ -291,15 +589,15 @@
                 <a href="${SITE_CONFIG.social.linkedin}" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
                 <a href="${SITE_CONFIG.social.whatsapp}" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
             `;
-
-            // Subir 3 niveles para el CV
             document.getElementById('btn-cv-top').href = "../../../" + SITE_CONFIG.rutas.cv;
-
             document.getElementById('copyright').textContent = 
-                `© ${SITE_CONFIG.año} | Proyecto Académico · ${SITE_CONFIG.nombre}`;
+                `© ${SITE_CONFIG.año} · Nave Industrial · ${SITE_CONFIG.nombre} · Umasi · Núñez · Salvador`;
+        } else {
+            // fallback por si no carga config
+            document.getElementById('quick-contact').innerHTML = '<a href="#"><i class="fas fa-envelope"></i> jumasi@ejemplo.com</a>';
+            document.getElementById('copyright').textContent = '© 2025 · Proyecto acero · Umasi · Núñez · Salvador';
         }
     });
 </script>
-
 </body>
 </html>

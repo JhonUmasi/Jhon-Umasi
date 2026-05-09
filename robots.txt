@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /
+
+Sitemap: https://jhonumasi.github.io/sitemap.xml

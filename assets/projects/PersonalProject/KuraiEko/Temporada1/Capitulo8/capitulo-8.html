@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kurai Eko - Capítulo 8 | El Nevado Bunkatsu</title>
+
+    <script src="../../../../../../config.js"></script>
+
+    <style>
+        :root {
+            --accent-color: #f2f2f2;
+            --secondary-color: #666;
+            --bg-dark: #050505;
+            --text-light: #e0e0e0;
+            --overlay: rgba(0, 0, 0, 0.95);
+            --border-light: rgba(255, 255, 255, 0.1);
+            --danger-color: #8b0000;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Garamond', 'Times New Roman', serif;
+            background: url('../../../../../../assets/images/Background.png') no-repeat center center fixed;
+            background-size: cover;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+
+        .content-wrapper {
+            background: var(--overlay);
+            min-height: 100vh;
+            backdrop-filter: grayscale(100%) blur(5px);
+        }
+
+        .nav-header {
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-light);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-nav, .btn-back {
+            color: var(--text-light);
+            text-decoration: none;
+            letter-spacing: 1px;
+            font-size: 0.8rem;
+            border: 1px solid var(--secondary-color);
+            padding: 8px 15px;
+            transition: 0.4s;
+            display: inline-block;
+        }
+
+        .btn-nav:hover, .btn-back:hover {
+            background: var(--text-light);
+            color: black;
+        }
+
+        .chapter-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px 80px 20px;
+        }
+
+        .chapter-header {
+            text-align: center;
+            margin-bottom: 50px;
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 30px;
+        }
+
+        .chapter-header h1 {
+            font-size: 2.5rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 900;
+            margin-bottom: 10px;
+            color: var(--accent-color);
+        }
+
+        .chapter-header .chapter-sub {
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+            font-style: italic;
+        }
+
+        .chapter-content {
+            font-size: 1.15rem;
+            text-align: justify;
+            white-space: pre-wrap;
+        }
+
+        .chapter-content p {
+            margin-bottom: 1.5em;
+            text-indent: 2em;
+        }
+
+        .trial-box {
+            background: rgba(139, 0, 0, 0.05);
+            border: 1px solid var(--danger-color);
+            padding: 25px;
+            margin: 40px 0;
+            position: relative;
+        }
+
+        .trial-box h3 {
+            color: var(--danger-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .dialogue b {
+            color: var(--accent-color);
+            letter-spacing: 1px;
+        }
+
+        .thought {
+            color: #aaa;
+            font-style: italic;
+        }
+
+        .chapter-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            opacity: 0.4;
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border-light);
+        }
+
+        @media (max-width: 768px) {
+            .chapter-header h1 { font-size: 1.8rem; }
+            .nav-header { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="content-wrapper">
+    <nav class="nav-header">
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <a href="../Temporada1.html" class="btn-back">← VOLVER A SAGA</a>
+            <span style="color: var(--secondary-color); letter-spacing: 2px;">KURAI EKO</span>
+        </div>
+        <div class="nav-links">
+            <a href="../Capitulo7/capitulo-7.html" class="btn-nav">← ANTERIOR</a>
+            <span class="btn-nav" style="opacity: 0.5; cursor: not-allowed;">SIGUIENTE →</span>
+        </div>
+    </nav>
+
+    <main class="chapter-container">
+        <header class="chapter-header">
+            <h1>Capítulo 8</h1>
+            <div class="chapter-sub">El Nevado Bunkatsu</div>
+        </header>
+
+        <article class="chapter-content">
+            <p>La vida de Enkiro parecía estabilizarse, pero su cercanía con Eliza despertó los celos de otros estudiantes. Tras ser emboscado y golpeado por Hiro, Todoroki y Matsuhiro, Enkiro reafirmó su deseo de proteger a la princesa, a pesar del desprecio de sus compañeros.</p>
+
+            <p>Llegó la semana de exámenes finales. Para la prueba de Magia Elemental, el profesor Arion asignó destinos peligrosos. Al equipo de Enkiro, formado por Eliza, Riku y Nana, le tocó el <b>Nevado Bunkatsu</b>, hogar de los temibles <i>Burukos</i> y leyendas de Yetis.</p>
+
+            <p>En las gélidas montañas, tras una ardua batalla coordinada, lograron derrotar a un Buruko. Sin embargo, en el camino de regreso por un acantilado estrecho, Eliza resbaló. Enkiro la sujetó, pero el suelo cedió y ambos cayeron al vacío.</p>
+
+            <p>Gracias a un hechizo de tierra de Enkiro, sobrevivieron a la caída. Pero la pesadilla apenas comenzaba. Un <b>Yeti</b> gigante los acechaba. Enkiro intentó proteger a Eliza solo, pero ella, queriendo ayudar, entorpeció el rango de ataque de Enkiro. En el caos, las garras de la bestia destrozaron uno de los ojos de Enkiro. Lleno de furia y dolor, Enkiro obligó a Eliza a huir mientras él acababa con el monstruo.</p>
+
+            <div class="trial-box">
+                <h3>La Traición del Guardián</h3>
+                <p>Mientras Enkiro luchaba, el guardia asignado por la academia interceptó a las chicas. Usando el hechizo arcano <b>Arthe</b>, modificó sus recuerdos: ahora Eliza creía que Enkiro la había empujado a propósito y que el guardia era su salvador.</p>
+                <p>Tres figuras misteriosas con tatuajes de dragón aparecieron para reclamar la espada de Enkiro. Al no poder desvincularla de su dueño vivo, decidieron incriminarlo para que el Rey lo encarcelara mientras ellos buscaban una forma de arrebatarle el arma en el laboratorio.</p>
+            </div>
+
+            <p>Enkiro despertó encadenado en un calabozo oscuro. Fue llevado ante un tribunal sombrío presidido por el Rey.</p>
+
+            <p class="dialogue"><b>Juez:</b> Enkiro Mikiojiro, se le acusa de atentar contra la princesa, asesinar al guardia Hiroki y otros crímenes atroces contra la moral de nuestra comunidad.</p>
+            <p class="dialogue"><b>Enkiro:</b> ¡Es mentira! Princesa Eliza, diga la verdad...</p>
+            <p class="dialogue"><b>Eliza:</b> (Con la memoria alterada) Enkiro Mikiojiro es culpable. Él intentó matarme.</p>
+
+            <p>Condenado a la horca, Enkiro lanzó el amuleto de la amistad hacia Eliza con desprecio antes de ser arrastrado. Ese simple objeto, cargado de recuerdos reales, comenzó a resquebrajar el hechizo en la mente de la princesa.</p>
+
+            <p>En el día de la ejecución, una voz misteriosa en la mente de Enkiro —uno de los hombres del nevado que necesitaba que siguiera vivo para que la espada no se perdiera— rompió sus cadenas. Enkiro huyó a lomos de un <b>Sylva</b>, dejando atrás una ciudad que ahora lo odiaba.</p>
+
+            <p>Eliza recuperó la memoria demasiado tarde. Vio a Enkiro escapar desde la distancia, con el alma destrozada por la culpa de haber condenado al único hombre que realmente la había protegido.</p>
+            
+            <p class="thought">Enkiro se dirigió al sur, convertido en un proscrito, con un ojo menos y un corazón lleno de sombras.</p>
+        </article>
+
+        <div class="chapter-navigation">
+            <a href="../Capitulo7/capitulo-7.html" class="btn-nav">← CAPÍTULO ANTERIOR</a>
+            <a href="../Temporada1.html" class="btn-nav">ÍNDICE</a>
+            <span class="btn-nav" style="opacity: 0.5;">PRÓXIMAMENTE →</span>
+        </div>
+    </main>
+
+    <footer>
+        <p id="copyright"></p>
+    </footer>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof SITE_CONFIG !== 'undefined') {
+            document.getElementById('copyright').textContent = 
+                `© ${SITE_CONFIG.año} | ${SITE_CONFIG.nombre} · Writer & Creator`;
+        }
+    });
+</script>
+
+</body>
+</html>

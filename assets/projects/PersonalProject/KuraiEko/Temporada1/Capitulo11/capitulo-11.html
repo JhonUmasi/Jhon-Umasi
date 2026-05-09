@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kurai Eko - Capítulo 11 | Vista Temporal</title>
+
+    <script src="../../../../../../config.js"></script>
+
+    <style>
+        :root {
+            --accent-color: #f2f2f2;
+            --secondary-color: #666;
+            --bg-dark: #050505;
+            --text-light: #e0e0e0;
+            --overlay: rgba(0, 0, 0, 0.95);
+            --border-light: rgba(255, 255, 255, 0.1);
+            --time-gold: #ffcc00;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Garamond', 'Times New Roman', serif;
+            background: url('../../../../../../assets/images/Background.png') no-repeat center center fixed;
+            background-size: cover;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+
+        .content-wrapper {
+            background: var(--overlay);
+            min-height: 100vh;
+            backdrop-filter: grayscale(100%) blur(5px);
+        }
+
+        .nav-header {
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-light);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .btn-nav, .btn-back {
+            color: var(--text-light);
+            text-decoration: none;
+            letter-spacing: 1px;
+            font-size: 0.8rem;
+            border: 1px solid var(--secondary-color);
+            padding: 8px 15px;
+            transition: 0.4s;
+            display: inline-block;
+        }
+
+        .btn-nav:hover, .btn-back:hover {
+            background: var(--text-light);
+            color: black;
+        }
+
+        .chapter-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px 80px 20px;
+        }
+
+        .chapter-header {
+            text-align: center;
+            margin-bottom: 50px;
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 30px;
+        }
+
+        .chapter-header h1 {
+            font-size: 2.5rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 900;
+            margin-bottom: 10px;
+            color: var(--accent-color);
+        }
+
+        .chapter-header .chapter-sub {
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+            font-style: italic;
+        }
+
+        .chapter-content {
+            font-size: 1.15rem;
+            text-align: justify;
+            white-space: pre-wrap;
+        }
+
+        .chapter-content p {
+            margin-bottom: 1.5em;
+            text-indent: 2em;
+        }
+
+        .temporal-box {
+            border: 1px solid var(--time-gold);
+            background: rgba(255, 204, 0, 0.05);
+            padding: 25px;
+            margin: 40px 0;
+            position: relative;
+        }
+
+        .temporal-box::before {
+            content: "REPRODUCCIÓN TEMPORAL";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--bg-dark);
+            padding: 0 10px;
+            color: var(--time-gold);
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+        }
+
+        .dialogue b {
+            color: var(--accent-color);
+            letter-spacing: 1px;
+        }
+
+        .crime-alert {
+            color: #ff4444;
+            font-weight: bold;
+            border-left: 3px solid #ff4444;
+            padding-left: 15px;
+            margin: 20px 0;
+        }
+
+        .chapter-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            opacity: 0.4;
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border-light);
+        }
+
+        @media (max-width: 768px) {
+            .chapter-header h1 { font-size: 1.8rem; }
+            .nav-header { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="content-wrapper">
+    <nav class="nav-header">
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <a href="../Temporada1.html" class="btn-back">← VOLVER A SAGA</a>
+            <span style="color: var(--secondary-color); letter-spacing: 2px;">KURAI EKO</span>
+        </div>
+        <div class="nav-links">
+            <a href="../Capitulo10/capitulo-10.html" class="btn-nav">← ANTERIOR</a>
+            <span class="btn-nav" style="opacity: 0.5; cursor: not-allowed;">SIGUIENTE →</span>
+        </div>
+    </nav>
+
+    <main class="chapter-container">
+        <header class="chapter-header">
+            <h1>Capítulo 11</h1>
+            <div class="chapter-sub">Vista Temporal</div>
+        </header>
+
+        <article class="chapter-content">
+            <p>Tras una semana sirviendo a la Reina Catherine en Mistsora, Enkiro decidió regresar al reino de Emerfall. Para llevar a su nueva aprendiz Yumi de forma clandestina, ideó un plan: esconderla en una caja de frutas exóticas del reino. El plan funcionó, pero la alegría del regreso se disipó al llegar a la casa de su maestro.</p>
+
+            <p>Enkiro encontró la vivienda en ruinas y a Arck, el Naju, sin vida en el patio. En medio de la desesperación, un brillo dorado emanó del anillo del maestro Chan, activando una grabación temporal de los hechos ocurridos.</p>
+
+            <div class="temporal-box">
+                <p class="dialogue"><b>Chan:</b> ¿Quiénes son ustedes?</p>
+                <p class="dialogue"><b>Mojito:</b> Cuánto tiempo sin vernos, doctor Chan.</p>
+                <p>Enkiro observó con impotencia cómo la <b>Organización del Dragón</b>, incluyendo a un traidor infiltrado llamado Thomas, emboscaba a su maestro. Karl, un guerrero de velocidad sobrehumana, dejó inconsciente a Chan. El video terminó mostrando cómo se llevaban al doctor hacia el reino de <b>Suzakumura</b>.</p>
+            </div>
+
+            <p>Decididos a rescatarlo y vengar a sus familias, Enkiro y Yumi emprendieron un viaje ilegal de regreso a Mistsora. Para evitar ser detectados, Enkiro moldeó un bote de madera y cruzó el río usando magia de viento. Sin embargo, su llegada fue caótica: para evitar que unos pobladores dieran la alarma, Enkiro se vio obligado a asesinar a un hombre y Yumi utilizó el hechizo prohibido <span style="color: var(--time-gold);">Arthe</span> para alterar la memoria de los testigos.</p>
+
+            <div class="crime-alert">
+                <p>Advertencia de la Reina: "Has cruzado el río ilegalmente, asesinado a un inocente y ocultado el crimen con magia Arthe. Esto es un delito grave".</p>
+            </div>
+
+            <p>Enkiro se presentó ante la Reina Catherine para denunciar al traidor Thomas, pero ella reveló conocer sus crímenes recientes. Sintiéndose acorralado y con la urgencia de salvar a Chan, Enkiro utilizó su técnica arcana <span style="color: #00ffff;">Room</span> para generar esferas de aislamiento y escapar del castillo en segundos, dejando a la Reina y sus guardias de rango Samma atrás.</p>
+
+            <p class="dialogue"><b>Enkiro:</b> No estoy aquí para perder el tiempo. El destino es Suzakumura.</p>
+
+            <p>Ahora, como prófugos internacionales, Enkiro y Yumi se adentran en territorio desconocido, perseguidos por reinos y sombras por igual.</p>
+        </article>
+
+        <div class="chapter-navigation">
+            <a href="../Capitulo10/capitulo-10.html" class="btn-nav">← CAPÍTULO ANTERIOR</a>
+            <a href="../Temporada1.html" class="btn-nav">ÍNDICE</a>
+            <span class="btn-nav" style="opacity: 0.5;">PRÓXIMAMENTE →</span>
+        </div>
+    </main>
+
+    <footer>
+        <p id="copyright"></p>
+    </footer>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof SITE_CONFIG !== 'undefined') {
+            document.getElementById('copyright').textContent = 
+                `© ${SITE_CONFIG.año} | ${SITE_CONFIG.nombre} · Writer & Creator`;
+        }
+    });
+</script>
+
+</body>
+</html>

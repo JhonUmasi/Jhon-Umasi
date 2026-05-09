@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confined Masonry Design · ETABS · SAP2000 · SAFE | Jhon Umasi</title>
+    
+    <!-- GLOBAL CONFIG - MISMA RUTA QUE Dynamic.html (3 niveles) -->
+    <script src="../../../js/config.js"></script>
+    
+    <!-- FONT AWESOME -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- GLOBAL CSS FOR PROJECTS -->
+    <link rel="stylesheet" href="../../../css/project-global.css">
+</head>
+<body>
+
+<div class="content-wrapper">
+    <div class="top-bar">
+        <div class="top-bar-content">
+            <div id="quick-contact"></div>
+            <div>
+                <span class="badge">Certified Course · 2026</span>
+                <a href="../../../../index.html#cursos" class="btn-back">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="project-container">
+        <div class="project-header">
+            <span class="badge" style="font-size: 1rem; margin-bottom: 15px; display: inline-block;">
+                ✅ Certified · Grade 19/20 · 36 Hours
+            </span>
+            <h1>CONFINED MASONRY ANALYSIS & DESIGN</h1>
+            <h3>ETABS · SAP2000 · SAFE · Peruvian Codes E.030 · E.070</h3>
+            <div style="margin-top: 15px; color: var(--text-muted);">
+                <i class="fas fa-chalkboard-teacher"></i> Instructor: Ing. Daniel O. Barrantes Guzmán · GESCONVIAL S.A.C.
+            </div>
+        </div>
+
+        <div class="project-main-image">
+            <img src="./genera1.avif" alt="ETABS Model - Confined Masonry Building" 
+                 onerror="this.parentElement.innerHTML='<div class=image-placeholder><i class=fas fa-cube></i><span>ETABS 3D Model</span><small>4-Story Confined Masonry Building · Cajamarca</small></div>'">
+        </div>
+
+        <div class="project-description">
+            <h2><i class="fas fa-certificate"></i> Certification</h2>
+            <p style="font-size: 1.05rem;"><strong>Course:</strong> Analysis and Design of Confined Masonry Buildings with ETABS, SAP2000 and SAFE</p>
+            <p><strong>Institution:</strong> GESCONVIAL S.A.C. (Gestión, Construcción e Infraestructura Vial)</p>
+            <p><strong>Certificate ID:</strong> ESS-G1 · <strong>Issue Date:</strong> April 30, 2026 · <strong>Grade:</strong> 19/20</p>
+            <p><strong>Duration:</strong> March 14 – April 08, 2026 (36 hours)</p>
+            <p><strong>Verification:</strong> Scan QR code on physical certificate to validate authenticity.</p>
+        </div>
+
+        <div class="project-stats">
+            <div class="stat-card">
+                <i class="fas fa-building"></i>
+                <div class="value">4</div>
+                <div class="label">Floors</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-ruler"></i>
+                <div class="value">2.80 m</div>
+                <div class="label">Story Height</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-mountain-city"></i>
+                <div class="value">Cajamarca</div>
+                <div class="label">Location · Zone 3</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-waveform"></i>
+                <div class="value">S3</div>
+                <div class="label">Soft Soil Profile</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-layer-group"></i>
+                <div class="value">0.85 kg/cm²</div>
+                <div class="label">Bearing Capacity</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-chart-line"></i>
+                <div class="value">R = 3</div>
+                <div class="label">Reduction Factor</div>
+            </div>
+        </div>
+
+        <div class="team-mini">
+            <span><i class="fas fa-chalkboard-user"></i> <strong>Ing. Daniel O. Barrantes Guzmán</strong> · Instructor</span>
+            <span><i class="fas fa-building"></i> <strong>GESCONVIAL S.A.C.</strong> · Training</span>
+            <span><i class="fas fa-id-card"></i> <strong>Certificate ID: ESS-G1</strong> · 19/20</span>
+        </div>
+
+        <div class="project-details-grid">
+            <div class="detail-card">
+                <h3><i class="fas fa-hard-hat"></i> Structural Materials</h3>
+                <ul>
+                    <li><strong>Masonry:</strong> Hollow brick · f'm = 65 kg/cm²</li>
+                    <li><strong>Concrete:</strong> f'c = 175 kg/cm² (confinement)</li>
+                    <li><strong>Rebar:</strong> fy = 4200 kg/cm²</li>
+                    <li><strong>X-direction walls:</strong> t = 0.13 m</li>
+                    <li><strong>Y-direction walls:</strong> t = 0.23 m</li>
+                    <li><strong>Tie beams:</strong> 0.14 x 0.35 m</li>
+                    <li><strong>Tie columns:</strong> 0.14 x 0.40 m</li>
+                </ul>
+            </div>
+
+            <div class="detail-card">
+                <h3><i class="fas fa-chart-line"></i> Seismic Analysis (E.030)</h3>
+                <ul>
+                    <li><strong>Seismic Zone 3:</strong> Z = 0.35</li>
+                    <li><strong>Category:</strong> U = 1.0 (Common building)</li>
+                    <li><strong>Soil Profile S3:</strong> S = 1.20</li>
+                    <li><strong>Amplification factor:</strong> C = 2.5</li>
+                    <li><strong>Period Tp = 1.0s · TL = 1.6s</strong></li>
+                    <li><strong>R = 3 (Confined masonry)</strong></li>
+                    <li><span style="color: #4CAF50;">✓ Wall density X: 4.1% · Y: 4.6%</span></li>
+                    <li><span style="color: #4CAF50;">✓ Drifts &lt; 50% of code limit</span></li>
+                </ul>
+            </div>
+
+            <div class="detail-card">
+                <h3><i class="fas fa-drafting-compass"></i> Structural Design (E.070)</h3>
+                <ul>
+                    <li><strong>X-direction walls:</strong> MX-01 to MX-08</li>
+                    <li><strong>Y-direction walls:</strong> MY-01 to MY-09</li>
+                    <li><strong>Axial verification:</strong> Pm/(f'm·t·L) &lt; 0.20 ✓</li>
+                    <li><strong>Shear verification:</strong> Vload ≤ 0.55·Vm ✓</li>
+                    <li><strong>Overstrength:</strong> Ω = 3.0</li>
+                    <li><strong>Crack control:</strong> Fsuasto per E.070 ✓</li>
+                </ul>
+            </div>
+
+            <div class="detail-card">
+                <h3><i class="fas fa-microchip"></i> Software Used</h3>
+                <ul>
+                    <li><strong>ETABS v20:</strong> 3D modeling & seismic analysis</li>
+                    <li><strong>SAP2000 v24:</strong> Verification & validation</li>
+                    <li><strong>SAFE v16:</strong> Foundation design (Winkler model)</li>
+                    <li><strong>Excel:</strong> Macros for wall density & load takedown</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- COURSE MODULES -->
+        <div class="detail-card" style="margin-bottom: 30px;">
+            <h3><i class="fas fa-book-open"></i> Course Modules</h3>
+            <ul style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px;">
+                <li><strong>M01:</strong> Introduction to Structural Masonry & Codes</li>
+                <li><strong>M02:</strong> Structuring Criteria & Pre-dimensioning</li>
+                <li><strong>M03:</strong> Load Takedown & ETABS Modeling</li>
+                <li><strong>M04:</strong> Static Seismic Analysis (E.030)</li>
+                <li><strong>M05:</strong> Dynamic Analysis & Verifications</li>
+                <li><strong>M06:</strong> Load-bearing Masonry Wall Design</li>
+                <li><strong>M07:</strong> Confinement Elements Design</li>
+                <li><strong>M08:</strong> Non-bearing Walls, Foundations & Closure</li>
+            </ul>
+        </div>
+
+        <!-- FOUNDATION DESIGN -->
+        <div class="detail-card">
+            <h3><i class="fas fa-layer-group"></i> Foundation Design · Winkler Model</h3>
+            <ul>
+                <li><strong>Allowable bearing capacity:</strong> 0.85 kg/cm²</li>
+                <li><strong>Ballast modulus (ks):</strong> 3.13 kg/cm³</li>
+                <li><strong>Foundation depth (Df):</strong> 1.20 m</li>
+                <li><strong>Footing height (ht):</strong> 0.61 m</li>
+                <li><strong>Shear verification:</strong> D/C = 92.68% ✓ COMPLIES</li>
+                <li><strong>Ultimate moment (Mu):</strong> 7.23 ton·m ≤ Cracking moment (7.30 ton·m) ✓</li>
+                <li><strong>Transmitted stress:</strong> 0.47 kg/cm² &lt; 0.85 kg/cm² ✓</li>
+            </ul>
+        </div>
+
+        <!-- GALLERY -->
+        <div id="project-gallery" data-images='[
+            {"src": "/funcional/assets/projects/Course/A_D_albanileria/ima1.avif", "alt": "ETABS Model - 3D View"},
+            {"src": "/funcional/assets/projects/Course/A_D_albanileria/ima2.avif", "alt": "Wall Distribution Plan View"},
+            {"src": "/funcional/assets/projects/Course/A_D_albanileria/ima3.avif", "alt": "Seismic Analysis - Story Shears"}
+        ]'></div>
+
+        <div class="resource-links">
+            <a href="https://docs.google.com/spreadsheets/d/1hQK9s8aj45vyBce8EJfVcInbfSO3ldqU/edit?usp=sharing" target="_blank" class="resource-link">
+                <i class="fas fa-file-excel"></i> Calculation Report (Excel)
+            </a>
+            <a href="https://drive.google.com/file/d/1iKfQ8-kneL5DDzNOVTQh6NCteUH_iZNR/view?usp=sharing" target="_blank" class="resource-link">
+                <i class="fas fa-draw-polygon"></i> Structural Drawings (DWG)
+            </a>
+        </div>
+
+        <div class="download-section">
+            <a href="https://drive.google.com/file/d/1YWq8-hRH04190xiYEqbgaZJBmzHo8Unu/view?usp=sharing" class="btn-download" target="_blank">
+                <i class="fas fa-download"></i> DOWNLOAD CERTIFICATE
+            </a>
+            <p style="margin-top: 15px; color: var(--text-muted); font-size: 0.85rem;">
+                <i class="fas fa-shield-alt"></i> Original certificate issued by GESCONVIAL S.A.C. · ID: ESS-G1
+            </p>
+        </div>
+    </div>
+
+    <footer>
+        <p class="copyright" id="copyright"></p>
+    </footer>
+</div>
+
+<!-- GLOBAL JS FOR PROJECTS - MISMA RUTA (3 niveles) -->
+<script src="../../../js/project-global.js"></script>
+
+</body>
+</html>

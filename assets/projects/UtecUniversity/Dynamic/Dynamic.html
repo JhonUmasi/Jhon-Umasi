@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Analysis · Scaled Structure SDOF | Jhon Umasi</title>
+    
+    <!-- GLOBAL CONFIG -->
+    <script src="../../../js/config.js"></script>
+    
+    <!-- FONT AWESOME -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- GLOBAL CSS FOR PROJECTS -->
+    <link rel="stylesheet" href="../../../css/project-global.css">
+</head>
+<body>
+
+<div class="content-wrapper">
+    <div class="top-bar">
+        <div class="top-bar-content">
+            <div id="quick-contact"></div>
+            <div>
+                <span class="badge">CI5311 · Dynamics and vibrations</span>
+                <a href="../../../../index.html#universidad" class="btn-back">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="project-container">
+        <div class="project-header">
+            <span class="badge" style="font-size: 1rem; margin-bottom: 15px; display: inline-block;">
+                Final Project · Experimental Analysis
+            </span>
+            <h1>DYNAMIC ANALYSIS OF SDOF STRUCTURE</h1>
+            <h3>Scaled Model · Vibration Testing · Energy Dissipation Device</h3>
+            <div style="margin-top: 15px; color: var(--text-muted);">
+                <i class="fas fa-chalkboard-teacher"></i> Course: Dynamics and vibrations
+            </div>
+        </div>
+
+        <div class="project-main-image">
+            <img src="./ge.avif" alt="Experimental Setup - Shake Table Testing">
+        </div>
+
+        <div class="project-description">
+            <h2><i class="fas fa-bullseye"></i> Project Summary</h2>
+            <p style="font-size: 1.1rem;">Experimental analysis of a reduced-scale single-degree-of-freedom (SDOF) structure, focusing on its dynamic properties under vibrations induced by a shake table. Natural frequency, damping ratio, and resonance behavior were identified and measured. A friction-based energy dissipation device was designed and implemented to mitigate excessive vibrations, comparing structural response with and without the dissipator.</p>
+        </div>
+
+        <div class="project-stats">
+            <div class="stat-card">
+                <i class="fas fa-chart-line"></i>
+                <div class="value">2.47 Hz</div>
+                <div class="label">Natural Frequency</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-clock"></i>
+                <div class="value">0.404 s</div>
+                <div class="label">Natural Period</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-waveform"></i>
+                <div class="value">123.55 N/m</div>
+                <div class="label">Stiffness (ke)</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-weight-hanging"></i>
+                <div class="value">0.512 kg</div>
+                <div class="label">Total Mass</div>
+            </div>
+        </div>
+
+        <div class="team-mini">
+            <span><i class="fas fa-user-tie"></i> <strong>Jhon Umasi Huisa</strong> · Theoretical Analysis & FFT Processing</span>
+            <span><i class="fas fa-user"></i> <strong>Gherson Velasquez</strong> · Experimental Setup & Data Collection</span>
+            <span><i class="fas fa-user"></i> <strong>Elmer Dávila</strong> · Dissipator Design & Implementation</span>
+            <span><i class="fas fa-user"></i> <strong>Raúl Velasquez</strong> · Results Validation & Report</span>
+        </div>
+
+        <div class="project-details-grid">
+            <div class="detail-card">
+                <h3><i class="fas fa-calculator"></i> Theoretical Analysis</h3>
+                <ul>
+                    <li><strong>Moment of Inertia (Ix):</strong> 6.011×10⁻¹³ m⁴</li>
+                    <li><strong>Equivalent Stiffness (ke):</strong> 123.55 N/m</li>
+                    <li><strong>Natural Frequency (ωn):</strong> 15.53 rad/s</li>
+                    <li><strong>Cyclic Frequency (fn):</strong> 2.471 Hz</li>
+                    <li><strong>Natural Period (Tn):</strong> 0.4046 s</li>
+                </ul>
+            </div>
+
+            <div class="detail-card">
+                <h3><i class="fas fa-flask"></i> Experimental Results</h3>
+                <ul>
+                    <li><strong>FFT Analysis fn:</strong> 2.475 Hz (average)</li>
+                    <li><strong>Damping Ratio (ζ):</strong> 6.6% to 11.2% (varies with amplitude)</li>
+                    <li><strong>Resonance detected at:</strong> ~2.47 Hz ✓</li>
+                    <li><strong>Dynamic Amplification Factor:</strong> Matches theoretical prediction</li>
+                    <li><span style="color: #4CAF50;">✓ Experimental validation of mathematical model</span></li>
+                </ul>
+            </div>
+
+            <div class="detail-card">
+                <h3><i class="fas fa-microchip"></i> Energy Dissipator Performance</h3>
+                <ul>
+                    <li><strong>Device Type:</strong> Resilient Slip Friction Joint (RSFJ)</li>
+                    <li><strong>Configuration:</strong> Spring-model gravity pendulum</li>
+                    <li><strong>At 2.0 Hz:</strong> Significant amplitude reduction ✓</li>
+                    <li><strong>At 2.5 Hz (near resonance):</strong> No structural failure ✓</li>
+                    <li><strong>Limitation:</strong> Single dissipator caused vertical drift deviation</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- GALERÍA CON RUTAS ABSOLUTAS DESDE LA RAÍZ -->
+        <div id="project-gallery" data-images='[
+            {"src": "/funcional/assets/projects/UtecUniversity/Dynamic/general.avif", "alt": "General Setup View"},
+            {"src": "/funcional/assets/projects/UtecUniversity/Dynamic/prueba1.avif", "alt": "Test 1 - Initial Configuration"},
+            {"src": "/funcional/assets/projects/UtecUniversity/Dynamic/prueba2.avif", "alt": "Test 2 - With Dissipator"},
+            {"src": "/funcional/assets/projects/UtecUniversity/Dynamic/comparaciongeneral.avif", "alt": "General Comparison - With vs Without"}
+        ]'></div>
+
+        <div class="resource-links">
+            <a href="https://drive.google.com/file/d/1LCADOLRtosof_eWrAZQR--bKO_qBQJB5/view?usp=sharing" target="_blank" class="resource-link">
+                <i class="fas fa-file-alt"></i> Complete Report PDF
+            </a>
+            <a href="https://drive.google.com/drive/folders/1wq53b1SCfHlXkK75uRaEi3txVPb8wEjP?usp=sharing" target="_blank" class="resource-link">
+                <i class="fas fa-chart-line"></i> Experimental Data (Excel)
+            </a>
+            <a href="https://drive.google.com/file/d/1okkS6MwmHdzm7gCqqO99NsJoIizU-1PG/view?usp=sharing" target="_blank" class="resource-link">
+                <i class="fas fa-draw-polygon"></i> Dissipator Drawings
+            </a>
+        </div>
+
+        <div class="download-section">
+            <a href="#" target="_blank" class="btn-download">
+                <i class="fas fa-file-pdf"></i> DOWNLOAD FULL REPORT
+            </a>
+            <p style="margin-top: 15px; color: var(--text-muted); font-size: 0.9rem;">
+                <i class="fas fa-folder-open"></i> Full report includes: theoretical calculations, FFT analysis, damping ratios, and dissipator performance evaluation
+            </p>
+        </div>
+    </div>
+
+    <footer>
+        <p class="copyright" id="copyright"></p>
+    </footer>
+</div>
+
+<!-- GLOBAL JS FOR PROJECTS -->
+<script src="../../../js/project-global.js"></script>
+
+</body>
+</html>

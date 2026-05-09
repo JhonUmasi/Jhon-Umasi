@@ -1,535 +1,199 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="canonical" href="https://jhonumasi.github.io/Jhon-Umasi/" />
-    <title>Portafolio de Ingeniería | Estructuras y Desarrollo</title>
-    <!-- Configuración global -->
-    <script src="config.js"></script>
-    <style>
-        :root {
-            --accent-color: #007acc;
-            --accent-hover: #005f9e;
-            --bg-overlay: rgba(0, 0, 0, 0.65);
-            --text-light: #ffffff;
-            --text-muted: rgba(255, 255, 255, 0.8);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: url('./assets/images/Background.avif') no-repeat center center fixed;
-            background-size: cover;
-            color: var(--text-light);
-            line-height: 1.6;
-            scroll-behavior: smooth;
-        }
-
-        .content-wrapper {
-            background: var(--bg-overlay);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            backdrop-filter: blur(3px);
-        }
-
-        .top-bar {
-            background: rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 0.8rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .top-bar-content {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .quick-contact {
-            display: flex;
-            gap: 1.5rem;
-            flex-wrap: wrap;
-        }
-
-        .quick-contact a {
-            color: var(--text-light);
-            text-decoration: none;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: color 0.3s;
-            opacity: 0.9;
-        }
-
-        .quick-contact a:hover {
-            color: var(--accent-color);
-            opacity: 1;
-        }
-
-        .badge {
-            background: var(--accent-color);
-            color: white;
-            padding: 0.3rem 1rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
-        header {
-            text-align: center;
-            padding: 40px 20px 30px;
-        }
-
-        h1 { 
-            font-size: 2.5rem; 
-            letter-spacing: 3px; 
-            border-bottom: 2px solid var(--accent-color); 
-            display: inline-block; 
-            padding-bottom: 10px;
-            margin-bottom: 15px;
-            font-weight: 300;
-        }
-
-        .subtitle {
-            color: var(--text-muted);
-            font-size: 1.1rem;
-            margin-bottom: 25px;
-        }
-
-        .btn-info {
-            display: inline-block;
-            background: transparent;
-            color: var(--accent-color);
-            font-weight: 600;
-            text-decoration: none;
-            border: 2px solid var(--accent-color);
-            padding: 12px 30px;
-            border-radius: 30px;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-size: 0.9rem;
-        }
-
-        .btn-info:hover {
-            background: var(--accent-color);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,122,204,0.3);
-        }
-
-        .index-nav {
-            background: rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(5px);
-            padding: 1rem 0;
-            margin: 20px 0;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .index-container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 2rem;
-        }
-
-        .index-item {
-            color: var(--text-light);
-            text-decoration: none;
-            font-size: 1rem;
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 30px;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            border: 1px solid transparent;
-        }
-
-        .index-item:hover {
-            background: rgba(0, 122, 204, 0.2);
-            border-color: var(--accent-color);
-            transform: translateY(-2px);
-        }
-
-        .index-item i {
-            color: var(--accent-color);
-            font-size: 0.9rem;
-        }
-
-        .index-indicator {
-            text-align: center;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-top: 0.5rem;
-        }
-
-        .index-indicator i {
-            color: var(--accent-color);
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
-            40% {transform: translateY(-10px);}
-            60% {transform: translateY(-5px);}
-        }
-
-        .section-container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 40px 20px;
-            width: 100%;
-            scroll-margin-top: 80px;
-        }
-
-        .section-title {
-            font-size: 1.8rem;
-            color: var(--accent-color);
-            border-left: 5px solid var(--accent-color);
-            padding-left: 15px;
-            margin-bottom: 30px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .section-title i {
-            font-size: 1.5rem;
-            opacity: 0.8;
-        }
-
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 30px;
-            margin-bottom: 20px;
-        }
-
-        .menu-item {
-            text-decoration: none;
-            color: white;
-            text-align: center;
-            transition: all 0.3s ease;
-            display: block;
-        }
-
-        .menu-item:hover { 
-            transform: translateY(-10px); 
-        }
-
-        .menu-item:hover .circle-container {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 25px rgba(0,122,204,0.5);
-        }
-
-        .circle-container {
-            width: 130px;
-            height: 130px;
-            border-radius: 50%;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            margin: 0 auto 15px;
-            overflow: hidden;
-            background: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 15px rgba(0,122,204,0.2);
-            transition: all 0.3s ease;
-        }
-
-        .circle-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .label { 
-            font-weight: 600; 
-            font-size: 0.95rem; 
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            color: var(--text-light);
-        }
-
-        footer {
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-            padding: 30px 20px;
-            text-align: center;
-            border-top: 2px solid var(--accent-color);
-            margin-top: auto;
-        }
-
-        .contact-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-            margin-bottom: 15px;
-        }
-
-        .contact-links a {
-            color: white;
-            text-decoration: none;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: color 0.3s;
-            opacity: 0.9;
-        }
-
-        .contact-links a:hover { 
-            color: var(--accent-color); 
-            opacity: 1;
-        }
-
-        .copyright {
-            font-size: 0.8rem;
-            opacity: 0.5;
-        }
-
-        .back-to-top {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: var(--accent-color);
-            color: white;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            opacity: 0;
-            transition: opacity 0.3s, transform 0.3s;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-            z-index: 99;
-        }
-
-        .back-to-top.visible {
-            opacity: 1;
-        }
-
-        .back-to-top:hover {
-            transform: translateY(-5px);
-            background: var(--accent-hover);
-        }
-
-        @media (max-width: 768px) {
-            .top-bar-content {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .quick-contact {
-                justify-content: center;
-            }
-            
-            h1 {
-                font-size: 2rem;
-            }
-            
-            .menu-grid {
-                gap: 20px;
-            }
-            
-            .circle-container {
-                width: 110px;
-                height: 110px;
-            }
-            
-            .contact-links {
-                gap: 1rem;
-                flex-direction: column;
-            }
-
-            .index-container {
-                gap: 1rem;
-            }
-
-            .index-item {
-                font-size: 0.9rem;
-                padding: 0.3rem 0.8rem;
-            }
-
-            .back-to-top {
-                bottom: 20px;
-                right: 20px;
-                width: 40px;
-                height: 40px;
-            }
-        }
-    </style>
+    <title>Engineering Portfolio | Jhon Umasi</title>
+    
+    <!-- CONFIGURACIÓN GLOBAL -->
+    <script src="./assets/js/config.js"></script>
+    
+    <!-- GOOGLE FONTS -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- FONT AWESOME -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- CSS EXTERNO -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    
+    <!-- JS EXTERNO -->
+    <script src="./assets/js/script.js" defer></script>
 </head>
 <body>
 
 <div class="content-wrapper">
     <div class="top-bar">
         <div class="top-bar-content">
-            <div class="quick-contact" id="quick-contact">
-                <!-- Se llenará con JavaScript -->
-            </div>
-            <span class="badge">Disponible para proyectos</span>
+            <div class="quick-contact" id="quick-contact"></div>
+            <span class="badge">Available for projects</span>
         </div>
     </div>
 
     <header>
-        <h1>INGENIERÍA ESTRUCTURAL & DEV</h1>
-        <div class="subtitle">Portafolio Profesional de <span id="nombre-header"></span></div>
+        <h1>STRUCTURAL ENGINEERING & DEV</h1>
+        <div class="subtitle">Professional Portfolio of <span id="nombre-header"></span></div>
         <a href="info-personal.html" class="btn-info">
-            <i class="fas fa-user"></i> INFORMACIÓN PERSONAL
+            <i class="fas fa-book-open"></i>
+            <i class="fas fa-handshake"></i>
+            ABOUT ME
+            <i class="fas fa-handshake"></i>
+            <i class="fas fa-book-open"></i>
         </a>
     </header>
 
-    <nav class="index-nav">
+    <nav class="index-nav" aria-label="Main navigation">
         <div class="index-container">
-            <a href="#civil" class="index-item"><i class="fas fa-hard-hat"></i> Ing. Civil</a>
-            <a href="#investigacion" class="index-item"><i class="fas fa-flask"></i> Investigación</a>
-            <a href="#gamedev" class="index-item"><i class="fas fa-gamepad"></i> Gamedev</a>
-            <a href="#contacto" class="index-item"><i class="fas fa-address-card"></i> Contacto</a>
-        </div>
-        <div class="index-indicator">
-            <i class="fas fa-chevron-down"></i> Navega por las secciones <i class="fas fa-chevron-down"></i>
+            <a href="#profesionales" class="index-item"><i class="fas fa-briefcase"></i> Professional Projects</a>
+            <a href="#universidad" class="index-item"><i class="fas fa-university"></i> UTEC Projects</a>
+            <a href="#cursos" class="index-item"><i class="fas fa-graduation-cap"></i> Courses</a>
+            <a href="#personales" class="index-item"><i class="fas fa-user"></i> Personal Projects</a>
+            <a href="#contacto" class="index-item"><i class="fas fa-scroll"></i> Contact</a>
         </div>
     </nav>
 
     <main>
-        <section id="civil" class="section-container">
-            <h2 class="section-title"><i class="fas fa-hard-hat"></i> Proyectos de Ing. Civil</h2>
+        <!-- SECTION: PROFESSIONAL PROJECTS -->
+        <section id="profesionales" class="section-container">
+            <h2 class="section-title"><i class="fas fa-briefcase"></i> Professional Projects</h2>
+            
+            <h3 class="subcategory-title">Independent</h3>
             <div class="menu-grid">
-                <a href="steel.html" class="menu-item">
-                    <div class="circle-container"><img src="./assets/images/Steel_icon.avif" alt="Steel"></div>
-                    <div class="label">STEEL</div>
+                <a href="#" class="menu-item">
+                    <div class="circle-container"><i class="fas fa-building" style="font-size: 3rem; color: var(--gold-matte);"></i></div>
+                    <div class="label">Industrial Warehouse - Huacho</div>
+                    <div class="course-badge"><i class="fas fa-hard-hat"></i> Structural Design | Metal Framing</div>
                 </a>
-                <a href="concrete.html" class="menu-item">
-                    <div class="circle-container"><img src="./assets/images/Concrete_icon.avif" alt="Concrete"></div>
-                    <div class="label">CONCRETE</div>
+                <a href="#" class="menu-item">
+                    <div class="circle-container"><i class="fas fa-parking" style="font-size: 3rem; color: var(--gold-matte);"></i></div>
+                    <div class="label">Parking Roof - Lima</div>
+                    <div class="course-badge"><i class="fas fa-drafting-compass"></i> Reinforced Concrete | Slabs</div>
                 </a>
-                <a href="seismic.html" class="menu-item">
-                    <div class="circle-container"><img src="./assets/images/Seismic_icon.avif" alt="Seismic"></div>
-                    <div class="label">SEISMIC</div>
-                </a>
-                <a href="Automatizacion.html" class="menu-item">
-                    <div class="circle-container"><img src="./assets/images/Automatizacion.avif" alt="Automatizacion"></div>
-                    <div class="label">AUTOMATIZACION</div>
-                </a>
-                <a href="Puente.html" class="menu-item">
-                    <div class="circle-container"><img src="./assets/images/Seismic_icon.avif" alt="Puente"></div>
-                    <div class="label">PUENTES</div>
+            </div>
+
+            <h3 class="subcategory-title">GM Ingenieros y Consultores</h3>
+            <div class="menu-grid">
+                <a href="#" class="menu-item">
+                    <div class="circle-container"><i class="fas fa-user-tie" style="font-size: 3rem; color: var(--gold-matte);"></i></div>
+                    <div class="label">Technical Assistant - Hybrid</div>
+                    <div class="course-badge"><i class="fas fa-laptop-code"></i> Hybrid Role | On-site & Remote</div>
                 </a>
             </div>
         </section>
 
-        <section id="investigacion" class="section-container">
-            <h2 class="section-title"><i class="fas fa-flask"></i> Investigación Académica</h2>
+        <!-- SECTION: UTEC UNIVERSITY PROJECTS -->
+        <section id="universidad" class="section-container">
+            <h2 class="section-title"><i class="fas fa-university"></i> UTEC University Projects</h2>
             <div class="menu-grid">
-                <a href="nanosteel.html" class="menu-item">
-                    <div class="circle-container"><img src="./assets/images/Nanosteel_icon.png" alt="NanoSteel"></div>
-                    <div class="label">NANOSTEEL</div>
+                <a href="./assets/projects/UtecUniversity/Steel/Proyecto_Cursos_DE.html" class="menu-item">
+                    <div class="circle-container"><img src="./assets/images/steelc.avif" alt="Steel structures preview"></div>
+                    <div class="label">Steel Structures Design</div>
                 </a>
-                <a href="ecoconcreto.html" class="menu-item">
-                    <div class="circle-container"><img src="./assets/images/Ecoconcreto_icon.png" alt="EcoConcreto"></div>
-                    <div class="label">ECOCONCRETO</div>
+                <a href="#" class="menu-item">
+                    <div class="circle-container"><img src="./assets/images/concrete.avif" alt="Reinforced concrete preview"></div>
+                    <div class="label">Reinforced Concrete Design</div>
+                </a>
+                <a href="./assets/projects/UtecUniversity/Seismic/Proyecto_Cursos_DS.html" class="menu-item">
+                    <div class="circle-container"><img src="./assets/images/seismic.avif" alt="Earthquake engineering preview"></div>
+                    <div class="label">Earthquake Engineering</div>
+                </a>
+                <a href="#" class="menu-item">
+                    <div class="circle-container"><img src="./assets/images/dinamic.avif" alt="Architectural engineering preview"></div>
+                    <div class="label">Architectural Engineering</div>
+                    <span class="warning-badge"><i class="fas fa-exclamation-triangle"></i> Under development - Not accessible</span>
+                </a>
+                <a href="#" class="menu-item">
+                    <div class="circle-container"><img src="./assets/images/dinamic.avif" alt="Machine learning preview"></div>
+                    <div class="label">Machine Learning</div>
+                    <span class="warning-badge"><i class="fas fa-exclamation-triangle"></i> Under development - Not accessible</span>
+                </a>
+                <a href="./assets/projects/UtecUniversity/Dynamic/Dynamic.html" class="menu-item">
+                    <div class="circle-container"><img src="./assets/images/dinamic.avif" alt="Dynamics and vibrations preview"></div>
+                    <div class="label">Dynamics & Vibrations</div>
+                </a>
+                <a href="#" class="menu-item disabled" aria-disabled="true">
+                    <div class="circle-container"><img src="./assets/images/dinamic.avif" alt="Thesis preview"></div>
+                    <div class="label">Thesis (Incomplete)</div>
+                    <span class="warning-badge"><i class="fas fa-exclamation-triangle"></i> Under development - Not accessible</span>
                 </a>
             </div>
         </section>
 
-        <section id="gamedev" class="section-container">
-            <h2 class="section-title"><i class="fas fa-gamepad"></i> Proyectos Aparte (Gamedev & Otros)</h2>
+        <!-- SECTION: COURSES -->
+        <section id="cursos" class="section-container">
+            <h2 class="section-title"><i class="fas fa-graduation-cap"></i> Courses & Specializations</h2>
             <div class="menu-grid">
-                <a href="./assets/projects/other/PokemonGodot.html" class="menu-item">
-                    <div class="circle-container"><img src="./assets/images/PokemonGodot_icon.avif" alt="Pokemon"></div>
-                    <div class="label">POKEMON GODOT</div>
+                <!--
+                <a href="#" class="menu-item">
+                    <div class="circle-container"><i class="fas fa-tools" style="font-size: 3rem; color: var(--gold-matte);"></i></div>
+                    <div class="label">Structural Masonry</div>
+                    <div class="course-badge"><i class="fas fa-chalkboard-teacher"></i> Albañilería | Peruvian Code</div>
                 </a>
-                <a href="./assets/projects/other/MyFriend.html" class="menu-item">
-                    <div class="circle-container"><img src="./assets/images/MyFriend_icon.avif" alt="Friends"></div>
-                    <div class="label">MY FRIENDS</div>
+                <a href="#" class="menu-item">
+                    <div class="circle-container"><i class="fas fa-table" style="font-size: 3rem; color: var(--gold-matte);"></i></div>
+                    <div class="label">Excel for Engineering</div>
+                    <div class="course-badge"><i class="fas fa-chart-line"></i> Macros | Data Analysis | Automation</div>
                 </a>
-                <a href="./assets/projects/other/KuraiEko/KuraiEko.html" class="menu-item">
-                    <div class="circle-container"><img src="./assets/images/KuraiEko_icon.avif" alt="Kurai"></div>
-                    <div class="label">KURAI EKO</div>
+                <a href="#" class="menu-item">
+                    <div class="circle-container"><i class="fas fa-project-diagram" style="font-size: 3rem; color: var(--gold-matte);"></i></div>
+                    <div class="label">Project Management</div>
+                    <div class="course-badge"><i class="fas fa-tasks"></i> PMI Essentials | Scheduling</div>
+                </a>
+                <a href="#" class="menu-item">
+                    <div class="circle-container"><i class="fas fa-cubes" style="font-size: 3rem; color: var(--gold-matte);"></i></div>
+                    <div class="label">BIM & Revit</div>
+                    <div class="course-badge"><i class="fas fa-drafting-compass"></i> Parametric modeling</div>
+                </a>
+                <a href="#" class="menu-item">
+                    <div class="circle-container"><i class="fas fa-chart-bar" style="font-size: 3rem; color: var(--gold-matte);"></i></div>
+                    <div class="label">ETABS / SAP2000</div>
+                    <div class="course-badge"><i class="fas fa-building"></i> Seismic Analysis</div>
+                </a>
+                <a href="#" class="menu-item">
+                    <div class="circle-container"><i class="fab fa-python" style="font-size: 3rem; color: var(--gold-matte);"></i></div>
+                    <div class="label">Python & Automation</div>
+                    <div class="course-badge"><i class="fas fa-code"></i> Scripting | Data Viz</div>
+                </a>
+                -->
+                <a href="./assets/projects/Course/A_D_albanileria/albanileria.html" class="menu-item">
+                    <div class="circle-container"><i class="fas fa-tools" style="font-size: 3rem; color: var(--gold-matte);"></i></div>
+                    <div class="label">Analisis y Diseño de Albañilería con ETABS, SAP2000 y Safe</div>
+                    <div class="course-badge"><i class="fas fa-chalkboard-teacher"></i> Albañilería | Peruvian Code</div>
+                </a>
+            </div>
+            <div style="margin-top: 15px; text-align: center; font-size: 0.85rem; opacity: 0.7;">
+                <i class="fas fa-certificate" style="color: var(--gold-matte);"></i> Certifications in progress & continuous learning — click each course for details (soon)
+            </div>
+        </section>
+
+        <!-- SECTION: PERSONAL PROJECTS -->
+        <section id="personales" class="section-container">
+            <h2 class="section-title"><i class="fas fa-user"></i> Personal Projects</h2>
+            <div class="menu-grid">
+                <a href="./assets/projects/PersonalProject/PokemonGodot/PokemonGodot.html" class="menu-item">
+                    <div class="circle-container"><img src="./assets/images/PokemonGodot_icon.avif" alt="Pokemon Godot project icon"></div>
+                    <div class="label">Pokemon Godot</div>
+                </a>
+                <a href="./assets/projects/PersonalProject/MyFriend/MyFriend.html" class="menu-item">
+                    <div class="circle-container"><img src="./assets/images/MyFriend_icon.avif" alt="My Friend Scarecrow project icon"></div>
+                    <div class="label">My Friend Scarecrow</div>
+                </a>
+                <a href="./assets/projects/PersonalProject/KuraiEko/KuraiEko.html" class="menu-item">
+                    <div class="circle-container"><img src="./assets/images/KuraiEko_icon.avif" alt="Kurai Eko project icon"></div>
+                    <div class="label">Kurai Eko</div>
                 </a>
             </div>
         </section>
     </main>
 
     <footer id="contacto">
-        <div class="contact-links" id="footer-contact">
-            <!-- Se llenará con JavaScript -->
-        </div>
+        <div class="contact-links" id="footer-contact"></div>
         <p class="copyright" id="copyright"></p>
     </footer>
 </div>
 
-<a href="#" class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></a>
-
-<script>
-    // Script para llenar todos los datos dinámicos
-    document.addEventListener('DOMContentLoaded', function() {
-        // 1. Nombre en el header
-        document.getElementById('nombre-header').textContent = SITE_CONFIG.nombre;
-        
-        // 2. Quick contact (barra superior)
-        const quickContact = document.getElementById('quick-contact');
-        quickContact.innerHTML = `
-            <a href="mailto:${SITE_CONFIG.email}"><i class="fas fa-envelope"></i> Email</a>
-            <a href="${SITE_CONFIG.social.linkedin}" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
-            <a href="${SITE_CONFIG.social.whatsapp}" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-            <a href="${SITE_CONFIG.social.github}" target="_blank"><i class="fab fa-github"></i> GitHub</a>
-        `;
-        
-        // 3. Footer contactos
-        const footerContact = document.getElementById('footer-contact');
-        footerContact.innerHTML = `
-            <a href="mailto:${SITE_CONFIG.email}"><i class="fas fa-envelope"></i> ${SITE_CONFIG.email}</a>
-            <a href="${SITE_CONFIG.social.linkedin}" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
-            <a href="${SITE_CONFIG.social.whatsapp}" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-            <a href="${SITE_CONFIG.social.github}" target="_blank"><i class="fab fa-github"></i> GitHub</a>
-        `;
-        
-        // 4. Copyright
-        document.getElementById('copyright').textContent = 
-            `© ${SITE_CONFIG.año} | Diseñado para Ingeniería · Todos los derechos reservados`;
-    });
-
-    // Botón volver arriba
-    window.onscroll = function() {
-        const backToTop = document.getElementById('backToTop');
-        if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
-            backToTop.classList.add('visible');
-        } else {
-            backToTop.classList.remove('visible');
-        }
-    };
-</script>
+<a href="#" class="back-to-top" id="backToTop" aria-label="Back to top"><i class="fas fa-arrow-up"></i></a>
 
 </body>
 </html>

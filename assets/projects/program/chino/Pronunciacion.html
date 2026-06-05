@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selector Aleatorio de Pinyin Chino</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts (Inter & Noto Sans SC for Chinese characters) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        chinese: ['Noto Sans SC', 'sans-serif'],
+                    },
+                    colors: {
+                        pinyin: {
+                            bg: '#0F172A', // Slate 900
+                            card: '#1E293B', // Slate 800
+                            primary: '#3B82F6', // Blue 500
+                            accent: '#10B981', // Emerald 500
+                            vowel: '#EC4899', // Pink 500
+                            consonant: '#8B5CF6', // Purple 500
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            background-color: #0B0F19;
+            color: #E2E8F0;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0F172A;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+
+        /* Neon Glows */
+        .glow-vowel {
+            box-shadow: 0 0 20px rgba(236, 72, 153, 0.25);
+        }
+        .glow-consonant {
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.25);
+        }
+        .glow-accent {
+            box-shadow: 0 0 25px rgba(16, 185, 129, 0.3);
+        }
+
+        /* Card Shuffling Animation */
+        @keyframes fastShuffle {
+            0% { transform: scale(0.95) translateY(10px); filter: blur(2px); opacity: 0.7; }
+            50% { transform: scale(1.03) translateY(-10px); filter: blur(4px); opacity: 0.5; }
+            100% { transform: scale(1) translateY(0); filter: blur(0); opacity: 1; }
+        }
+
+        .shuffling {
+            animation: fastShuffle 0.12s infinite alternate ease-in-out;
+        }
+
+        /* Floating effect */
+        .float-anim {
+            animation: float 4s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between overflow-x-hidden pb-12">
+
+    <!-- Header -->
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur-md sticky top-0 z-50 px-4 py-4 sm:px-6 lg:px-8">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-pinyin-primary to-pinyin-accent flex items-center justify-center text-white shadow-lg shadow-pinyin-primary/20">
+                    <span class="font-bold text-lg font-chinese">拼</span>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+                        Pinyin Chino <span class="text-xs bg-pinyin-primary/20 text-pinyin-primary px-2 py-0.5 rounded-full font-mono border border-pinyin-primary/30">拼音</span>
+                    </h1>
+                    <p class="text-xs text-slate-400">Selector Aleatorio y Guía de Pronunciación Interactiva</p>
+                </div>
+            </div>
+            
+            <!-- Quick stats or shortcuts -->
+            <div class="flex gap-4 text-xs">
+                <span id="stat-vowels" class="px-3 py-1.5 rounded-lg bg-pink-500/10 text-pink-400 border border-pink-500/20">
+                    <i class="fa-solid font-bold mr-1">a</i> 6 Vocales
+                </span>
+                <span id="stat-consonants" class="px-3 py-1.5 rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20">
+                    <i class="fa-solid font-bold mr-1">b</i> 21 Consonantes
+                </span>
+                <button onclick="toggleVoiceSetup()" class="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition flex items-center gap-1.5 border border-slate-700">
+                    <i class="fa-solid fa-volume-high text-pinyin-accent" id="voice-indicator"></i>
+                    <span>Voz China</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow max-w-6xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8 flex flex-col gap-6">
+        
+        <!-- Voice Configuration Overlay / Hidden Panel -->
+        <div id="voice-settings" class="hidden bg-slate-800/90 border border-slate-700 rounded-2xl p-4 mb-2 flex flex-col md:flex-row items-center justify-between gap-4 animate-fade-in">
+            <div class="flex items-center gap-3">
+                <div class="p-2.5 rounded-xl bg-pinyin-accent/20 text-pinyin-accent">
+                    <i class="fa-solid fa-robot text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-sm text-white">Configuración del Lector TTS (Text-to-Speech)</h3>
+                    <p class="text-xs text-slate-400">Selecciona el motor de voz de tu dispositivo para la mejor pronunciación china.</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 w-full md:w-auto">
+                <select id="voice-select" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg focus:ring-pinyin-primary focus:border-pinyin-primary block p-2.5 w-full md:w-64">
+                    <option value="">Cargando voces...</option>
+                </select>
+                <button onclick="testVoice()" class="p-2.5 bg-pinyin-accent hover:bg-pinyin-accent/80 text-white rounded-lg transition-all text-xs flex items-center gap-1 shrink-0">
+                    <i class="fa-solid fa-play"></i> Probar
+                </button>
+            </div>
+        </div>
+
+        <!-- Mode & Selection Controller -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            <!-- Controls & Mode Panel (Left) -->
+            <div class="lg:col-span-4 bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between gap-5 shadow-xl">
+                <div>
+                    <span class="text-xs uppercase tracking-wider text-pinyin-accent font-semibold mb-2 block">Paso 1: Configurar Filtro</span>
+                    <h2 class="text-lg font-bold text-white mb-4">¿Qué deseas practicar hoy?</h2>
+                    
+                    <!-- Mode Buttons -->
+                    <div class="space-y-3">
+                        <label class="relative flex items-center p-3 rounded-xl cursor-pointer border transition-all bg-slate-800/50 hover:bg-slate-800 border-slate-700 select-none group">
+                            <input type="radio" name="mode-select" value="all" checked class="sr-only" onchange="updateModeUI()">
+                            <div class="w-5 h-5 rounded-full border border-slate-500 flex items-center justify-center mr-3 group-hover:border-pinyin-primary transition-colors">
+                                <div class="w-2.5 h-2.5 rounded-full bg-pinyin-primary scale-0 transition-transform" id="radio-all-dot"></div>
+                            </div>
+                            <div class="flex-grow">
+                                <span class="font-semibold text-sm block text-white">Todo el Pinyin</span>
+                                <span class="text-xs text-slate-400">Mezcla aleatoria de vocales y consonantes</span>
+                            </div>
+                            <span class="text-xs font-mono px-2 py-0.5 rounded bg-slate-900 text-slate-400">27</span>
+                        </label>
+
+                        <label class="relative flex items-center p-3 rounded-xl cursor-pointer border transition-all bg-slate-800/50 hover:bg-slate-800 border-slate-700 select-none group">
+                            <input type="radio" name="mode-select" value="vowels" class="sr-only" onchange="updateModeUI()">
+                            <div class="w-5 h-5 rounded-full border border-slate-500 flex items-center justify-center mr-3 group-hover:border-pink-500 transition-colors">
+                                <div class="w-2.5 h-2.5 rounded-full bg-pink-500 scale-0 transition-transform" id="radio-vowels-dot"></div>
+                            </div>
+                            <div class="flex-grow">
+                                <span class="font-semibold text-sm block text-pink-400">Solo Vocales (Finales)</span>
+                                <span class="text-xs text-slate-400">a, o, e, i, u, ü y variantes</span>
+                            </div>
+                            <span class="text-xs font-mono px-2 py-0.5 rounded bg-pink-950 text-pink-400">6</span>
+                        </label>
+
+                        <label class="relative flex items-center p-3 rounded-xl cursor-pointer border transition-all bg-slate-800/50 hover:bg-slate-800 border-slate-700 select-none group">
+                            <input type="radio" name="mode-select" value="consonants" class="sr-only" onchange="updateModeUI()">
+                            <div class="w-5 h-5 rounded-full border border-slate-500 flex items-center justify-center mr-3 group-hover:border-purple-500 transition-colors">
+                                <div class="w-2.5 h-2.5 rounded-full bg-purple-500 scale-0 transition-transform" id="radio-consonants-dot"></div>
+                            </div>
+                            <div class="flex-grow">
+                                <span class="font-semibold text-sm block text-purple-400">Solo Consonantes (Iniciales)</span>
+                                <span class="text-xs text-slate-400">b, p, m, f, d, t, n, l, g...</span>
+                            </div>
+                            <span class="text-xs font-mono px-2 py-0.5 rounded bg-purple-950 text-purple-400">21</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Fast Info Alert / Guide Box -->
+                <div class="bg-slate-850 border border-slate-800 p-4 rounded-xl mt-4">
+                    <div class="flex items-start gap-2 text-xs text-slate-300 leading-relaxed">
+                        <i class="fa-solid fa-circle-info text-pinyin-primary mt-0.5 shrink-0"></i>
+                        <div>
+                            <span class="font-bold text-slate-200">Tip de estudio:</span> 
+                            En el Pinyin, las <span class="text-purple-400 font-semibold">consonantes</span> se llaman "iniciales" y las <span class="text-pink-400 font-semibold">vocales</span> se llaman "finales" porque siempre inician y terminan la sílaba respectivamente.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Spinner and Visual Board (Right / Center) -->
+            <div class="lg:col-span-8 flex flex-col gap-6">
+                
+                <!-- The Generator Area -->
+                <div class="bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 rounded-2xl p-6 sm:p-8 flex flex-col items-center justify-center relative overflow-hidden shadow-2xl min-h-[420px]">
+                    
+                    <!-- Decorative glowing backdrops -->
+                    <div id="glow-element" class="absolute w-72 h-72 rounded-full bg-pinyin-primary/10 blur-[100px] -top-10 -right-10 transition-all duration-700"></div>
+                    <div id="glow-element-2" class="absolute w-72 h-72 rounded-full bg-pinyin-accent/5 blur-[120px] -bottom-10 -left-10 transition-all duration-700"></div>
+
+                    <!-- Watermark background pinyin symbol -->
+                    <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-5 select-none">
+                        <span id="watermark" class="font-chinese font-black text-[220px]">拼</span>
+                    </div>
+
+                    <!-- Content Header inside card -->
+                    <div class="text-center z-10 mb-6">
+                        <span id="badge-type" class="px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase border bg-slate-850 text-slate-300 border-slate-750">
+                            LISTO PARA EMPEZAR
+                        </span>
+                    </div>
+
+                    <!-- Main Display Letter Card -->
+                    <div class="z-10 my-4 flex flex-col items-center justify-center min-h-[220px]">
+                        <!-- Card Wrapper with 3D/shadow layers -->
+                        <div id="display-card-wrapper" class="relative group cursor-pointer" onclick="playCurrentAudio()">
+                            <!-- Decorative background pulse -->
+                            <div id="display-card-pulse" class="absolute -inset-1 rounded-3xl bg-gradient-to-r from-pinyin-primary to-pinyin-accent opacity-30 blur-md group-hover:opacity-50 transition duration-1000"></div>
+                            
+                            <!-- Actual Interactive Card content -->
+                            <div id="display-card" class="relative w-48 h-48 sm:w-56 sm:h-56 bg-slate-900 border border-slate-750 rounded-3xl flex flex-col items-center justify-center transition-all duration-300 shadow-2xl hover:border-slate-600">
+                                
+                                <span id="display-letter" class="font-extrabold text-7xl sm:text-8xl tracking-tight text-white select-none">
+                                    ?
+                                </span>
+                                
+                                <span id="display-chinese-character" class="absolute top-3 right-4 font-chinese text-sm text-slate-600 select-none">
+                                    拼音
+                                </span>
+
+                                <div class="absolute bottom-4 flex items-center justify-center gap-1.5 text-slate-500 group-hover:text-pinyin-accent transition-colors">
+                                    <i class="fa-solid fa-volume-high text-sm"></i>
+                                    <span class="text-xs font-semibold tracking-wider uppercase">Escuchar</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Trigger Button -->
+                    <div class="z-10 w-full max-w-sm mt-4">
+                        <button id="btn-spin" onclick="triggerShuffle()" class="w-full py-4 px-6 bg-gradient-to-r from-pinyin-primary via-blue-600 to-pinyin-accent text-white font-bold text-lg rounded-2xl shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-3">
+                            <i class="fa-solid fa-shuffle text-xl animate-spin-slow"></i>
+                            <span id="btn-text">¡SELECCIONAR ALEATORIO!</span>
+                        </button>
+                    </div>
+
+                    <!-- Quick stats / counts inside the frame -->
+                    <p class="text-[10px] text-slate-500 z-10 mt-4 tracking-wider uppercase">
+                        Sugerencia: puedes usar la tecla <kbd class="px-1.5 py-0.5 bg-slate-800 rounded text-slate-300 text-[9px] font-mono">Espacio</kbd> en tu teclado para girar rápido.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Info Panel (Shows up after selection) -->
+        <div id="detail-panel" class="hidden bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl transition-all duration-500 animate-fade-in">
+            <div class="border-b border-slate-800 pb-5 mb-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <div id="detail-badge-icon" class="w-12 h-12 rounded-2xl bg-pink-500/10 text-pink-500 flex items-center justify-center text-2xl font-bold font-chinese border border-pink-500/20">
+                        a
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h3 id="detail-title" class="text-2xl font-black text-white tracking-tight">Vocal: a</h3>
+                            <span id="detail-category-badge" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-pink-500/10 text-pink-400 border border-pink-500/30">Vocal</span>
+                        </div>
+                        <p class="text-xs text-slate-400">Guía práctica de pronunciación para nativos de español</p>
+                    </div>
+                </div>
+                
+                <div class="flex gap-2 w-full sm:w-auto">
+                    <button onclick="playCurrentAudio()" class="flex-grow sm:flex-none px-4 py-2.5 bg-slate-800 hover:bg-slate-750 text-white rounded-xl transition text-xs font-semibold flex items-center justify-center gap-2 border border-slate-700">
+                        <i class="fa-solid fa-volume-high text-pinyin-accent text-sm"></i> Pronunciación estándar
+                    </button>
+                    <button id="favorite-btn" onclick="toggleFavorite()" class="px-3 py-2.5 bg-slate-800 hover:bg-slate-750 text-slate-400 hover:text-red-400 rounded-xl transition border border-slate-700" title="Guardar/Destacar">
+                        <i class="fa-solid fa-heart"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Detail Grid Info -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                
+                <!-- Pronunciation Guide -->
+                <div class="md:col-span-7 space-y-4">
+                    <div class="bg-slate-850/50 border border-slate-800 p-5 rounded-2xl">
+                        <h4 class="text-xs font-bold tracking-wider uppercase text-pinyin-accent mb-3 flex items-center gap-1.5">
+                            <i class="fa-solid fa-microphone-lines"></i> ¿Cómo suena en español?
+                        </h4>
+                        <p id="detail-guide-text" class="text-slate-200 text-sm leading-relaxed font-light">
+                            Suena exactamente como la 'a' en español. Abre bien la boca de forma natural y relaja los labios.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-850/50 border border-slate-800 p-5 rounded-2xl">
+                        <h4 class="text-xs font-bold tracking-wider uppercase text-pinyin-primary mb-3 flex items-center gap-1.5">
+                            <i class="fa-solid fa-comment-dots"></i> Consejos Avanzados de Articulación
+                        </h4>
+                        <div id="detail-tips" class="text-slate-300 text-xs leading-relaxed space-y-2">
+                            <p>• La boca debe estar lo suficientemente abierta.</p>
+                            <p>• Mantén la lengua en una posición baja y plana en el centro de tu boca.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Word Examples (Mandarin Vocabulary) -->
+                <div class="md:col-span-5 flex flex-col justify-between">
+                    <div class="bg-slate-850/30 border border-slate-800 p-5 rounded-2xl h-full flex flex-col justify-between">
+                        <div>
+                            <h4 class="text-xs font-bold tracking-wider uppercase text-slate-400 mb-4 flex items-center gap-1.5">
+                                <i class="fa-solid fa-book-open"></i> Ejemplo práctico de uso
+                            </h4>
+                            <div class="flex items-center gap-4 py-2">
+                                <span id="detail-example-hanzi" class="font-chinese font-bold text-4xl text-white bg-slate-900/60 p-3 rounded-2xl border border-slate-800">
+                                    爸
+                                </span>
+                                <div>
+                                    <span id="detail-example-pinyin" class="text-lg font-bold text-pinyin-accent block">bà</span>
+                                    <span id="detail-example-meaning" class="text-sm text-slate-300">papá</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Fun Fact or Note -->
+                        <div class="mt-6 pt-4 border-t border-slate-850 text-xs text-slate-400 italic flex items-start gap-1.5">
+                            <i class="fa-regular fa-lightbulb text-amber-400 mt-0.5 shrink-0"></i>
+                            <span id="detail-fact">La vocal 'a' es la más abierta y resonante de todo el sistema Pinyin chino.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- All Pinyin Grid Quick Access -->
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl">
+            <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+                <div>
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        Tabla de Referencia Rápida
+                    </h3>
+                    <p class="text-xs text-slate-400">Presiona cualquier carácter para cargarlo y escucharlo directamente.</p>
+                </div>
+                <div class="flex gap-2">
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-bold bg-pink-500/15 text-pink-400 border border-pink-500/20">Vocales</span>
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-bold bg-purple-500/15 text-purple-400 border border-purple-500/20">Consonantes</span>
+                </div>
+            </div>
+
+            <!-- Tab Panels Content -->
+            <div class="space-y-6">
+                <!-- Vocales Section -->
+                <div>
+                    <h4 class="text-[11px] font-bold tracking-wider uppercase text-pink-400 mb-2">Vocales (Finales Simples)</h4>
+                    <div id="grid-vowels" class="grid grid-cols-6 sm:grid-cols-6 md:grid-cols-12 gap-2">
+                        <!-- Filled dynamically -->
+                    </div>
+                </div>
+
+                <!-- Consonantes Section -->
+                <div>
+                    <h4 class="text-[11px] font-bold tracking-wider uppercase text-purple-400 mb-2">Consonantes (Iniciales)</h4>
+                    <div id="grid-consonants" class="grid grid-cols-4 sm:grid-cols-7 md:grid-cols-12 gap-2">
+                        <!-- Filled dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Layout: History (Left) + Interactive Mini-Quiz (Right) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            <!-- History List (lg:col-span-5) -->
+            <div class="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl flex flex-col h-[320px]">
+                <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-3 shrink-0">
+                    <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-clock-rotate-left text-pinyin-accent"></i> Historial de Práctica
+                    </h3>
+                    <button onclick="clearHistory()" class="text-xs text-slate-400 hover:text-red-400 transition">
+                        Limpiar
+                    </button>
+                </div>
+                <div id="history-list" class="flex-grow overflow-y-auto space-y-2 pr-1">
+                    <!-- Dynamic history item row -->
+                    <div class="text-center text-xs text-slate-500 py-12">
+                        El historial se llenará conforme vayas girando el selector.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Mini-Quiz (lg:col-span-7) -->
+            <div class="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl flex flex-col justify-between min-h-[320px]">
+                <div>
+                    <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-3">
+                        <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-gamepad text-pinyin-primary"></i> Desafío de Oído (Quiz)
+                        </h3>
+                        <span id="quiz-score" class="text-xs font-semibold px-2.5 py-1 bg-pinyin-primary/10 text-pinyin-primary rounded-lg border border-pinyin-primary/20">
+                            Puntaje: 0/0
+                        </span>
+                    </div>
+
+                    <!-- Quiz Question State -->
+                    <div id="quiz-ready-state" class="text-center py-6">
+                        <p class="text-xs text-slate-300 mb-4 max-w-md mx-auto">
+                            Te reproduciremos un sonido en mandarín. Tendrás que adivinar a qué letra del Pinyin pertenece entre 4 opciones posibles. ¡Entrena tu oído!
+                        </p>
+                        <button onclick="startQuiz()" class="px-5 py-2.5 bg-pinyin-primary hover:bg-pinyin-primary/80 text-white font-semibold text-xs rounded-xl transition shadow-lg shadow-pinyin-primary/20">
+                            ¡Comenzar Desafío!
+                        </button>
+                    </div>
+
+                    <!-- Active Quiz Game State (Hidden at first) -->
+                    <div id="quiz-active-state" class="hidden space-y-4">
+                        <div class="flex items-center justify-center gap-4 bg-slate-850 p-4 rounded-2xl">
+                            <button onclick="playQuizSound()" class="w-14 h-14 bg-gradient-to-tr from-pinyin-primary to-pinyin-accent hover:from-pinyin-accent hover:to-pinyin-primary text-white text-xl rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-all" title="Repetir audio del quiz">
+                                <i class="fa-solid fa-volume-high"></i>
+                            </button>
+                            <div>
+                                <h4 class="text-xs font-bold text-white">Escucha el sonido chino</h4>
+                                <p class="text-[11px] text-slate-400">Presiona el botón para escuchar de nuevo, luego marca la respuesta correcta.</p>
+                            </div>
+                        </div>
+
+                        <!-- 4 Option Grid -->
+                        <div class="grid grid-cols-2 gap-3" id="quiz-options-container">
+                            <!-- Filled dynamically via JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quiz Status Bar Feedback -->
+                <div id="quiz-feedback" class="mt-3 text-xs text-center font-semibold text-slate-400 h-6">
+                    <!-- "¡Respuesta Correcta!" / "Incorrecto, era la 'a'" -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center text-xs text-slate-500 mt-12 px-4 max-w-xl mx-auto">
+        <p class="mb-1">Desarrollado con fines educativos. La pronunciación depende de los paquetes instalados en tu navegador/sistema operativo.</p>
+        <p>&copy; 2026 Pinyin Chino Interactivo • Todos los derechos reservados.</p>
+    </footer>
+
+    <!-- Audio Player Native Element -->
+    <audio id="native-pinyin-audio" class="hidden"></audio>
+
+    <!-- JavaScript Logic & Datasets -->
+    <script>
+        // Pinyin Dataset
+        // Type: v = vowel, c = consonant
+        const pinyinData = [
+            // Vocales (Finales Simples)
+            {
+                letter: 'a',
+                type: 'v',
+                name: 'Vocal simple a',
+                ipa: '/a/',
+                guide: "Suena exactamente como la 'a' en español. Abre la boca de manera natural y relaja tus labios.",
+                tips: ["La boca debe estar lo suficientemente abierta.", "La lengua permanece abajo en una posición neutral."],
+                exampleHanzi: "爸",
+                examplePinyin: "bà",
+                exampleMeaning: "papá",
+                fact: "La 'a' es la vocal más abierta y resonante de todo el sistema Pinyin chino."
+            },
+            {
+                letter: 'o',
+                type: 'v',
+                name: 'Vocal simple o',
+                ipa: '/o/',
+                guide: "Similar a la 'o' del español pero más cerrada, a veces terminando en un ligero matiz de 'u' u 'ou'.",
+                tips: ["Redondea los labios de forma pronunciada hacia adentro.", "La lengua se contrae ligeramente hacia atrás."],
+                exampleHanzi: "我",
+                examplePinyin: "wǒ",
+                exampleMeaning: "yo",
+                fact: "En mandarín, la vocal 'o' sola normalmente va acompañada por una semiconsonante implícita."
+            },
+            {
+                letter: 'e',
+                type: 'v',
+                name: 'Vocal simple e',
+                ipa: '/ɤ/',
+                guide: "Este es el sonido más singular. No es como la 'e' de español. Intenta decir 'o' pero con los labios estirados horizontalmente, como sonriendo sin mostrar los dientes.",
+                tips: ["No redondees los labios. Déjalos planos.", "El sonido es gutural, proviene de la parte trasera de la garganta."],
+                exampleHanzi: "哥",
+                examplePinyin: "gē",
+                exampleMeaning: "hermano mayor",
+                fact: "Se conoce comúnmente como la 'e gutural' o 'e neutra' por su peculiar sonido de fondo."
+            },
+            {
+                letter: 'i',
+                type: 'v',
+                name: 'Vocal simple i',
+                ipa: '/i/',
+                guide: "Suena como la 'i' en español, con los labios muy estirados horizontalmente hacia los lados.",
+                tips: ["Los labios deben quedar estirados de forma similar a una gran sonrisa.", "La punta de la lengua toca los dientes inferiores por detrás."],
+                exampleHanzi: "一",
+                examplePinyin: "yī",
+                exampleMeaning: "uno",
+                fact: "Después de las consonantes 'z, c, s, zh, ch, sh, r', la 'i' se pronuncia como un zumbido sordo casi mudo."
+            },
+            {
+                letter: 'u',
+                type: 'v',
+                name: 'Vocal simple u',
+                ipa: '/u/',
+                guide: "Suena como la 'u' en español. Los labios deben sobresalir fuertemente redondeados y pequeños.",
+                tips: ["Haz los labios un círculo muy pequeño.", "La parte trasera de la lengua se eleva hacia el velo del paladar."],
+                exampleHanzi: "五",
+                examplePinyin: "wǔ",
+                exampleMeaning: "cinco",
+                fact: "En Pinyin, si una sílaba comienza por 'u' sola, se escribe 'wu' pero se pronuncia igual."
+            },
+            {
+                letter: 'ü',
+                type: 'v',
+                name: 'Vocal simple ü',
+                ipa: '/y/',
+                guide: "El sonido más difícil para hispanohablantes. Pon los labios en posición para decir 'u' (muy redondeados), pero sin moverlos, intenta pronunciar una 'i' de español.",
+                tips: ["La posición externa de los labios es de 'u', pero el sonido interno de la lengua es de 'i'.", "No cambies la posición labial a mitad de camino."],
+                exampleHanzi: "绿",
+                examplePinyin: "lǜ",
+                exampleMeaning: "verde",
+                fact: "Esta letra es prestada de la fonética alemana y también existe de manera idéntica en el francés (la letra 'u')."
+            },
+
+            // Consonantes (Iniciales)
+            {
+                letter: 'b',
+                type: 'c',
+                name: 'Consonante b',
+                ipa: '/p/',
+                guide: "No suena como la 'b' española de 'burro'. En chino es sorda y se asemeja a una 'p' muy suave en español sin soltar aire.",
+                tips: ["Une firmemente los labios.", "No hagas vibrar las cuerdas vocales, es un sonido sordo."],
+                exampleHanzi: "八",
+                examplePinyin: "bā",
+                exampleMeaning: "ocho",
+                fact: "El mandarín no distingue entre consonantes sordas/sonoras (p vs b), sino entre no-aspiradas (b) y aspiradas (p)."
+            },
+            {
+                letter: 'p',
+                type: 'c',
+                name: 'Consonante p',
+                ipa: '/pʰ/',
+                guide: "Suena como una 'p' de español pero fuertemente ASPIRADA (con una gran ráfaga de aire que sale de tu boca).",
+                tips: ["Coloca un papel frente a tu boca: al pronunciar 'p', el papel debe moverse bruscamente por el aire.", "Libera el aire de golpe."],
+                exampleHanzi: "跑",
+                examplePinyin: "pǎo",
+                exampleMeaning: "correr",
+                fact: "La aspiración es clave en mandarín; si pronuncias 'p' sin aire, los chinos escucharán 'b'."
+            },
+            {
+                letter: 'm',
+                type: 'c',
+                name: 'Consonante m',
+                ipa: '/m/',
+                guide: "Suena exactamente igual que la 'm' del español.",
+                tips: ["Sonido nasal bilabial directo.", "El aire pasa libremente por la nariz."],
+                exampleHanzi: "猫",
+                examplePinyin: "māo",
+                exampleMeaning: "gato",
+                fact: "Prácticamente idéntica en todos los idiomas del mundo."
+            },
+            {
+                letter: 'f',
+                type: 'c',
+                name: 'Consonante f',
+                ipa: '/f/',
+                guide: "Suena exactamente igual que la 'f' del español.",
+                tips: ["Los dientes superiores tocan suavemente el labio inferior."],
+                exampleHanzi: "飞",
+                examplePinyin: "fēi",
+                exampleMeaning: "volar",
+                fact: "Suena idéntico al español de 'fuego'."
+            },
+            {
+                letter: 'd',
+                type: 'c',
+                name: 'Consonante d',
+                ipa: '/t/',
+                guide: "No suena como 'd' de 'dado'. Suena como una 't' suave de español, firme y sin expulsar ráfagas de aire.",
+                tips: ["La punta de la lengua toca los dientes superiores traseros.", "Es un sonido sordo, sin vibración de garganta."],
+                exampleHanzi: "大",
+                examplePinyin: "dà",
+                exampleMeaning: "grande",
+                fact: "Al igual que con b/p, 'd' y 't' se diferencian únicamente por la cantidad de aire que expulsas."
+            },
+            {
+                letter: 't',
+                type: 'c',
+                name: 'Consonante t',
+                ipa: '/tʰ/',
+                guide: "Es una 't' muy ASPIRADA. Expulsa una fuerte bocanada de aire justo después de pronunciarla.",
+                tips: ["Toca tus dientes con la punta de la lengua y suelta el aire intensamente.", "Sopla fuertemente."],
+                exampleHanzi: "天",
+                examplePinyin: "tiān",
+                exampleMeaning: "cielo / día",
+                fact: "La diferencia de aire cambia por completo el significado de las palabras."
+            },
+            {
+                letter: 'n',
+                type: 'c',
+                name: 'Consonante n',
+                ipa: '/n/',
+                guide: "Suena exactamente igual que la 'n' en español.",
+                tips: ["La lengua toca la encía de los dientes superiores."],
+                exampleHanzi: "你",
+                examplePinyin: "nǐ",
+                exampleMeaning: "tú",
+                fact: "Funciona igual como consonante inicial y como final de sílabas (como en 'an')."
+            },
+            {
+                letter: 'l',
+                type: 'c',
+                name: 'Consonante l',
+                ipa: '/l/',
+                guide: "Suena idéntica a la 'l' en español.",
+                tips: ["La punta de la lengua se apoya arriba.", "El aire fluye por los lados."],
+                exampleHanzi: "路",
+                examplePinyin: "lù",
+                exampleMeaning: "camino / calle",
+                fact: "Suena idéntico al español."
+            },
+            {
+                letter: 'g',
+                type: 'c',
+                name: 'Consonante g',
+                ipa: '/k/',
+                guide: "No es como la 'g' española de 'gato'. Suena como una 'k' suave en español (como en 'casa') sin soltar nada de aire.",
+                tips: ["La parte trasera de la lengua presiona el velo del paladar.", "Es un sonido seco e insonoro."],
+                exampleHanzi: "狗",
+                examplePinyin: "gǒu",
+                exampleMeaning: "perro",
+                fact: "Nunca suena suave como en 'gente' ni arrastrado. Siempre es un sonido sordo similar a 'k'."
+            },
+            {
+                letter: 'k',
+                type: 'c',
+                name: 'Consonante k',
+                ipa: '/kʰ/',
+                guide: "Es una 'k' fuertemente ASPIRADA. Exhala una cantidad notable de aire desde el fondo de tu garganta.",
+                tips: ["Es el sonido de 'k' pero con un suspiro fuerte acompañándolo.", "Usa un papel para verificar la salida del aire."],
+                exampleHanzi: "看",
+                examplePinyin: "kàn",
+                exampleMeaning: "mirar / ver",
+                fact: "No soplar fuerte en la 'k' puede hacer que parezca una 'g' para un oyente chino."
+            },
+            {
+                letter: 'h',
+                type: 'c',
+                name: 'Consonante h',
+                ipa: '/x/',
+                guide: "Suena como la 'j' en español pero mucho más suave y aspirada, idéntico al sonido de la 'h' en el inglés ('hello').",
+                tips: ["No raspes la garganta bruscamente.", "Haz una exhalación suave y relajada."],
+                exampleHanzi: "好",
+                examplePinyin: "hǎo",
+                exampleMeaning: "bueno / bien",
+                fact: "En algunas regiones de China suena un poco más fuerte, pero por lo general es muy sutil."
+            },
+            {
+                letter: 'j',
+                type: 'c',
+                name: 'Consonante j',
+                ipa: '/tɕ/',
+                guide: "Similar a una mezcla entre la 'ch' suave de español y la 'y'. Pronúnciala con la lengua abajo detrás de los dientes inferiores.",
+                tips: ["Aplatana la superficie de la lengua contra el paladar duro.", "Sonido sordo y corto, sin vibrar."],
+                exampleHanzi: "家",
+                examplePinyin: "jiā",
+                exampleMeaning: "casa / familia",
+                fact: "El sonido 'j' en chino solo puede ir seguido de los sonidos 'i' y 'ü'."
+            },
+            {
+                letter: 'q',
+                type: 'c',
+                name: 'Consonante q',
+                ipa: '/tɕʰ/',
+                guide: "Se pronuncia exactamente en la misma posición que la 'j' anterior, pero expulsando una corriente violenta de aire (ASPIRADA).",
+                tips: ["Haz la posición de 'ch' pero pon la lengua bien abajo.", "Sopla aire con fuerza para hacer un chasquido sibilante."],
+                exampleHanzi: "七",
+                examplePinyin: "qī",
+                exampleMeaning: "siete",
+                fact: "Es uno de los sonidos más distintivos del idioma y requiere mucha práctica."
+            },
+            {
+                letter: 'x',
+                type: 'c',
+                name: 'Consonante x',
+                ipa: '/ɕ/',
+                guide: "Suena muy parecido a la 'sh' en inglés (como en 'she') o 's' suave, con la lengua abajo tocando la parte interior de los dientes frontales de abajo.",
+                tips: ["La punta de la lengua abajo.", "Deja escapar el aire rozando suavemente."],
+                exampleHanzi: "谢谢",
+                examplePinyin: "xièxie",
+                exampleMeaning: "gracias",
+                fact: "No enrolles la lengua hacia atrás al pronunciar la 'x'. Mantenla plana y abajo."
+            },
+            {
+                letter: 'zh',
+                type: 'c',
+                name: 'Consonante zh',
+                ipa: '/tʂ/',
+                guide: "Sonido retroflejo. Dobla la punta de la lengua hacia arriba y hacia atrás, tocando el paladar. Di 'ch' pero sin expulsar aire.",
+                tips: ["Dobla la punta de la lengua sin tocar la garganta.", "No vibra la garganta."],
+                exampleHanzi: "中国",
+                examplePinyin: "zhōngguó",
+                exampleMeaning: "China",
+                fact: "Es un sonido retroflejo sordo, no existe un equivalente directo en español ordinario."
+            },
+            {
+                letter: 'ch',
+                type: 'c',
+                name: 'Consonante ch',
+                ipa: '/tʂʰ/',
+                guide: "Igual que 'zh' (lengua doblada hacia atrás en el paladar), pero expulsando una fuerte cantidad de aire (ASPIRADO).",
+                tips: ["Lengua doblada hacia atrás.", "Suelta un soplido fuerte al hacer el sonido 'ch'."],
+                exampleHanzi: "吃",
+                examplePinyin: "chī",
+                exampleMeaning: "comer",
+                fact: "Se parece a la 'ch' chilena o una 'ch' pronunciada de manera muy marcada y silbante."
+            },
+            {
+                letter: 'sh',
+                type: 'c',
+                name: 'Consonante sh',
+                ipa: '/ʂ/',
+                guide: "Lengua doblada hacia atrás contra el paladar. Deja pasar el aire haciendo el sonido de 'sh' inglesa.",
+                tips: ["Lengua arqueada hacia atrás.", "Solo deja que pase aire continuo, de forma suave."],
+                exampleHanzi: "书",
+                examplePinyin: "shū",
+                exampleMeaning: "libro",
+                fact: "Similar al sonido que se hace en español para pedir silencio ('¡shhh!'), pero con la lengua arqueada."
+            },
+            {
+                letter: 'r',
+                type: 'c',
+                name: 'Consonante r',
+                ipa: '/ʐ/',
+                guide: "Coloca la lengua doblada hacia atrás en el paladar (posición retrofleja). Pronuncia un sonido como la 'j' francesa ('je') o una 'r' inglesa muy suave.",
+                tips: ["No hagas vibrar la lengua contra el paladar (no es la 'r' fuerte de español).", "Debe sonar como una fricción suave."],
+                exampleHanzi: "人",
+                examplePinyin: "rén",
+                exampleMeaning: "persona / gente",
+                fact: "Es el único sonido retroflejo sonoro de todo el alfabeto mandarín."
+            },
+            {
+                letter: 'z',
+                type: 'c',
+                name: 'Consonante z',
+                ipa: '/ts/',
+                guide: "Suena como la combinación 'ds' o 'ts' (como el final de la palabra inglesa 'cats') sin expulsar aire.",
+                tips: ["La punta de la lengua toca los dientes frontales superiores cerrados.", "Suelta el sonido de manera corta y sutil."],
+                exampleHanzi: "字",
+                examplePinyin: "zì",
+                exampleMeaning: "carácter / palabra",
+                fact: "Es un sonido alveolar plano, la lengua no se dobla hacia atrás."
+            },
+            {
+                letter: 'c',
+                type: 'c',
+                name: 'Consonante c',
+                ipa: '/tsʰ/',
+                guide: "Exactamente igual al sonido 'z' ('ts'), pero expulsando un fuerte soplo de aire (ASPIRADO).",
+                tips: ["Posición de 'ts'.", "Sopla fuertemente al abrir el aire."],
+                exampleHanzi: "词",
+                examplePinyin: "cí",
+                exampleMeaning: "palabra / vocabulario",
+                fact: "La 'c' en Pinyin nunca suena como 'k' o 's' de forma directa. Siempre suena como 'ts' aspirada."
+            },
+            {
+                letter: 's',
+                type: 'c',
+                name: 'Consonante s',
+                ipa: '/s/',
+                guide: "Suena igual que la 's' del español latinoamericano.",
+                tips: ["La lengua está plana y se apoya tras los dientes inferiores.", "Deja pasar aire de forma silbante."],
+                exampleHanzi: "三",
+                examplePinyin: "sān",
+                exampleMeaning: "tres",
+                fact: "Bastante sencilla y natural para los hispanohablantes."
+            }
+        ];
+
+        // Global App State
+        let currentSelection = null;
+        let selectedMode = 'all'; // 'all' | 'vowels' | 'consonants'
+        let history = [];
+        let synth = window.speechSynthesis;
+        let pinyinVoice = null;
+        let isShuffling = false;
+
+        // Quiz State
+        let quizActive = false;
+        let quizCorrectAnswer = null;
+        let quizScoreCorrect = 0;
+        let quizScoreTotal = 0;
+
+        // Initialize App
+        window.onload = function() {
+            initVoices();
+            renderReferenceGrids();
+            updateModeUI();
+            setupKeyboardListeners();
+            
+            // If voices list changes (common Chrome behavior)
+            if (speechSynthesis.onvoiceschanged !== undefined) {
+                speechSynthesis.onvoiceschanged = initVoices;
+            }
+        };
+
+        // Initialize TTS voices
+        function initVoices() {
+            if (!synth) return;
+            const voices = synth.getVoices();
+            const voiceSelect = document.getElementById('voice-select');
+            voiceSelect.innerHTML = '';
+
+            // Find Chinese voices
+            const zhVoices = voices.filter(v => v.lang.includes('zh') || v.lang.includes('ZH'));
+
+            if (zhVoices.length === 0) {
+                const opt = document.createElement('option');
+                opt.value = "";
+                opt.innerText = "No se detectó voz de chino nativo en este equipo (usando motor por defecto)";
+                voiceSelect.appendChild(opt);
+                pinyinVoice = voices.find(v => v.lang.includes('en') || v.lang.includes('es')) || null;
+            } else {
+                // Populate Chinese voices
+                zhVoices.forEach((voice, idx) => {
+                    const opt = document.createElement('option');
+                    opt.value = voice.name;
+                    opt.innerText = `${voice.name} (${voice.lang})`;
+                    if (voice.name.toLowerCase().includes('google') || voice.name.toLowerCase().includes('xiaoxiao') || idx === 0) {
+                        opt.selected = true;
+                        pinyinVoice = voice;
+                    }
+                    voiceSelect.appendChild(opt);
+                });
+                
+                document.getElementById('voice-indicator').classList.remove('text-slate-500');
+                document.getElementById('voice-indicator').classList.add('text-pinyin-accent');
+            }
+
+            voiceSelect.onchange = function() {
+                const selectedName = voiceSelect.value;
+                pinyinVoice = voices.find(v => v.name === selectedName) || null;
+            };
+        }
+
+        function toggleVoiceSetup() {
+            const panel = document.getElementById('voice-settings');
+            panel.classList.toggle('hidden');
+        }
+
+        function testVoice() {
+            speakText("pīn yīn");
+        }
+
+        // TTS Speaker Function
+        function speakText(text) {
+            if (!synth) return;
+            
+            // Cancel any running speech
+            synth.cancel();
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            if (pinyinVoice) {
+                utterance.voice = pinyinVoice;
+            }
+            utterance.lang = 'zh-CN';
+            utterance.rate = 0.8; // slightly slower for educational purposes
+            utterance.pitch = 1.0;
+            
+            synth.speak(utterance);
+        }
+
+        // Render Quick Reference Grid
+        function renderReferenceGrids() {
+            const vowelsGrid = document.getElementById('grid-vowels');
+            const consonantsGrid = document.getElementById('grid-consonants');
+
+            vowelsGrid.innerHTML = '';
+            consonantsGrid.innerHTML = '';
+
+            pinyinData.forEach(item => {
+                const button = document.createElement('button');
+                button.className = `p-3 rounded-xl font-bold text-center border transition-all duration-250 cursor-pointer text-sm flex flex-col items-center justify-center `;
+                
+                if (item.type === 'v') {
+                    button.className += 'bg-pink-500/5 hover:bg-pink-500/20 text-pink-400 border-pink-500/20 hover:border-pink-500/40 active:scale-95';
+                    button.innerHTML = `<span class="text-base">${item.letter}</span>`;
+                    button.onclick = () => selectItem(item);
+                    vowelsGrid.appendChild(button);
+                } else {
+                    button.className += 'bg-purple-500/5 hover:bg-purple-500/20 text-purple-400 border-purple-500/20 hover:border-purple-500/40 active:scale-95';
+                    button.innerHTML = `<span class="text-base">${item.letter}</span>`;
+                    button.onclick = () => selectItem(item);
+                    consonantsGrid.appendChild(button);
+                }
+            });
+        }
+
+        // UI Controls for Radio Selection Modes
+        function updateModeUI() {
+            const radios = document.getElementsByName('mode-select');
+            radios.forEach(radio => {
+                const dot = document.getElementById(`radio-${radio.value}-dot`);
+                if (radio.checked) {
+                    selectedMode = radio.value;
+                    dot.classList.remove('scale-0');
+                    dot.classList.add('scale-100');
+                } else {
+                    dot.classList.remove('scale-100');
+                    dot.classList.add('scale-0');
+                }
+            });
+        }
+
+        // Setup Keyboard "Space" Listener
+        function setupKeyboardListeners() {
+            document.addEventListener('keydown', function(event) {
+                if (event.code === 'Space') {
+                    event.preventDefault(); // Stop page scrolling down
+                    // Trigger spin only if not already spinning and not focusing an input
+                    if (!isShuffling && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'SELECT') {
+                        triggerShuffle();
+                    }
+                }
+            });
+        }
+
+        // Main Spinner Trigger logic
+        function triggerShuffle() {
+            if (isShuffling) return;
+            isShuffling = true;
+
+            const btnSpin = document.getElementById('btn-spin');
+            const btnText = document.getElementById('btn-text');
+            const displayLetter = document.getElementById('display-letter');
+            const displayCard = document.getElementById('display-card');
+            const glowElement = document.getElementById('glow-element');
+            const badgeType = document.getElementById('badge-type');
+
+            // Set button state
+            btnSpin.classList.add('opacity-80', 'cursor-not-allowed');
+            btnText.innerText = "BARAJANDO...";
+            displayLetter.classList.add('shuffling');
+
+            // Filter data according to choice
+            let filteredList = pinyinData;
+            if (selectedMode === 'vowels') {
+                filteredList = pinyinData.filter(item => item.type === 'v');
+            } else if (selectedMode === 'consonants') {
+                filteredList = pinyinData.filter(item => item.type === 'c');
+            }
+
+            // Quick shuffle animation cycles
+            let duration = 1200; // ms
+            let intervalTime = 70; // ms
+            let elapsed = 0;
+            let lastIndex = -1;
+
+            const shuffleInterval = setInterval(() => {
+                let randomIndex;
+                do {
+                    randomIndex = Math.floor(Math.random() * filteredList.length);
+                } while (randomIndex === lastIndex && filteredList.length > 1);
+
+                displayLetter.innerText = filteredList[randomIndex].letter;
+                
+                // Color switching effects during shuffle
+                if (filteredList[randomIndex].type === 'v') {
+                    displayCard.className = "relative w-48 h-48 sm:w-56 sm:h-56 bg-slate-900 border border-pink-500/40 rounded-3xl flex flex-col items-center justify-center transition-all duration-100 shadow-2xl glow-vowel";
+                    displayLetter.className = "font-extrabold text-7xl sm:text-8xl tracking-tight text-pink-400 select-none shuffling";
+                } else {
+                    displayCard.className = "relative w-48 h-48 sm:w-56 sm:h-56 bg-slate-900 border border-purple-500/40 rounded-3xl flex flex-col items-center justify-center transition-all duration-100 shadow-2xl glow-consonant";
+                    displayLetter.className = "font-extrabold text-7xl sm:text-8xl tracking-tight text-purple-400 select-none shuffling";
+                }
+
+                lastIndex = randomIndex;
+                elapsed += intervalTime;
+            }, intervalTime);
+
+            // Finish shuffle and pick winner
+            setTimeout(() => {
+                clearInterval(shuffleInterval);
+                displayLetter.classList.remove('shuffling');
+                
+                // Final selection
+                const finalIndex = Math.floor(Math.random() * filteredList.length);
+                const winner = filteredList[finalIndex];
+                
+                selectItem(winner);
+
+                // Reset button state
+                btnSpin.classList.remove('opacity-80', 'cursor-not-allowed');
+                btnText.innerText = "¡SELECCIONAR ALEATORIO!";
+                isShuffling = false;
+            }, duration);
+        }
+
+        // Apply visual states and detailed explanations for any chosen/clicked item
+        function selectItem(item) {
+            currentSelection = item;
+
+            // 1. Update Display Card Card UI
+            const displayLetter = document.getElementById('display-letter');
+            const displayCard = document.getElementById('display-card');
+            const displayCardPulse = document.getElementById('display-card-pulse');
+            const badgeType = document.getElementById('badge-type');
+            const watermark = document.getElementById('watermark');
+
+            displayLetter.innerText = item.letter;
+            watermark.innerText = item.letter;
+
+            if (item.type === 'v') {
+                displayCard.className = "relative w-48 h-48 sm:w-56 sm:h-56 bg-slate-900 border-2 border-pink-500 rounded-3xl flex flex-col items-center justify-center transition-all duration-300 shadow-2xl glow-vowel";
+                displayLetter.className = "font-extrabold text-7xl sm:text-8xl tracking-tight text-pink-400 select-none";
+                displayCardPulse.className = "absolute -inset-1 rounded-3xl bg-pink-500 opacity-40 blur-md transition duration-500";
+                badgeType.innerText = "VOCAL SELECCIONADA";
+                badgeType.className = "px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase border bg-pink-500/10 text-pink-400 border-pink-500/20";
+            } else {
+                displayCard.className = "relative w-48 h-48 sm:w-56 sm:h-56 bg-slate-900 border-2 border-purple-500 rounded-3xl flex flex-col items-center justify-center transition-all duration-300 shadow-2xl glow-consonant";
+                displayLetter.className = "font-extrabold text-7xl sm:text-8xl tracking-tight text-purple-400 select-none";
+                displayCardPulse.className = "absolute -inset-1 rounded-3xl bg-purple-500 opacity-40 blur-md transition duration-500";
+                badgeType.innerText = "CONSONANTE SELECCIONADA";
+                badgeType.className = "px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase border bg-purple-500/10 text-purple-400 border-purple-500/20";
+            }
+
+            // 2. Load Information on Detail Panel
+            const detailPanel = document.getElementById('detail-panel');
+            detailPanel.classList.remove('hidden');
+
+            const badgeIcon = document.getElementById('detail-badge-icon');
+            badgeIcon.innerText = item.letter;
+
+            if (item.type === 'v') {
+                badgeIcon.className = "w-12 h-12 rounded-2xl bg-pink-500/10 text-pink-500 flex items-center justify-center text-2xl font-bold font-chinese border border-pink-500/20";
+                document.getElementById('detail-category-badge').className = "px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-pink-500/10 text-pink-400 border border-pink-500/30";
+                document.getElementById('detail-category-badge').innerText = "Vocal (Final)";
+                document.getElementById('detail-title').innerText = `Vocal: ${item.letter}`;
+            } else {
+                badgeIcon.className = "w-12 h-12 rounded-2xl bg-purple-500/10 text-purple-500 flex items-center justify-center text-2xl font-bold font-chinese border border-purple-500/20";
+                document.getElementById('detail-category-badge').className = "px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-purple-500/10 text-purple-400 border border-purple-500/30";
+                document.getElementById('detail-category-badge').innerText = "Consonante (Inicial)";
+                document.getElementById('detail-title').innerText = `Consonante: ${item.letter}`;
+            }
+
+            document.getElementById('detail-guide-text').innerHTML = `<strong>Sonido básico:</strong> ${item.guide}`;
+            
+            // Render list tips
+            const tipsContainer = document.getElementById('detail-tips');
+            tipsContainer.innerHTML = '';
+            item.tips.forEach(tip => {
+                const p = document.createElement('p');
+                p.innerText = tip;
+                tipsContainer.appendChild(p);
+            });
+
+            // Update example vocabulary
+            document.getElementById('detail-example-hanzi').innerText = item.exampleHanzi;
+            document.getElementById('detail-example-pinyin').innerText = item.examplePinyin;
+            document.getElementById('detail-example-meaning').innerText = item.exampleMeaning;
+            document.getElementById('detail-fact').innerText = item.fact;
+
+            // Reset Favorite Button State
+            const favBtn = document.getElementById('favorite-btn');
+            favBtn.classList.remove('text-red-500');
+            favBtn.classList.add('text-slate-400');
+
+            // 3. Play pronunciation voice automatically
+            playCurrentAudio();
+
+            // 4. Register to History
+            addToHistory(item);
+        }
+
+        // Play standard sound of selected letter
+        function playCurrentAudio() {
+            if (!currentSelection) return;
+            
+            // Standardizing the Pinyin tone for pure letter reading (usually first tone works best for single letters)
+            let speechString = currentSelection.letter;
+            if (currentSelection.letter === 'ü') speechString = 'yu'; // Fallback for voice speech recognizer
+            
+            speakText(speechString);
+        }
+
+        // Add to practice history log
+        function addToHistory(item) {
+            // Uniquely add item or move it to top
+            history = history.filter(h => h.letter !== item.letter);
+            history.unshift(item);
+
+            // Limit history size to 8 entries
+            if (history.length > 8) {
+                history.pop();
+            }
+
+            renderHistory();
+        }
+
+        // Clear history log
+        function clearHistory() {
+            history = [];
+            renderHistory();
+        }
+
+        // Render History list UI
+        function renderHistory() {
+            const container = document.getElementById('history-list');
+            container.innerHTML = '';
+
+            if (history.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center text-xs text-slate-500 py-12">
+                        El historial se llenará conforme vayas girando el selector.
+                    </div>
+                `;
+                return;
+            }
+
+            history.forEach(item => {
+                const row = document.createElement('div');
+                row.className = "flex items-center justify-between p-2.5 rounded-xl bg-slate-850 hover:bg-slate-800/90 border border-slate-800 transition-all cursor-pointer group";
+                row.onclick = () => selectItem(item);
+
+                const badgeColor = item.type === 'v' ? 'bg-pink-500/10 text-pink-400 border border-pink-500/20' : 'bg-purple-500/10 text-purple-400 border border-purple-500/20';
+
+                row.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="w-7 h-7 rounded-lg text-xs font-bold flex items-center justify-center ${badgeColor}">
+                            ${item.letter}
+                        </span>
+                        <div>
+                            <span class="text-xs font-semibold text-slate-200">${item.name}</span>
+                            <span class="text-[10px] text-slate-400 block">${item.examplePinyin} (${item.exampleMeaning})</span>
+                        </div>
+                    </div>
+                    <button class="w-7 h-7 rounded-lg bg-slate-900 group-hover:bg-pinyin-accent/20 group-hover:text-pinyin-accent text-slate-500 transition-all flex items-center justify-center">
+                        <i class="fa-solid fa-volume-high text-xs"></i>
+                    </button>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        // Toggle Favorite Heart Color
+        function toggleFavorite() {
+            const favBtn = document.getElementById('favorite-btn');
+            favBtn.classList.toggle('text-red-500');
+            favBtn.classList.toggle('text-slate-400');
+        }
+
+        // AUDIO QUIZ GAME LOGIC
+        function startQuiz() {
+            quizActive = true;
+            document.getElementById('quiz-ready-state').classList.add('hidden');
+            document.getElementById('quiz-active-state').classList.remove('hidden');
+            document.getElementById('quiz-feedback').innerText = "¡Escucha con atención y selecciona!";
+            document.getElementById('quiz-feedback').className = "mt-3 text-xs text-center font-semibold text-pinyin-primary";
+            
+            generateQuizQuestion();
+        }
+
+        function generateQuizQuestion() {
+            // Select random letter as target
+            const targetIndex = Math.floor(Math.random() * pinyinData.length);
+            quizCorrectAnswer = pinyinData[targetIndex];
+
+            // Select 3 random distractors
+            let pool = pinyinData.filter(item => item.letter !== quizCorrectAnswer.letter);
+            let distractors = [];
+            for (let i = 0; i < 3; i++) {
+                const randIndex = Math.floor(Math.random() * pool.length);
+                distractors.push(pool[randIndex]);
+                pool = pool.filter((_, idx) => idx !== randIndex);
+            }
+
+            // Shuffle target + distractors together
+            let options = [quizCorrectAnswer, ...distractors];
+            options.sort(() => Math.random() - 0.5);
+
+            // Render buttons
+            const optionsContainer = document.getElementById('quiz-options-container');
+            optionsContainer.innerHTML = '';
+
+            options.forEach(option => {
+                const btn = document.createElement('button');
+                btn.className = "py-3.5 px-4 bg-slate-850 hover:bg-slate-800 border border-slate-700/80 hover:border-slate-600 rounded-xl text-center text-sm font-bold text-slate-200 transition-all duration-150 active:scale-95 flex items-center justify-center gap-2 shadow-sm";
+                btn.innerHTML = `<span class="text-sm font-mono">${option.letter}</span>`;
+                btn.onclick = () => submitQuizAnswer(option, btn);
+                optionsContainer.appendChild(btn);
+            });
+
+            // Automatically play sound for the first time
+            setTimeout(() => {
+                playQuizSound();
+            }, 300);
+        }
+
+        function playQuizSound() {
+            if (!quizCorrectAnswer) return;
+            let speechString = quizCorrectAnswer.letter;
+            if (quizCorrectAnswer.letter === 'ü') speechString = 'yu';
+            speakText(speechString);
+        }
+
+        function submitQuizAnswer(selectedOption, clickedButton) {
+            const optionsButtons = document.getElementById('quiz-options-container').querySelectorAll('button');
+            
+            // Disable further clicks
+            optionsButtons.forEach(btn => btn.disabled = true);
+
+            quizScoreTotal++;
+
+            const feedback = document.getElementById('quiz-feedback');
+
+            if (selectedOption.letter === quizCorrectAnswer.letter) {
+                // Correct
+                quizScoreCorrect++;
+                clickedButton.className = "py-3.5 px-4 bg-emerald-500/20 border-2 border-emerald-500 text-emerald-300 rounded-xl text-center text-sm font-bold transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/10";
+                clickedButton.innerHTML += `<i class="fa-solid fa-circle-check text-emerald-400"></i>`;
+                
+                feedback.innerText = "¡Excelente! Sonido identificado correctamente.";
+                feedback.className = "mt-3 text-xs text-center font-bold text-emerald-400";
+            } else {
+                // Incorrect
+                clickedButton.className = "py-3.5 px-4 bg-rose-500/20 border-2 border-rose-500 text-rose-300 rounded-xl text-center text-sm font-bold transition-all flex items-center justify-center gap-2 shadow-lg shadow-rose-500/10";
+                clickedButton.innerHTML += `<i class="fa-solid fa-circle-xmark text-rose-400"></i>`;
+                
+                // Show the correct one
+                optionsButtons.forEach(btn => {
+                    if (btn.innerText.trim() === quizCorrectAnswer.letter) {
+                        btn.className = "py-3.5 px-4 bg-emerald-500/10 border-2 border-emerald-500/50 text-emerald-300 rounded-xl text-center text-sm font-bold transition-all flex items-center justify-center gap-2";
+                    }
+                });
+
+                feedback.innerText = `Incorrecto. Era el sonido de la letra: "${quizCorrectAnswer.letter}"`;
+                feedback.className = "mt-3 text-xs text-center font-bold text-rose-400";
+            }
+
+            // Update Scoreboard UI
+            document.getElementById('quiz-score').innerText = `Puntaje: ${quizScoreCorrect}/${quizScoreTotal}`;
+
+            // Trigger next question after 2.5 seconds
+            setTimeout(() => {
+                feedback.innerText = "Cargando siguiente sonido...";
+                feedback.className = "mt-3 text-xs text-center font-semibold text-slate-400";
+                generateQuizQuestion();
+            }, 2500);
+        }
+    </script>
+</body>
+</html>

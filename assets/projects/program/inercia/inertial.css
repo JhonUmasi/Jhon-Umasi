@@ -1,0 +1,133 @@
+/* ============================================
+   CAD EXTENSIONS FOR INERTIAL PROGRAM
+   ============================================ */
+
+.main-cad-layout {
+    display: grid;
+    grid-template-columns: 250px 1fr 280px;
+    gap: 20px;
+    align-items: start;
+    background: var(--bg-sage);
+}
+
+.cad-sidebar, .results-panel {
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid var(--gold-matte);
+    padding: 20px;
+}
+
+.cad-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.input-group label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--text-primary);
+    letter-spacing: 1px;
+}
+
+.input-group input {
+    background: var(--bg-primary);
+    border: 1px solid var(--gold-matte);
+    padding: 8px 12px;
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+}
+
+.input-group input:focus {
+    border-color: var(--accent-hover);
+    box-shadow: 0 0 5px rgba(197, 160, 89, 0.3);
+}
+
+.cad-help-text {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 15px;
+    line-height: 1.4;
+}
+
+/* CANVAS STYLES */
+.canvas-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #ffffff;
+    border: 2px solid var(--gold-matte);
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+    overflow: hidden;
+}
+
+#cadCanvas {
+    cursor: crosshair;
+    display: block;
+}
+
+/* RESULTS */
+.results-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.result-card {
+    border-bottom: 1px solid rgba(197, 160, 89, 0.3);
+    padding-bottom: 8px;
+}
+
+.result-label {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+}
+
+.result-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.unit {
+    font-size: 0.8rem;
+    color: var(--gold-matte);
+    font-weight: 500;
+}
+
+.btn-danger {
+    border-color: #a34747 !important;
+    color: #a34747 !important;
+}
+.btn-danger:hover {
+    background: #a34747 !important;
+    color: #fff !important;
+    box-shadow: 0 5px 20px rgba(163, 71, 71, 0.2) !important;
+}
+
+/* RESPONSIVE CAD */
+@media (max-width: 1024px) {
+    .main-cad-layout {
+        grid-template-columns: 1fr;
+    }
+    .canvas-wrapper {
+        order: -1; /* Pone el canvas arriba en móviles */
+    }
+}
+
+.active-tool {
+    background: var(--gold-matte) !important;
+    color: var(--bg-primary) !important;
+}

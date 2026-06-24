@@ -469,15 +469,18 @@ footer {
 
 .image-container {
     width: 100%;
-    height: 160px; /* Ajusta la altura a tu gusto para la portada */
+    max-width: 100%; /* Evita que el contenedor se estire más allá de la tarjeta */
+    height: 240px;   /* Un poco más alto para que luzcan tus proyectos de ingeniería */
     overflow: hidden;
-    border-radius: 8px; /* Bordes ligeramente redondeados para mantener la estética */
     margin-bottom: 15px;
+    position: relative; /* Asegura el correcto posicionamiento interno */
+    border: 1px solid rgba(197, 160, 89, 0.3); /* Un sutil borde dorado estético */
 }
 
 .image-container img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Esto hace que la imagen llene el espacio sin deformarse */
+    max-width: 100%; /* Garantía absoluta de que no se saldrá horizontalmente */
+    object-fit: cover; /* Centra y corta la foto para que no se deforme */
     display: block;
 }

@@ -124,8 +124,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="info-item"><strong>Spanish</strong><span>Native</span></div>
                 <div class="info-item"><strong>English</strong><span>Upper-Intermediate (B2)</span></div>
                 <div class="info-item"><strong>Quechua</strong><span>Intermediate</span></div>
-                <div class="info-item"><strong>German</strong><span>Basic (A1)</span></div>
-                <div class="info-item"><strong>Korean</strong><span>Basic (A1)</span></div>
+                <div class="info-item"><strong>German</strong><span>Basic</span></div>
             `;
         }
 

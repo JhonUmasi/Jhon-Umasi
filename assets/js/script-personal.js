@@ -124,23 +124,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="info-item"><strong>Spanish</strong><span>Native</span></div>
                 <div class="info-item"><strong>English</strong><span>Upper-Intermediate (B2)</span></div>
                 <div class="info-item"><strong>Quechua</strong><span>Intermediate</span></div>
-                <div class="info-item"><strong>German</strong><span>Basic</span></div>
             `;
         }
 
         // ============================================
-        // 10. BOTONES DE DESCARGA Y CONTACTO
+        // 10. BOTONES DE CV Y CONTACTO
         // ============================================
         const cvUrl = SITE_CONFIG.rutas.cv;
         
         const btnCv = document.getElementById('btn-cv');
         if (btnCv) {
             btnCv.href = cvUrl;
+            btnCv.target = '_blank';  // 👈 AÑADIDO
         }
         
         const btnCvTop = document.getElementById('btn-cv-top');
         if (btnCvTop) {
             btnCvTop.href = cvUrl;
+            btnCvTop.target = '_blank';  // 👈 AÑADIDO
         }
         
         const btnContactar = document.getElementById('btn-contactar');

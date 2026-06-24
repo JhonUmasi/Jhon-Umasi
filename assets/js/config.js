@@ -7,7 +7,7 @@ const SITE_CONFIG = {
     nombre_completo: "Jhon Alex Umasi Huisa",
     titulo: "Ingeniero Civil Estructural · Desarrollador · Investigador",
     email: "jhonumasi13@gmail.com",
-    telefono: "+51 914 424 137",
+    telefono: "+51 916 163 569",
     ubicacion: "Lima Perú",
     fecha_nacimiento: "13 de Septiembre, 2004",
     nacionalidad: "Peruana",
@@ -18,7 +18,7 @@ const SITE_CONFIG = {
         github: "https://github.com/JhonUmasi",
         twitter: "https://twitter.com/JhonUmasi",
         instagram: "https://instagram.com/jhon_umasi",
-        whatsapp: "https://wa.me/914424137",
+        whatsapp: "https://wa.me/916163569",
         telegram: "https://t.me/jhonumasi"
     },
     

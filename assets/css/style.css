@@ -466,3 +466,17 @@ footer {
         margin: 0 auto;
     }
 }
+.image-container {
+    width: 100%;
+    height: 160px; /* Ajusta la altura a tu gusto para la portada */
+    overflow: hidden;
+    border-radius: 8px; /* Bordes ligeramente redondeados para mantener la estética */
+    margin-bottom: 15px;
+}
+
+.image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Esto hace que la imagen llene el espacio sin deformarse */
+    display: block;
+}

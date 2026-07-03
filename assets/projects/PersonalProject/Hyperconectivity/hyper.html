@@ -32,33 +32,59 @@
         </div>
     </div>
 
-    <!-- ===== PERSONAJE ANIMADO (IZQUIERDA) ===== -->
-    <div id="personajeContainer">
-        <img id="personajeImg" src="imagen/sent1.avif" alt="Personaje">
+    <!-- ===== PANEL IZQUIERDO: CAOS VISUAL ===== -->
+    <div class="panel-izquierdo">
+        <!-- Canvas de partículas (fondo) -->
+        <canvas id="canvasParticulas"></canvas>
+
+        <!-- Personaje animado -->
+        <div id="personajeContainer">
+            <img id="personajeImg" src="imagen/sent1.avif" alt="Personaje">
+        </div>
+
+        <!-- Zona de notificaciones caóticas -->
+        <div id="zonaCaos">
+            <div id="notificaciones"></div>
+        </div>
+
+        <!-- Métricas de Fragmentación Cerebral -->
+        <div id="metricasArte">
+            <div class="titulo-fragmentacion">🧩 Fragmentación Cerebral</div>
+            <div class="metrica-arte">
+                <span class="label">🧠 Enfoque</span>
+                <div class="barra-arte">
+                    <div class="fill productividad" style="width: 100%;"></div>
+                </div>
+                <span class="valor">100%</span>
+            </div>
+            <div id="fragmentacionDetalle">
+                <span>🧘 En reposo</span>
+            </div>
+        </div>
     </div>
 
-    <!-- ===== TEXTO DE JENNY HOLZER ===== -->
-    <div id="textoHolzer" class="texto-holzer"></div>
+    <!-- ===== PANEL DERECHO: GRAFO CAÓTICO ===== -->
+    <div class="panel-derecho">
+        <!-- Texto de Jenny Holzer -->
+        <div id="textoHolzer" class="texto-holzer"></div>
 
-    <!-- ===== INDICADOR ===== -->
-    <div id="indicador">
-        <span id="timerDisplay">00:00</span>
-        <span style="margin:0 10px;opacity:0.3;">|</span>
-        <span id="estadoDisplay">🟢 Estable</span>
-        <span style="margin:0 10px;opacity:0.3;">|</span>
-        <span id="faseDisplay">Fase 1/6</span>
-        <span style="margin:0 10px;opacity:0.3;">|</span>
-        <span id="tareasActivas">0 activas</span>
-        <button onclick="reiniciarExperiencia()" class="btn-reiniciar-arte">
-            <i class="fas fa-redo"></i>
-        </button>
+        <!-- Indicador -->
+        <div id="indicador">
+            <span id="timerDisplay">00:00</span>
+            <span style="margin:0 8px;opacity:0.3;">|</span>
+            <span id="estadoDisplay">🟢 Estable</span>
+            <span style="margin:0 8px;opacity:0.3;">|</span>
+            <span id="faseDisplay">Fase 1/6</span>
+            <span style="margin:0 8px;opacity:0.3;">|</span>
+            <span id="tareasActivas">0 activas</span>
+            <button onclick="reiniciarExperiencia()" class="btn-reiniciar-arte">
+                <i class="fas fa-redo"></i>
+            </button>
+        </div>
+
+        <!-- Grafo -->
+        <div id="grafo"></div>
     </div>
-
-    <!-- ===== NOTIFICACIONES ===== -->
-    <div id="notificaciones"></div>
-
-    <!-- ===== GRAFO ===== -->
-    <div id="grafo"></div>
 
     <!-- ===== COLAPSO ===== -->
     <div id="colapsoModal">
@@ -88,28 +114,6 @@
             </div>
         </div>
     </div>
-
-    <!-- ===== MÉTRICAS ===== -->
-    <div id="metricasArte">
-        <div class="metrica-arte">
-            <span class="label">PLASTICIDAD</span>
-            <div class="barra-arte"><div class="fill" id="plasticidadFill"></div></div>
-            <span class="valor" id="plasticidadText">100%</span>
-        </div>
-        <div class="metrica-arte">
-            <span class="label">DESORDEN</span>
-            <div class="barra-arte"><div class="fill" id="desordenFill"></div></div>
-            <span class="valor" id="desordenText">0%</span>
-        </div>
-        <div class="metrica-arte">
-            <span class="label">ATENCIÓN</span>
-            <div class="barra-arte"><div class="fill" id="atencionFill"></div></div>
-            <span class="valor" id="atencionText">100%</span>
-        </div>
-    </div>
-
-    <!-- ===== PARTÍCULAS ===== -->
-    <canvas id="canvasParticulas"></canvas>
 
     <script src="hyper.js"></script>
 </body>

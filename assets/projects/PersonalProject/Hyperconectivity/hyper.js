@@ -1,42 +1,93 @@
-var DURACION_TOTAL = 120;
+// ============================================
+// HYPER.JS - SISTEMA CON ESTADOS IRREVERSIBLES v12
+// ============================================
+
 var simulacionActiva = false;
 var tiempoInicio = 0;
-var intervaloSimulacion = null;
-var contadorNodos = 0;
-var faseActual = 0;
+var tareasDB = [];
+var tareasActivas = [];
+var tareasCompletadas = [];
+var tareasIncompletas = []; // Tiempo en negativo pero aún conectadas
+var nodosDesconectados = []; // Tiempo <= -limite, divagando sin conexión
+var totalCompletadas = 0;
+var totalIncompletas = 0;
+var totalDesconectados = 0;
 
-var estadisticas = {
-    totalActividades: 0,
-    totalAbandonadas: 0,
-    totalCambios: 0
+var prioridadCategoria = {
+    'Trabajo': 1.0,
+    'Social': 1.0,
+    'Aprendizaje': 1.0,
+    'Entretenimiento': 1.0
 };
 
+var estadisticas = {
+    totalCompletadas: 0,
+    totalIncompletas: 0,
+    totalDesconectados: 0
+};
+
+// ============================================
+// CARGA DEL CSV
+// ============================================
+function cargarCSV() {
+    fetch('hyper.csv')
+        .then(response => response.text())
+        .then(data => {
+            var lineas = data.split('\n');
+            var headers = lineas[0].split(',');
+            tareasDB = [];
+            for (var i = 1; i < lineas.length; i++) {
+                if (lineas[i].trim() === '') continue;
+                var valores = lineas[i].split(',');
+                var tarea = {};
+                for (var j = 0; j < headers.length; j++) {
+                    tarea[headers[j].trim()] = valores[j] ? valores[j].trim() : '';
+                }
+                tarea.id = parseInt(tarea.id);
+                tarea.clicks_necesarios = parseInt(tarea.clicks_necesarios);
+                tarea.tiempo_limite = parseInt(tarea.tiempo_limite);
+                tarea.prioridad_base = parseInt(tarea.prioridad_base);
+                tarea.es_distractor = tarea.es_distractor === 'true';
+                tareasDB.push(tarea);
+            }
+            console.log('CSV cargado:', tareasDB.length, 'tareas');
+        })
+        .catch(error => {
+            console.error('Error cargando CSV:', error);
+            cargarTareasRespaldo();
+        });
+}
+
+function cargarTareasRespaldo() {
+    tareasDB = [
+        { id: 1, tarea: 'Revisar Excel', descripcion: 'Balance mensual', categoria: 'Trabajo', clicks_necesarios: 8, tiempo_limite: 15, prioridad_base: 9, es_distractor: false },
+        { id: 2, tarea: 'WhatsApp jefe', descripcion: 'Confirmar cambios', categoria: 'Trabajo', clicks_necesarios: 4, tiempo_limite: 12, prioridad_base: 8, es_distractor: false },
+        { id: 3, tarea: 'WhatsApp amigo', descripcion: 'Invitación a cenar', categoria: 'Social', clicks_necesarios: 2, tiempo_limite: 8, prioridad_base: 3, es_distractor: true },
+        { id: 4, tarea: 'Instagram', descripcion: 'Fotos de familia', categoria: 'Social', clicks_necesarios: 2, tiempo_limite: 6, prioridad_base: 2, es_distractor: true },
+        { id: 5, tarea: 'YouTube tutorial', descripcion: 'Excel avanzado', categoria: 'Aprendizaje', clicks_necesarios: 5, tiempo_limite: 12, prioridad_base: 4, es_distractor: false },
+        { id: 6, tarea: 'Slack equipo', descripcion: 'Mensajes en canales', categoria: 'Trabajo', clicks_necesarios: 4, tiempo_limite: 11, prioridad_base: 7, es_distractor: false },
+        { id: 7, tarea: 'TikTok', descripcion: 'Videos virales', categoria: 'Entretenimiento', clicks_necesarios: 2, tiempo_limite: 5, prioridad_base: 1, es_distractor: true },
+        { id: 8, tarea: 'Correos Gmail', descripcion: 'Responder pendientes', categoria: 'Trabajo', clicks_necesarios: 5, tiempo_limite: 14, prioridad_base: 7, es_distractor: false },
+    ];
+}
+
+// ============================================
+// ANIMACIÓN PERSONAJE
+// ============================================
 var animacionPersonaje = {
-    estado: 'sentado',
     frameActual: 0,
     direccion: 1,
     framesSentado: ['sent1.avif', 'sent2.avif', 'sent3.avif', 'sent4.avif'],
     framesCelular: ['cel1.avif', 'cel2.avif', 'cel3.avif'],
-    repeticionesCel3: 0,
-    maxRepeticionesCel3: 3,
-    repeticionesUltimo: 0,
-    velocidadBase: 200,
-    velocidadActual: 200,
+    velocidadBase: 400,
+    velocidadActual: 400,
     ultimoCambio: 0,
     modo: 'sentado',
-    tiempoAlternancia: 0,
-    animacionActiva: true,
-    pausa: false,
-    pausaHasta: 0,
-    objetivo: null,
-    enTransicion: false,
-    framesRestantes: 0
+    animacionActiva: true
 };
 
 function actualizarPersonaje(tiempo) {
     if (!animacionPersonaje.animacionActiva) return;
-    if (animacionPersonaje.pausa && tiempo < animacionPersonaje.pausaHasta) return;
-    animacionPersonaje.pausa = false;
     var img = document.getElementById('personajeImg');
     if (!img) return;
     var elapsed = tiempo - animacionPersonaje.ultimoCambio;
@@ -48,224 +99,28 @@ function actualizarPersonaje(tiempo) {
             var maxFrame = frames.length - 1;
             animacionPersonaje.frameActual += animacionPersonaje.direccion;
             if (animacionPersonaje.frameActual >= maxFrame) {
-                if (animacionPersonaje.repeticionesUltimo < 3) {
-                    animacionPersonaje.repeticionesUltimo++;
-                    animacionPersonaje.frameActual = maxFrame;
-                } else {
-                    animacionPersonaje.direccion = -1;
-                    animacionPersonaje.repeticionesUltimo = 0;
-                    animacionPersonaje.frameActual = maxFrame - 1;
-                }
+                animacionPersonaje.direccion = -1;
+                animacionPersonaje.frameActual = maxFrame - 1;
             } else if (animacionPersonaje.frameActual <= 0) {
                 animacionPersonaje.direccion = 1;
                 animacionPersonaje.frameActual = 1;
             }
             animacionPersonaje.frameActual = Math.max(0, Math.min(maxFrame, animacionPersonaje.frameActual));
-            var frameName = frames[Math.floor(animacionPersonaje.frameActual)];
-            img.src = 'imagen/' + frameName;
+            img.src = 'imagen/' + frames[Math.floor(animacionPersonaje.frameActual)];
         } else {
             var framesCel = animacionPersonaje.framesCelular;
             var maxCel = framesCel.length - 1;
             animacionPersonaje.frameActual += animacionPersonaje.direccion;
             if (animacionPersonaje.frameActual >= maxCel) {
-                if (animacionPersonaje.repeticionesCel3 < animacionPersonaje.maxRepeticionesCel3) {
-                    animacionPersonaje.repeticionesCel3++;
-                    animacionPersonaje.frameActual = maxCel;
-                } else {
-                    animacionPersonaje.direccion = -1;
-                    animacionPersonaje.repeticionesCel3 = 0;
-                    animacionPersonaje.frameActual = maxCel - 1;
-                }
+                animacionPersonaje.direccion = -1;
+                animacionPersonaje.frameActual = maxCel - 1;
             } else if (animacionPersonaje.frameActual <= 0) {
                 animacionPersonaje.direccion = 1;
-                animacionPersonaje.repeticionesCel3 = 0;
                 animacionPersonaje.frameActual = 1;
             }
             animacionPersonaje.frameActual = Math.max(0, Math.min(maxCel, animacionPersonaje.frameActual));
-            var frameName = framesCel[Math.floor(animacionPersonaje.frameActual)];
-            img.src = 'imagen/' + frameName;
+            img.src = 'imagen/' + framesCel[Math.floor(animacionPersonaje.frameActual)];
         }
-    }
-}
-
-function ejecutarComportamientoNotificacion(tipo, intensidad) {
-    var img = document.getElementById('personajeImg');
-    if (!img) return;
-    animacionPersonaje.pausa = true;
-    animacionPersonaje.pausaHasta = Date.now() + 300 + (intensidad * 200);
-    switch(tipo) {
-        case 'whatsapp':
-            animacionPersonaje.modo = 'celular';
-            animacionPersonaje.frameActual = 0;
-            animacionPersonaje.direccion = 1;
-            animacionPersonaje.repeticionesCel3 = 0;
-            animacionPersonaje.velocidadActual = 150;
-            img.src = 'imagen/cel1.avif';
-            setTimeout(function() {
-                img.src = 'imagen/cel2.avif';
-                animacionPersonaje.velocidadActual = 300;
-                animacionPersonaje.frameActual = 1;
-            }, 300);
-            setTimeout(function() {
-                animacionPersonaje.modo = 'sentado';
-                animacionPersonaje.frameActual = 0;
-                animacionPersonaje.velocidadActual = 300;
-                img.src = 'imagen/sent1.avif';
-                setTimeout(function() {
-                    animacionPersonaje.velocidadActual = animacionPersonaje.velocidadBase;
-                    animacionPersonaje.pausa = false;
-                }, 500);
-            }, 1200 + (intensidad * 300));
-            break;
-        case 'gmail':
-            animacionPersonaje.modo = 'celular';
-            animacionPersonaje.frameActual = 0;
-            animacionPersonaje.direccion = 1;
-            animacionPersonaje.repeticionesCel3 = 0;
-            animacionPersonaje.velocidadActual = 150;
-            img.src = 'imagen/cel1.avif';
-            setTimeout(function() {
-                img.src = 'imagen/cel2.avif';
-                animacionPersonaje.frameActual = 1;
-            }, 300);
-            setTimeout(function() {
-                img.src = 'imagen/cel3.avif';
-                animacionPersonaje.frameActual = 2;
-                animacionPersonaje.repeticionesCel3 = 0;
-                var repeticiones = 2 + intensidad;
-                var cont = 0;
-                var intervaloRep = setInterval(function() {
-                    cont++;
-                    if (cont >= repeticiones) {
-                        clearInterval(intervaloRep);
-                        animacionPersonaje.modo = 'sentado';
-                        animacionPersonaje.frameActual = 0;
-                        animacionPersonaje.velocidadActual = 400;
-                        img.src = 'imagen/sent1.avif';
-                        setTimeout(function() {
-                            animacionPersonaje.velocidadActual = animacionPersonaje.velocidadBase;
-                            animacionPersonaje.pausa = false;
-                        }, 500);
-                    }
-                }, 400);
-            }, 600);
-            break;
-        case 'youtube':
-            animacionPersonaje.modo = 'celular';
-            animacionPersonaje.frameActual = 0;
-            animacionPersonaje.direccion = 1;
-            animacionPersonaje.repeticionesCel3 = 0;
-            animacionPersonaje.velocidadActual = 200;
-            img.src = 'imagen/cel1.avif';
-            setTimeout(function() {
-                img.src = 'imagen/cel2.avif';
-                animacionPersonaje.frameActual = 1;
-            }, 400);
-            setTimeout(function() {
-                img.src = 'imagen/cel3.avif';
-                animacionPersonaje.frameActual = 2;
-                animacionPersonaje.repeticionesCel3 = 0;
-                var repeticiones = 3 + intensidad;
-                var cont = 0;
-                var intervaloRep = setInterval(function() {
-                    cont++;
-                    if (cont >= repeticiones) {
-                        clearInterval(intervaloRep);
-                        animacionPersonaje.modo = 'sentado';
-                        animacionPersonaje.frameActual = 0;
-                        animacionPersonaje.velocidadActual = 150;
-                        img.src = 'imagen/sent1.avif';
-                        setTimeout(function() {
-                            img.src = 'imagen/sent2.avif';
-                            animacionPersonaje.frameActual = 1;
-                        }, 200);
-                        setTimeout(function() {
-                            img.src = 'imagen/sent3.avif';
-                            animacionPersonaje.frameActual = 2;
-                        }, 400);
-                        setTimeout(function() {
-                            img.src = 'imagen/sent4.avif';
-                            animacionPersonaje.frameActual = 3;
-                        }, 600);
-                        setTimeout(function() {
-                            animacionPersonaje.velocidadActual = animacionPersonaje.velocidadBase;
-                            animacionPersonaje.pausa = false;
-                        }, 1000);
-                    }
-                }, 300);
-            }, 800);
-            break;
-        case 'slack':
-            animacionPersonaje.modo = 'celular';
-            animacionPersonaje.frameActual = 0;
-            animacionPersonaje.direccion = 1;
-            animacionPersonaje.repeticionesCel3 = 0;
-            animacionPersonaje.velocidadActual = 200;
-            img.src = 'imagen/cel1.avif';
-            setTimeout(function() {
-                img.src = 'imagen/cel2.avif';
-                animacionPersonaje.frameActual = 1;
-            }, 400);
-            setTimeout(function() {
-                animacionPersonaje.modo = 'sentado';
-                animacionPersonaje.frameActual = 0;
-                animacionPersonaje.velocidadActual = 300;
-                img.src = 'imagen/sent1.avif';
-                setTimeout(function() {
-                    animacionPersonaje.velocidadActual = animacionPersonaje.velocidadBase;
-                    animacionPersonaje.pausa = false;
-                }, 500);
-            }, 1000 + (intensidad * 200));
-            break;
-        case 'twitter':
-            animacionPersonaje.modo = 'celular';
-            animacionPersonaje.frameActual = 0;
-            animacionPersonaje.direccion = 1;
-            animacionPersonaje.repeticionesCel3 = 0;
-            animacionPersonaje.velocidadActual = 150;
-            img.src = 'imagen/cel1.avif';
-            setTimeout(function() {
-                img.src = 'imagen/cel2.avif';
-                animacionPersonaje.frameActual = 1;
-            }, 300);
-            setTimeout(function() {
-                img.src = 'imagen/cel3.avif';
-                animacionPersonaje.frameActual = 2;
-            }, 600);
-            setTimeout(function() {
-                animacionPersonaje.modo = 'sentado';
-                animacionPersonaje.frameActual = 0;
-                animacionPersonaje.velocidadActual = 200;
-                img.src = 'imagen/sent1.avif';
-                setTimeout(function() {
-                    animacionPersonaje.velocidadActual = animacionPersonaje.velocidadBase;
-                    animacionPersonaje.pausa = false;
-                }, 300);
-            }, 1000 + (intensidad * 150));
-            break;
-        default:
-            animacionPersonaje.modo = 'celular';
-            animacionPersonaje.frameActual = 0;
-            animacionPersonaje.direccion = 1;
-            animacionPersonaje.velocidadActual = 200;
-            img.src = 'imagen/cel1.avif';
-            setTimeout(function() {
-                img.src = 'imagen/cel2.avif';
-            }, 400);
-            setTimeout(function() {
-                img.src = 'imagen/cel3.avif';
-            }, 800);
-            setTimeout(function() {
-                animacionPersonaje.modo = 'sentado';
-                animacionPersonaje.frameActual = 0;
-                animacionPersonaje.velocidadActual = 300;
-                img.src = 'imagen/sent1.avif';
-                setTimeout(function() {
-                    animacionPersonaje.velocidadActual = animacionPersonaje.velocidadBase;
-                    animacionPersonaje.pausa = false;
-                }, 400);
-            }, 1200);
-            break;
     }
 }
 
@@ -274,47 +129,947 @@ function cambiarModoPersonaje(modo) {
     animacionPersonaje.modo = modo;
     animacionPersonaje.frameActual = 0;
     animacionPersonaje.direccion = 1;
-    animacionPersonaje.repeticionesCel3 = 0;
-    animacionPersonaje.repeticionesUltimo = 0;
     animacionPersonaje.ultimoCambio = Date.now();
     var img = document.getElementById('personajeImg');
     if (img) {
-        if (modo === 'sentado') {
-            img.src = 'imagen/sent1.avif';
-        } else {
-            img.src = 'imagen/cel1.avif';
-        }
+        img.src = 'imagen/' + (modo === 'sentado' ? 'sent1.avif' : 'cel1.avif');
     }
 }
 
-function actualizarPersonajePorEstado(fase, tareasActivas) {
-    if (fase === 0 || fase === 1) {
-        if (animacionPersonaje.modo !== 'sentado') {
-            cambiarModoPersonaje('sentado');
+// ============================================
+// SISTEMA DE PRIORIDADES
+// ============================================
+function actualizarPrioridades() {
+    var completadasRecientes = tareasCompletadas.slice(-5);
+    var distractoresCompletados = completadasRecientes.filter(t => t.es_distractor).length;
+    var trabajoCompletado = completadasRecientes.filter(t => t.categoria === 'Trabajo').length;
+    var socialCompletado = completadasRecientes.filter(t => t.categoria === 'Social').length;
+    
+    prioridadCategoria['Trabajo'] = 1.0 + (trabajoCompletado * 0.3) - (distractoresCompletados * 0.1);
+    prioridadCategoria['Social'] = 1.0 + (socialCompletado * 0.4) + (distractoresCompletados * 0.2);
+    prioridadCategoria['Aprendizaje'] = 1.0 + (completadasRecientes.filter(t => t.categoria === 'Aprendizaje').length * 0.3);
+    prioridadCategoria['Entretenimiento'] = 1.0 + (completadasRecientes.filter(t => t.categoria === 'Entretenimiento').length * 0.4) + (distractoresCompletados * 0.3);
+    
+    for (var cat in prioridadCategoria) {
+        prioridadCategoria[cat] = Math.max(0.3, Math.min(2.5, prioridadCategoria[cat]));
+    }
+}
+
+function generarTareaAleatoria() {
+    if (tareasDB.length === 0) return null;
+    
+    actualizarPrioridades();
+    
+    var disponibles = tareasDB.filter(t => 
+        !tareasActivas.some(a => a.id === t.id) && 
+        !tareasCompletadas.some(c => c.id === t.id) &&
+        !tareasIncompletas.some(i => i.id === t.id) &&
+        !nodosDesconectados.some(d => d.id === t.id)
+    );
+    
+    if (disponibles.length === 0) return null;
+    
+    var tareasConPeso = disponibles.map(function(t) {
+        var peso = t.prioridad_base * (prioridadCategoria[t.categoria] || 1.0);
+        if (t.es_distractor) {
+            var distractoresCompletados = tareasCompletadas.filter(tc => tc.es_distractor).length;
+            peso = peso * (1 + (distractoresCompletados * 0.05));
         }
-        animacionPersonaje.animacionActiva = true;
-        animacionPersonaje.velocidadActual = animacionPersonaje.velocidadBase;
-    } else if (fase === 2 || fase === 3) {
-        if (animacionPersonaje.modo !== 'celular') {
-            cambiarModoPersonaje('celular');
+        return { tarea: t, peso: peso };
+    });
+    
+    var totalPeso = tareasConPeso.reduce(function(sum, item) { return sum + item.peso; }, 0);
+    var random = Math.random() * totalPeso;
+    var acumulado = 0;
+    
+    for (var i = 0; i < tareasConPeso.length; i++) {
+        acumulado += tareasConPeso[i].peso;
+        if (random <= acumulado) {
+            return tareasConPeso[i].tarea;
         }
-        animacionPersonaje.animacionActiva = true;
-        animacionPersonaje.velocidadActual = 150;
+    }
+    return tareasConPeso[0] ? tareasConPeso[0].tarea : null;
+}
+
+// ============================================
+// SISTEMA DE TAREAS
+// ============================================
+var listaTareasContainer = null;
+var intervaloTiempo = null;
+
+function agregarTarea(tareaDB) {
+    if (!tareaDB) return;
+    if (tareasActivas.some(t => t.id === tareaDB.id)) return;
+    
+    var nuevaTarea = {
+        id: tareaDB.id,
+        tarea: tareaDB.tarea,
+        descripcion: tareaDB.descripcion,
+        categoria: tareaDB.categoria,
+        subcategoria: tareaDB.subcategoria || 'General',
+        clicks_necesarios: tareaDB.clicks_necesarios,
+        clicks_actuales: 0,
+        tiempo_limite: tareaDB.tiempo_limite,
+        tiempo_restante: tareaDB.tiempo_limite,
+        prioridad: tareaDB.prioridad_base,
+        estado: 'activa', // activa, incompleta (negativo), desconectado, completada
+        es_distractor: tareaDB.es_distractor || false,
+        iniciada: Date.now(),
+        element: null
+    };
+    
+    tareasActivas.push(nuevaTarea);
+    
+    var item = crearTareaElement(nuevaTarea);
+    nuevaTarea.element = item;
+    
+    if (listaTareasContainer) {
+        listaTareasContainer.appendChild(item);
+        var placeholder = listaTareasContainer.querySelector('.placeholder-message');
+        if (placeholder) placeholder.remove();
+    }
+    
+    actualizarGrafoComplejo();
+    
+    var icono = nuevaTarea.es_distractor ? '🎯' : '📌';
+    mostrarNotificacion(icono + ' ' + nuevaTarea.tarea + ' (' + nuevaTarea.clicks_necesarios + ' clicks, ' + nuevaTarea.tiempo_limite + 's)', 
+                        nuevaTarea.es_distractor ? 'distractor' : '');
+    
+    cambiarModoPersonaje('celular');
+    setTimeout(function() { cambiarModoPersonaje('sentado'); }, 800);
+    
+    document.getElementById('tareasActivas').textContent = tareasActivas.length + ' activas';
+    actualizarMetricas();
+}
+
+function crearTareaElement(t) {
+    var div = document.createElement('div');
+    div.className = 'tarea-item';
+    div.dataset.id = t.id;
+    
+    var icono = obtenerIconoCategoria(t.categoria);
+    var clicksRestantes = t.clicks_necesarios - t.clicks_actuales;
+    var progreso = (t.clicks_actuales / t.clicks_necesarios) * 100;
+    var tiempoRestante = Math.ceil(t.tiempo_restante);
+    
+    var colorClase = 'verde';
+    var tiempoColor = 'verde';
+    if (tiempoRestante < 0) {
+        tiempoColor = 'negativo';
+        colorClase = 'rojo';
+    } else if (tiempoRestante <= 3) {
+        tiempoColor = 'rojo';
+        colorClase = 'rojo';
+    } else if (tiempoRestante <= 6) {
+        tiempoColor = 'naranja';
+        colorClase = 'naranja';
+    }
+    
+    var distractorTag = t.es_distractor ? ' 🎯' : '';
+    var tiempoTexto = tiempoRestante < 0 ? tiempoRestante + 's' : tiempoRestante + 's';
+    
+    div.innerHTML = `
+        <div class="tarea-header">
+            <span>${icono}</span>
+            <span>${t.tarea}${distractorTag}</span>
+            <span class="categoria">${t.categoria}</span>
+            <span class="tiempo-restante ${tiempoColor}">${tiempoTexto}</span>
+        </div>
+        <div class="tarea-descripcion">${t.descripcion}</div>
+        <div class="barra-progreso">
+            <div class="fill-progreso ${colorClase}" style="width:${progreso}%;"></div>
+        </div>
+        <div class="clicks-info">
+            <span>⬆ ${clicksRestantes} clicks restantes</span>
+            ${t.es_distractor ? '<span style="color:#faa61a;">⚡ Fácil</span>' : ''}
+        </div>
+    `;
+    
+    div.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (t.estado === 'completada' || t.estado === 'incompleta' || t.estado === 'desconectado') return;
+        procesarClickTarea(t.id);
+    });
+    
+    return div;
+}
+
+function actualizarTareaElement(t) {
+    if (!t.element) return;
+    if (t.estado === 'completada' || t.estado === 'desconectado') return;
+    
+    var clicksRestantes = t.clicks_necesarios - t.clicks_actuales;
+    var progreso = (t.clicks_actuales / t.clicks_necesarios) * 100;
+    var tiempoRestante = Math.ceil(t.tiempo_restante);
+    
+    var colorClase = 'verde';
+    var tiempoColor = 'verde';
+    if (tiempoRestante < 0) {
+        tiempoColor = 'negativo';
+        colorClase = 'rojo';
+    } else if (tiempoRestante <= 3) {
+        tiempoColor = 'rojo';
+        colorClase = 'rojo';
+    } else if (tiempoRestante <= 6) {
+        tiempoColor = 'naranja';
+        colorClase = 'naranja';
+    }
+    
+    var fill = t.element.querySelector('.fill-progreso');
+    if (fill) {
+        fill.style.width = progreso + '%';
+        fill.className = 'fill-progreso ' + colorClase;
+    }
+    
+    var tiempoSpan = t.element.querySelector('.tiempo-restante');
+    if (tiempoSpan) {
+        var tiempoTexto = tiempoRestante < 0 ? tiempoRestante + 's' : tiempoRestante + 's';
+        tiempoSpan.textContent = tiempoTexto;
+        tiempoSpan.className = 'tiempo-restante ' + tiempoColor;
+    }
+    
+    var info = t.element.querySelector('.clicks-info');
+    if (info) {
+        info.innerHTML = `<span>⬆ ${clicksRestantes} clicks restantes</span>${t.es_distractor ? '<span style="color:#faa61a;">⚡ Fácil</span>' : ''}`;
+    }
+}
+
+function procesarClickTarea(id) {
+    var tarea = tareasActivas.find(t => t.id === id);
+    if (!tarea || tarea.estado !== 'activa') return;
+    
+    tarea.clicks_actuales++;
+    
+    if (tarea.clicks_actuales >= tarea.clicks_necesarios) {
+        completarTarea(id);
     } else {
-        var ahora = Date.now();
-        if (!animacionPersonaje.tiempoAlternancia) {
-            animacionPersonaje.tiempoAlternancia = ahora;
+        actualizarTareaElement(tarea);
+        cambiarModoPersonaje('celular');
+        setTimeout(function() { cambiarModoPersonaje('sentado'); }, 300);
+    }
+    
+    actualizarMetricas();
+}
+
+function completarTarea(id) {
+    var tarea = tareasActivas.find(t => t.id === id);
+    if (!tarea || tarea.estado !== 'activa') return;
+    
+    tarea.estado = 'completada';
+    tareasCompletadas.push(tarea);
+    tareasActivas = tareasActivas.filter(t => t.id !== id);
+    totalCompletadas++;
+    estadisticas.totalCompletadas++;
+    
+    if (tarea.element) {
+        tarea.element.classList.add('eliminando');
+        setTimeout(function() {
+            if (tarea.element && tarea.element.parentNode) {
+                tarea.element.parentNode.removeChild(tarea.element);
+            }
+        }, 500);
+    }
+    
+    mostrarNotificacion('✅ ' + tarea.tarea + ' completada', 'exito');
+    cambiarModoPersonaje('sentado');
+    
+    document.getElementById('tareasActivas').textContent = tareasActivas.length + ' activas';
+    actualizarGrafoComplejo();
+    actualizarMetricas();
+    
+    mantenerMinimoTareas();
+}
+
+function moverAIncompleta(tarea) {
+    if (!tarea || tarea.estado !== 'activa') return;
+    
+    // Marcar como incompleta (tiempo negativo)
+    tarea.estado = 'incompleta';
+    tareasActivas = tareasActivas.filter(t => t.id !== tarea.id);
+    tareasIncompletas.push(tarea);
+    totalIncompletas++;
+    estadisticas.totalIncompletas++;
+    
+    if (tarea.element) {
+        tarea.element.classList.add('incompleta');
+        var info = tarea.element.querySelector('.clicks-info');
+        if (info) info.innerHTML = '⏳ ' + Math.ceil(tarea.tiempo_restante) + 's';
+        var tiempo = tarea.element.querySelector('.tiempo-restante');
+        if (tiempo) {
+            tiempo.textContent = Math.ceil(tarea.tiempo_restante) + 's';
+            tiempo.className = 'tiempo-restante negativo';
         }
-        if (ahora - animacionPersonaje.tiempoAlternancia > 1500) {
-            animacionPersonaje.tiempoAlternancia = ahora;
-            var nuevoModo = animacionPersonaje.modo === 'sentado' ? 'celular' : 'sentado';
-            cambiarModoPersonaje(nuevoModo);
-            animacionPersonaje.velocidadActual = 100;
+        var fill = tarea.element.querySelector('.fill-progreso');
+        if (fill) {
+            fill.className = 'fill-progreso rojo';
         }
-        animacionPersonaje.animacionActiva = true;
+    }
+    
+    mostrarNotificacion('⏳ ' + tarea.tarea + ' - tiempo agotado (' + Math.ceil(tarea.tiempo_restante) + 's)', 'fallo');
+    actualizarGrafoComplejo();
+    actualizarMetricas();
+}
+
+function moverADesconectado(tarea) {
+    if (!tarea) return;
+    
+    // Desconectar del grafo - divagar sin rumbo
+    tarea.estado = 'desconectado';
+    
+    // Remover de donde esté
+    tareasActivas = tareasActivas.filter(t => t.id !== tarea.id);
+    tareasIncompletas = tareasIncompletas.filter(t => t.id !== tarea.id);
+    nodosDesconectados.push(tarea);
+    totalDesconectados++;
+    estadisticas.totalDesconectados++;
+    
+    if (tarea.element) {
+        tarea.element.classList.add('incompleta');
+        var info = tarea.element.querySelector('.clicks-info');
+        if (info) info.innerHTML = '🌀 Desconectado - Divagando';
+        var tiempo = tarea.element.querySelector('.tiempo-restante');
+        if (tiempo) {
+            tiempo.textContent = '🌀';
+            tiempo.className = 'tiempo-restante negativo';
+        }
+        var fill = tarea.element.querySelector('.fill-progreso');
+        if (fill) {
+            fill.className = 'fill-progreso rojo';
+        }
+    }
+    
+    mostrarNotificacion('🌀 ' + tarea.tarea + ' - desconectado del grafo', 'fallo');
+    actualizarGrafoComplejo();
+    actualizarMetricas();
+}
+
+function mantenerMinimoTareas() {
+    // Mantener al menos 4 tareas activas
+    var activas = tareasActivas.filter(t => t.estado === 'activa').length;
+    var necesarias = 4 - activas;
+    
+    if (necesarias > 0) {
+        for (var i = 0; i < necesarias; i++) {
+            setTimeout(function() {
+                var nueva = generarTareaAleatoria();
+                if (nueva) {
+                    agregarTarea(nueva);
+                }
+            }, i * 1000 + 500);
+        }
+    }
+    
+    // Si hay muchas incompletas, generar más caos
+    var incompletas = tareasIncompletas.length;
+    if (incompletas > 2) {
+        var caosExtra = Math.min(2, Math.floor(incompletas / 2));
+        for (var j = 0; j < caosExtra; j++) {
+            setTimeout(function() {
+                var tarea = generarTareaAleatoria();
+                if (tarea) {
+                    agregarTarea(tarea);
+                    mostrarNotificacion('💥 Caos! Nueva tarea urgente!', 'fallo');
+                }
+            }, j * 2000 + 1000 + 3000);
+        }
     }
 }
 
+function mostrarMensajeEspera() {
+    if (!listaTareasContainer) return;
+    var mensaje = 'Esperando nuevas tareas...';
+    if (tareasCompletadas.length > 0) {
+        mensaje = '✅ ' + tareasCompletadas.length + ' completadas';
+    }
+    var div = document.createElement('div');
+    div.className = 'placeholder-message';
+    div.style.cssText = 'grid-column:1/-1;text-align:center;padding:30px 20px;color:var(--text-muted);font-size:13px;';
+    div.innerHTML = '<i class="fas fa-brain" style="font-size:28px;display:block;margin-bottom:8px;opacity:0.3;"></i>' + mensaje;
+    listaTareasContainer.appendChild(div);
+}
+
+// ============================================
+// NOTIFICACIONES
+// ============================================
+function mostrarNotificacion(mensaje, tipo) {
+    var container = document.getElementById('notificaciones');
+    if (!container) {
+        var zona = document.getElementById('zonaNotificaciones');
+        if (zona) {
+            var div = document.createElement('div');
+            div.id = 'notificaciones';
+            zona.appendChild(div);
+            container = div;
+        }
+    }
+    if (!container) return;
+    
+    var notif = document.createElement('div');
+    notif.className = 'notif-item';
+    if (tipo === 'distractor') notif.classList.add('distractor');
+    else if (tipo === 'exito') notif.classList.add('exito');
+    else if (tipo === 'fallo') notif.classList.add('fallo');
+    notif.textContent = mensaje;
+    container.appendChild(notif);
+    
+    while (container.children.length > 3) {
+        container.firstChild.remove();
+    }
+    
+    setTimeout(function() {
+        if (notif.parentNode) {
+            notif.style.opacity = '0';
+            notif.style.transform = 'translateX(-20px)';
+            notif.style.transition = 'all 0.5s ease';
+            setTimeout(function() {
+                if (notif.parentNode) notif.remove();
+            }, 500);
+        }
+    }, 4000);
+}
+
+function obtenerIconoCategoria(categoria) {
+    var icons = { 'Trabajo': '💼', 'Social': '📱', 'Aprendizaje': '📚', 'Entretenimiento': '🎮' };
+    return icons[categoria] || '📌';
+}
+
+// ============================================
+// MÉTRICAS
+// ============================================
+function calcularAtencion() {
+    var activas = tareasActivas.filter(t => t.estado === 'activa').length;
+    var completadas = tareasCompletadas.length;
+    var incompletas = tareasIncompletas.length;
+    var desconectados = nodosDesconectados.length;
+    
+    var base = 100;
+    base -= activas * 2;
+    base -= incompletas * 8;
+    base -= desconectados * 6;
+    base += completadas * 2;
+    
+    var trabajoCompletado = tareasCompletadas.filter(t => t.categoria === 'Trabajo').length;
+    base += trabajoCompletado * 0.5;
+    
+    return Math.max(0, Math.min(100, base));
+}
+
+function calcularPlasticidad() {
+    var activas = tareasActivas.filter(t => t.estado === 'activa').length;
+    var completadas = tareasCompletadas.length;
+    var incompletas = tareasIncompletas.length;
+    var desconectados = nodosDesconectados.length;
+    
+    var base = 100;
+    base -= activas * 1.5;
+    base -= incompletas * 10;
+    base -= desconectados * 8;
+    base += completadas * 1.5;
+    
+    var distractoresCompletados = tareasCompletadas.filter(t => t.es_distractor).length;
+    base -= distractoresCompletados * 3;
+    
+    return Math.max(0, Math.min(100, base));
+}
+
+function obtenerEstadoMental() {
+    var atencion = calcularAtencion();
+    var plasticidad = calcularPlasticidad();
+    var desconectados = nodosDesconectados.length;
+    
+    if (atencion > 70 && plasticidad > 70) return '🧘 Enfoque total';
+    if (atencion > 50 && plasticidad > 50) return '🎯 Atención parcial';
+    if (atencion > 30 && plasticidad > 30) return '🌀 Fragmentado';
+    if (atencion < 30 && plasticidad < 30 || desconectados > 3) return '💀 Colapso inminente';
+    if (desconectados > 0) return '⚠️ ' + desconectados + ' nodos desconectados';
+    return '📊 Procesando...';
+}
+
+function actualizarMetricas() {
+    var atencion = calcularAtencion();
+    var plasticidad = calcularPlasticidad();
+    
+    document.getElementById('atencionValor').textContent = Math.round(atencion) + '%';
+    document.getElementById('plasticidadValor').textContent = Math.round(plasticidad) + '%';
+    
+    document.querySelector('.fill.atencion').style.width = atencion + '%';
+    document.querySelector('.fill.plasticidad').style.width = plasticidad + '%';
+    
+    document.getElementById('estadoMental').textContent = obtenerEstadoMental();
+    
+    if (atencion < 30 || plasticidad < 30) {
+        document.getElementById('estadoDisplay').textContent = '🔴 Colapso';
+    } else if (atencion < 50 || plasticidad < 50) {
+        document.getElementById('estadoDisplay').textContent = '🟡 Inestable';
+    } else {
+        document.getElementById('estadoDisplay').textContent = '🟢 Enfoque';
+    }
+}
+
+// ============================================
+// GRAFO - CON ESTADOS IRREVERSIBLES
+// ============================================
+var listadoNodos = new vis.DataSet([]);
+var listadoConexiones = new vis.DataSet([]);
+var red = null;
+
+function inicializarGrafo() {
+    var contenedor = document.getElementById('grafo');
+    var datos = { nodes: listadoNodos, edges: listadoConexiones };
+    var opciones = {
+        nodes: {
+            shape: 'dot',
+            font: { size: 12, color: '#1B3022', face: 'Inter', bold: false },
+            borderWidth: 1.5
+        },
+        edges: {
+            width: 1.5,
+            smooth: { type: 'continuous', roundness: 0.5 },
+            arrows: { to: { enabled: false } }
+        },
+        physics: {
+            solver: 'forceAtlas2Based',
+            forceAtlas2Based: {
+                gravitationalConstant: -100,
+                centralGravity: 0.01,
+                springLength: 150,
+                springConstant: 0.06,
+                damping: 0.4
+            },
+            stabilization: { iterations: 200 }
+        },
+        interaction: { hover: true, tooltipDelay: 300 },
+        background: { color: 'rgba(248,245,242,0.0)' }
+    };
+    red = new vis.Network(contenedor, datos, opciones);
+}
+
+function actualizarGrafoComplejo() {
+    var menteId = '🧠 Mente';
+    
+    if (!listadoNodos.get(menteId)) {
+        listadoNodos.add({
+            id: menteId,
+            label: '🧠 Mente',
+            color: { background: '#43b581', border: '#2d7d4e' },
+            size: 35,
+            borderWidth: 3,
+            font: { color: '#1B3022', size: 16, face: 'Inter', bold: true }
+        });
+    }
+    
+    var categorias = ['Trabajo', 'Social', 'Aprendizaje', 'Entretenimiento'];
+    
+    categorias.forEach(function(cat) {
+        var catId = 'cat_' + cat;
+        if (!listadoNodos.get(catId)) {
+            listadoNodos.add({
+                id: catId,
+                label: '📂 ' + cat,
+                color: { background: '#43b581', border: '#2d7d4e' },
+                size: 25,
+                borderWidth: 2,
+                font: { color: '#FFFFFF', size: 13, face: 'Inter', bold: true }
+            });
+            listadoConexiones.add({
+                id: 'mente_' + cat,
+                from: menteId,
+                to: catId,
+                color: { color: 'rgba(67,181,129,0.5)' },
+                width: 2,
+                dashes: true
+            });
+        }
+    });
+    
+    // Todas las tareas: activas + incompletas + desconectados + completadas
+    var todasTareas = tareasActivas.concat(tareasIncompletas, nodosDesconectados, tareasCompletadas);
+    
+    todasTareas.forEach(function(t) {
+        var id = t.nodoId || ('tarea_' + t.id);
+        var color = { background: '#43b581', border: '#2d7d4e' };
+        var size = 14;
+        var borderWidth = 1.5;
+        var label = t.tarea;
+        var opacity = 1;
+        
+        if (t.estado === 'completada') {
+            color = { background: '#43b581', border: '#2d7d4e' };
+            size = 12;
+            opacity = 0.5;
+            label = '✅ ' + t.tarea;
+        } else if (t.estado === 'desconectado') {
+            // Nodo divagando - color gris, pequeño, sin conexión
+            color = { background: '#95A5A6', border: '#717f82' };
+            size = 8;
+            opacity = 0.3;
+            label = '🌀 ' + t.tarea;
+        } else if (t.estado === 'incompleta') {
+            // Nodo en tiempo negativo - ROJO, irreversible
+            color = { background: '#ed4245', border: '#a1282b' };
+            size = 12;
+            opacity = 0.7;
+            label = '⏳ ' + t.tarea;
+        } else if (t.estado === 'activa') {
+            var tiempoRestante = t.tiempo_restante;
+            // El color depende del tiempo restante
+            if (tiempoRestante <= 3) {
+                color = { background: '#ed4245', border: '#a1282b' };
+                size = 16;
+                borderWidth = 2.5;
+            } else if (tiempoRestante <= 6) {
+                color = { background: '#faa61a', border: '#c47f15' };
+                size = 15;
+                borderWidth = 2;
+            }
+        }
+        
+        if (listadoNodos.get(id)) {
+            listadoNodos.update({
+                id: id,
+                label: label,
+                color: color,
+                size: size,
+                borderWidth: borderWidth,
+                opacity: opacity
+            });
+        } else {
+            listadoNodos.add({
+                id: id,
+                label: label,
+                color: color,
+                size: size,
+                borderWidth: borderWidth,
+                font: { color: '#1B3022', size: 11, face: 'Inter' },
+                opacity: opacity
+            });
+        }
+    });
+    
+    // CONEXIONES - SOLO PARA TAREAS ACTIVAS (NO incompletas, NO desconectados)
+    // Incompletas: conexión se debilita gradualmente
+    // Desconectados: SIN CONEXIÓN
+    
+    tareasActivas.forEach(function(t) {
+        if (t.estado !== 'activa') return;
+        
+        var id = t.nodoId || ('tarea_' + t.id);
+        var catId = 'cat_' + (t.categoria || 'otro');
+        var conexionId = 'cat_' + id;
+        
+        var colorLinea = 'rgba(67,181,129,0.5)';
+        var ancho = 1.5;
+        
+        var tiempoRestante = t.tiempo_restante;
+        if (tiempoRestante <= 3) {
+            colorLinea = 'rgba(237,66,69,0.7)';
+            ancho = 2;
+        } else if (tiempoRestante <= 6) {
+            colorLinea = 'rgba(250,166,26,0.6)';
+            ancho = 2;
+        }
+        
+        if (!listadoConexiones.get(conexionId)) {
+            listadoConexiones.add({
+                id: conexionId,
+                from: catId,
+                to: id,
+                color: { color: colorLinea },
+                width: ancho,
+                smooth: { type: 'continuous', roundness: 0.5 }
+            });
+        } else {
+            listadoConexiones.update({
+                id: conexionId,
+                color: { color: colorLinea },
+                width: ancho
+            });
+        }
+    });
+    
+    // Tareas incompletas - conexión se debilita (nunca se fortalece)
+    tareasIncompletas.forEach(function(t) {
+        var id = t.nodoId || ('tarea_' + t.id);
+        var conexionId = 'cat_' + id;
+        var edge = listadoConexiones.get(conexionId);
+        if (edge) {
+            // Reducir gradualmente la conexión
+            var nuevoAncho = Math.max(0.1, edge.width - 0.01);
+            if (nuevoAncho <= 0.1) {
+                listadoConexiones.remove(conexionId);
+            } else {
+                listadoConexiones.update({
+                    id: conexionId,
+                    width: nuevoAncho,
+                    color: { color: 'rgba(237,66,69,' + (nuevoAncho / 2) + ')' }
+                });
+            }
+        }
+    });
+    
+    // Desconectados - eliminar cualquier conexión que tengan
+    nodosDesconectados.forEach(function(t) {
+        var id = t.nodoId || ('tarea_' + t.id);
+        var conexionId = 'cat_' + id;
+        if (listadoConexiones.get(conexionId)) {
+            listadoConexiones.remove(conexionId);
+        }
+    });
+}
+
+// ============================================
+// TIMER Y SIMULACIÓN
+// ============================================
+function actualizarTiempo() {
+    if (!simulacionActiva) return;
+    
+    var ahora = Date.now();
+    var elapsed = (ahora - tiempoInicio) / 1000;
+    var mins = Math.floor(elapsed / 60);
+    var secs = Math.floor(elapsed % 60);
+    document.getElementById('timerDisplay').textContent =
+        String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+    
+    var tareasADesconectar = [];
+    var tareasAIncompletar = [];
+    
+    // Procesar tareas activas
+    tareasActivas.forEach(function(t) {
+        if (t.estado !== 'activa') return;
+        var tiempoTranscurrido = (ahora - t.iniciada) / 1000;
+        t.tiempo_restante = t.tiempo_limite - tiempoTranscurrido;
+        
+        // Actualizar visual
+        actualizarTareaElement(t);
+        
+        // Verificar estado
+        if (t.tiempo_restante < 0) {
+            // Si tiempo negativo y ha pasado el límite (ej: -15 cuando limite=15)
+            if (t.tiempo_restante <= -t.tiempo_limite) {
+                tareasADesconectar.push(t);
+            } else {
+                // Tiempo negativo pero aún no desconectado
+                tareasAIncompletar.push(t);
+            }
+        }
+    });
+    
+    // Mover a incompletas (primera vez que entra en negativo)
+    tareasAIncompletar.forEach(function(t) {
+        if (t.estado === 'activa') {
+            moverAIncompleta(t);
+        }
+    });
+    
+    // Desconectar (llegó a -tiempo_limite)
+    tareasADesconectar.forEach(function(t) {
+        moverADesconectado(t);
+    });
+    
+    // También revisar incompletas que puedan haber llegado al límite
+    tareasIncompletas.forEach(function(t) {
+        var tiempoTranscurrido = (ahora - t.iniciada) / 1000;
+        t.tiempo_restante = t.tiempo_limite - tiempoTranscurrido;
+        
+        if (t.tiempo_restante <= -t.tiempo_limite) {
+            // Mover a desconectado
+            moverADesconectado(t);
+        }
+    });
+    
+    // Mantener mínimo 4 tareas activas
+    mantenerMinimoTareas();
+    
+    document.getElementById('tareasActivas').textContent = tareasActivas.length + ' activas';
+    actualizarGrafoComplejo();
+    actualizarMetricas();
+}
+
+// ============================================
+// INICIO
+// ============================================
+function iniciarExperiencia() {
+    document.getElementById('overlayInicial').classList.add('oculto');
+    
+    if (tareasDB.length === 0) {
+        cargarCSV();
+    }
+    
+    initParticulas();
+    
+    listadoNodos.clear();
+    listadoConexiones.clear();
+    tareasActivas = [];
+    tareasCompletadas = [];
+    tareasIncompletas = [];
+    nodosDesconectados = [];
+    totalCompletadas = 0;
+    totalIncompletas = 0;
+    totalDesconectados = 0;
+    
+    prioridadCategoria = {
+        'Trabajo': 1.0,
+        'Social': 1.0,
+        'Aprendizaje': 1.0,
+        'Entretenimiento': 1.0
+    };
+    
+    estadisticas = {
+        totalCompletadas: 0,
+        totalIncompletas: 0,
+        totalDesconectados: 0
+    };
+    
+    animacionPersonaje.modo = 'sentado';
+    animacionPersonaje.frameActual = 0;
+    animacionPersonaje.direccion = 1;
+    animacionPersonaje.ultimoCambio = Date.now();
+    document.getElementById('personajeImg').src = 'imagen/sent1.avif';
+    
+    listaTareasContainer = document.getElementById('listaTareas');
+    if (listaTareasContainer) {
+        listaTareasContainer.innerHTML = '';
+    }
+    
+    var menteId = '🧠 Mente';
+    if (!listadoNodos.get(menteId)) {
+        listadoNodos.add({
+            id: menteId,
+            label: '🧠 Mente',
+            color: { background: '#43b581', border: '#2d7d4e' },
+            size: 35,
+            borderWidth: 3,
+            font: { color: '#1B3022', size: 16, face: 'Inter', bold: true }
+        });
+    }
+    
+    ['Trabajo', 'Social', 'Aprendizaje', 'Entretenimiento'].forEach(function(cat) {
+        var catId = 'cat_' + cat;
+        if (!listadoNodos.get(catId)) {
+            listadoNodos.add({
+                id: catId,
+                label: '📂 ' + cat,
+                color: { background: '#43b581', border: '#2d7d4e' },
+                size: 25,
+                borderWidth: 2,
+                font: { color: '#FFFFFF', size: 13, face: 'Inter', bold: true }
+            });
+            listadoConexiones.add({
+                id: 'mente_' + cat,
+                from: menteId,
+                to: catId,
+                color: { color: 'rgba(67,181,129,0.5)' },
+                width: 2,
+                dashes: true
+            });
+        }
+    });
+    
+    tiempoInicio = Date.now();
+    simulacionActiva = true;
+    
+    if (intervaloTiempo) clearInterval(intervaloTiempo);
+    intervaloTiempo = setInterval(actualizarTiempo, 1000);
+    
+    // Generar 5 tareas iniciales
+    setTimeout(function() {
+        var tareasIniciales = [];
+        var intentos = 0;
+        while (tareasIniciales.length < 5 && intentos < 50) {
+            var tarea = generarTareaAleatoria();
+            if (tarea && !tareasIniciales.some(t => t.id === tarea.id)) {
+                tareasIniciales.push(tarea);
+                agregarTarea(tarea);
+            }
+            intentos++;
+        }
+    }, 500);
+    
+    setInterval(function() {
+        if (simulacionActiva) {
+            actualizarPersonaje(Date.now());
+        }
+    }, 200);
+    
+    setTimeout(actualizarGrafoComplejo, 1000);
+}
+
+function reiniciarExperiencia() {
+    simulacionActiva = false;
+    if (intervaloTiempo) {
+        clearInterval(intervaloTiempo);
+        intervaloTiempo = null;
+    }
+    
+    listadoNodos.clear();
+    listadoConexiones.clear();
+    tareasActivas = [];
+    tareasCompletadas = [];
+    tareasIncompletas = [];
+    nodosDesconectados = [];
+    
+    document.getElementById('colapsoModal').classList.remove('visible');
+    document.getElementById('overlayInicial').classList.remove('oculto');
+    if (listaTareasContainer) listaTareasContainer.innerHTML = '';
+    document.getElementById('estadoDisplay').textContent = '🟢 Enfoque';
+    document.getElementById('tareasActivas').textContent = '0 activas';
+    document.getElementById('timerDisplay').textContent = '00:00';
+    
+    var notif = document.getElementById('notificaciones');
+    if (notif) notif.innerHTML = '';
+    
+    document.getElementById('atencionValor').textContent = '100%';
+    document.getElementById('plasticidadValor').textContent = '100%';
+    document.querySelector('.fill.atencion').style.width = '100%';
+    document.querySelector('.fill.plasticidad').style.width = '100%';
+    document.getElementById('estadoMental').textContent = '🧘 En reposo';
+}
+
+// ============================================
+// PARTÍCULAS
+// ============================================
+var particulas = [];
+var canvas, ctx;
+
+function initParticulas() {
+    canvas = document.getElementById('canvasParticulas');
+    if (!canvas) return;
+    ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    particulas = [];
+    for (var i = 0; i < 60; i++) {
+        particulas.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            vx: (Math.random() - 0.5) * 0.2,
+            vy: (Math.random() - 0.5) * 0.2,
+            size: Math.random() * 2 + 0.5,
+            opacity: Math.random() * 0.2 + 0.05
+        });
+    }
+    animarParticulas();
+}
+
+function animarParticulas() {
+    if (!canvas || !ctx) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particulas.forEach(function(p) {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(67,181,129,' + p.opacity + ')';
+        ctx.fill();
+    });
+    requestAnimationFrame(animarParticulas);
+}
+
+// ============================================
+// TEXTOS HOLZER
+// ============================================
 var textosHolzer = [
     "La atención es el recurso más escaso del siglo XXI",
     "El exceso de información fragmenta la capacidad de pensar profundamente",
@@ -328,340 +1083,11 @@ var textosHolzer = [
     "La plasticidad se erosiona con cada distracción"
 ];
 
-var actividades = {
-    "📝 Investigación": {
-        categoria: "Programas/Apps",
-        subactividades: ["🔍 Google Scholar", "📄 Docs", "📊 Sheets", "📎 Drive", "📚 PDF", "✏️ Anotaciones"]
-    },
-    "🎨 Diseño": {
-        categoria: "Programas/Apps",
-        subactividades: ["🎨 Figma", "📐 AutoCAD", "🖌️ Photoshop", "📄 Docs", "🎬 Premiere", "🖼️ Illustrator"]
-    },
-    "💻 Programación": {
-        categoria: "Programas/Apps",
-        subactividades: ["🐍 VS Code", "📄 Docs", "🔍 Stack Overflow", "📊 Sheets", "🐱 GitHub", "📦 NPM", "🐳 Docker"]
-    },
-    "📊 Análisis": {
-        categoria: "Programas/Apps",
-        subactividades: ["📊 Excel", "📊 Power BI", "📄 Docs", "🔍 Research", "📈 Tableau", "🐍 Python", "📉 R"]
-    },
-    "🎓 Estudio": {
-        categoria: "Programas/Apps",
-        subactividades: ["📚 Moodle", "📄 Docs", "🔍 Google", "📎 Drive", "📝 Notas", "🎧 Podcast", "📖 Libros"]
-    },
-    "📱 Social": {
-        categoria: "Navegador Web",
-        subactividades: ["🐦 Twitter", "📸 Instagram", "💬 WhatsApp", "📘 Facebook", "🎵 TikTok", "📺 YouTube"]
-    },
-    "💼 Trabajo": {
-        categoria: "Programas/Apps",
-        subactividades: ["💬 Slack", "📧 Gmail", "📅 Calendar", "📝 Jira", "🔗 Zoom", "📊 Teams"]
-    },
-    "🎮 Entretenimiento": {
-        categoria: "Navegador Web",
-        subactividades: ["🎮 Steam", "📺 Netflix", "🎵 Spotify", "📚 Reddit", "🎬 Twitch", "🎮 Epic Games"]
-    }
-};
-
-var distracciones = [
-    { icono: "📱", mensaje: "WhatsApp: Mensaje de Juan", tipo: "whatsapp", peso: 2 },
-    { icono: "📱", mensaje: "WhatsApp: Mensaje de María", tipo: "whatsapp", peso: 2 },
-    { icono: "📱", mensaje: "WhatsApp: Grupo familiar (20 msgs)", tipo: "whatsapp", peso: 3 },
-    { icono: "🐦", mensaje: "Twitter: Nueva notificación", tipo: "twitter", peso: 2 },
-    { icono: "🐦", mensaje: "Twitter: Trending #colapso", tipo: "twitter", peso: 3 },
-    { icono: "📧", mensaje: "Gmail: Correo importante del cliente", tipo: "gmail", peso: 3 },
-    { icono: "📧", mensaje: "Gmail: Oferta de trabajo", tipo: "gmail", peso: 4 },
-    { icono: "📧", mensaje: "Gmail: 5 correos no leídos", tipo: "gmail", peso: 3 },
-    { icono: "📸", mensaje: "Instagram: Nueva foto etiquetada", tipo: "twitter", peso: 2 },
-    { icono: "📸", mensaje: "Instagram: 10 notificaciones", tipo: "twitter", peso: 3 },
-    { icono: "💬", mensaje: "Slack: Mensaje del equipo", tipo: "slack", peso: 3 },
-    { icono: "💬", mensaje: "Slack: Reunión urgente", tipo: "slack", peso: 4 },
-    { icono: "💬", mensaje: "Slack: 3 canales con actividad", tipo: "slack", peso: 3 },
-    { icono: "📺", mensaje: "YouTube: Nuevo video recomendado", tipo: "youtube", peso: 3 },
-    { icono: "📺", mensaje: "YouTube: Tutorial de tu interés", tipo: "youtube", peso: 4 },
-    { icono: "📺", mensaje: "YouTube: Shorts - 5 videos", tipo: "youtube", peso: 4 },
-    { icono: "🎵", mensaje: "Spotify: Canción sugerida", tipo: "twitter", peso: 2 },
-    { icono: "📰", mensaje: "Noticias: Alerta informativa", tipo: "twitter", peso: 3 },
-    { icono: "📰", mensaje: "Noticias: Breaking News", tipo: "twitter", peso: 4 },
-    { icono: "🎮", mensaje: "Steam: Oferta de juego", tipo: "twitter", peso: 3 },
-    { icono: "📚", mensaje: "Reddit: Nuevo post popular", tipo: "twitter", peso: 3 }
-];
-
-var listadoNodos = new vis.DataSet([]);
-var listadoConexiones = new vis.DataSet([]);
-var red = null;
-
-var estado_sistema = {
-    nodo_activo: "",
-    historial: {},
-    tareas_activas: []
-};
-
-var nodosBase = ["🧠 Cerebro", "💡 Plasticidad", "🧬 Sinapsis", "🌐 Conexiones", "⚡ Caos"];
-
-var particulas = [];
-var canvas, ctx;
-
-function initParticulas() {
-    canvas = document.getElementById('canvasParticulas');
-    ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    for (var i = 0; i < 120; i++) {
-        particulas.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            vx: (Math.random() - 0.5) * 1,
-            vy: (Math.random() - 0.5) * 1,
-            size: Math.random() * 3 + 0.5,
-            opacity: Math.random() * 0.4 + 0.05
-        });
-    }
-    animarParticulas();
-}
-
-function animarParticulas() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    particulas.forEach(function(p) {
-        p.x += p.vx;
-        p.y += p.vy;
-        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(197,160,89,' + p.opacity + ')';
-        ctx.fill();
-    });
-    for (var i = 0; i < particulas.length; i++) {
-        for (var j = i + 1; j < particulas.length; j++) {
-            var dx = particulas[i].x - particulas[j].x;
-            var dy = particulas[i].y - particulas[j].y;
-            var dist = Math.sqrt(dx*dx + dy*dy);
-            if (dist < 200) {
-                ctx.beginPath();
-                ctx.moveTo(particulas[i].x, particulas[i].y);
-                ctx.lineTo(particulas[j].x, particulas[j].y);
-                ctx.strokeStyle = 'rgba(197,160,89,' + (0.03 * (1 - dist/200)) + ')';
-                ctx.lineWidth = 0.5;
-                ctx.stroke();
-            }
-        }
-    }
-    requestAnimationFrame(animarParticulas);
-}
-
-function inicializarGrafo() {
-    var contenedor = document.getElementById('grafo');
-    var datos = { nodes: listadoNodos, edges: listadoConexiones };
-    var opciones = {
-        nodes: {
-            shape: 'dot',
-            font: {
-                size: 12,
-                color: '#1B3022',
-                face: 'Inter',
-                bold: false
-            },
-            borderWidth: 1.5,
-            color: {
-                border: '#C5A059',
-                background: '#F5F0EB',
-                highlight: {
-                    border: '#D4B06A',
-                    background: '#EDE8E2'
-                }
-            }
-        },
-        edges: {
-            width: 1.5,
-            smooth: { type: 'continuous', roundness: 0.5 },
-            color: {
-                color: 'rgba(197,160,89,0.25)',
-                highlight: '#C5A059',
-                inherit: false
-            },
-            arrows: { to: { enabled: false } }
-        },
-        physics: {
-            solver: 'forceAtlas2Based',
-            forceAtlas2Based: {
-                gravitationalConstant: -80,
-                centralGravity: 0.01,
-                springLength: 120,
-                springConstant: 0.08,
-                damping: 0.4
-            },
-            stabilization: { iterations: 150 }
-        },
-        interaction: {
-            hover: true,
-            tooltipDelay: 200,
-            navigationButtons: false,
-            keyboard: false
-        },
-        background: {
-            color: 'rgba(248,245,242,0.0)'
-        }
-    };
-    red = new vis.Network(contenedor, datos, opciones);
-}
-
-function actualizarGrafo() {
-    var ahora = Date.now() / 1000;
-    var nodoActivoActual = estado_sistema.nodo_activo;
-    var contadorConexiones = {};
-    listadoConexiones.get().forEach(function(c) {
-        contadorConexiones[c.from] = (contadorConexiones[c.from] || 0) + 1;
-        contadorConexiones[c.to] = (contadorConexiones[c.to] || 0) + 1;
-    });
-    Object.keys(estado_sistema.historial).forEach(function(nombre) {
-        var info = estado_sistema.historial[nombre];
-        var tiempoInactivo = ahora - info.ultimo_visto;
-        var esInactivo = tiempoInactivo > 20 && info.categoria !== "Raiz";
-        var esImportante = (contadorConexiones[nombre] || 0) > 3 && info.categoria !== "Raiz";
-        var colorNodo = { background: '#F5F0EB', border: '#C5A059' };
-        var tamaño = nombre === "🧠 Cerebro" ? 30 : (info.categoria === "Raiz" ? 22 : 12);
-        var borderWidth = 1.5;
-        var etiqueta = nombre;
-        var fontColor = '#1B3022';
-        if (nombre === nodoActivoActual) {
-            borderWidth = 3;
-            tamaño += 4;
-            colorNodo = { background: '#E8E0D8', border: '#C5A059' };
-        } else if (esInactivo) {
-            etiqueta = "";
-            if (esImportante) {
-                colorNodo = { background: '#EDE8E2', border: '#D4C5A0' };
-                tamaño = 14;
-            } else {
-                colorNodo = { background: '#F8F5F2', border: '#E8E0D8' };
-                tamaño = 8;
-            }
-        } else if (esImportante) {
-            colorNodo = { background: '#E8E0D8', border: '#C5A059' };
-            tamaño = 18;
-            borderWidth = 2;
-        } else if (info.categoria === "Raiz") {
-            colorNodo = { background: '#EDE8E2', border: '#C5A059' };
-            tamaño = 24;
-            borderWidth = 2;
-        }
-        if (!listadoNodos.get(nombre)) {
-            listadoNodos.add({
-                id: nombre,
-                label: etiqueta,
-                color: colorNodo,
-                size: tamaño,
-                borderWidth: borderWidth,
-                font: { color: fontColor, size: 12, face: 'Inter', bold: false }
-            });
-            if (info.categoria === "Navegador Web") {
-                listadoConexiones.add({
-                    id: "NW-" + nombre,
-                    from: "🌐 Conexiones",
-                    to: nombre,
-                    color: { color: 'rgba(197,160,89,0.3)' },
-                    width: 1
-                });
-            }
-            if (info.categoria === "Programas/Apps") {
-                listadoConexiones.add({
-                    id: "PA-" + nombre,
-                    from: "⚡ Caos",
-                    to: nombre,
-                    color: { color: 'rgba(197,160,89,0.3)' },
-                    width: 1
-                });
-            }
-            if (nombre === "🌐 Conexiones" || nombre === "⚡ Caos") {
-                listadoConexiones.add({
-                    id: "MA-" + nombre,
-                    from: "🧠 Cerebro",
-                    to: nombre,
-                    color: { color: 'rgba(197,160,89,0.4)' },
-                    width: 1.5
-                });
-            }
-        } else {
-            listadoNodos.update({
-                id: nombre,
-                label: etiqueta,
-                color: colorNodo,
-                size: tamaño,
-                borderWidth: borderWidth,
-                font: { color: fontColor, size: 12, face: 'Inter', bold: false }
-            });
-        }
-    });
-    listadoConexiones.get().forEach(function(c) {
-        var nodoOrigen = listadoNodos.get(c.from);
-        var nodoDestino = listadoNodos.get(c.to);
-        if (nodoOrigen && nodoDestino) {
-            var colorLinea = 'rgba(197,160,89,0.2)';
-            var anchoLinea = 1;
-            if (c.from === nodoActivoActual || c.to === nodoActivoActual) {
-                colorLinea = '#C5A059';
-                anchoLinea = 2.5;
-            } else if (nodoOrigen.label === "" && nodoDestino.label === "") {
-                colorLinea = 'rgba(197,160,89,0.05)';
-                anchoLinea = 0.5;
-            } else if (c.from === "🧠 Cerebro" || c.to === "🧠 Cerebro") {
-                colorLinea = 'rgba(197,160,89,0.35)';
-                anchoLinea = 1.8;
-            } else if (c.from === "🌐 Conexiones" || c.to === "🌐 Conexiones" || c.from === "⚡ Caos" || c.to === "⚡ Caos") {
-                colorLinea = 'rgba(197,160,89,0.25)';
-                anchoLinea = 1.2;
-            }
-            listadoConexiones.update({
-                id: c.id,
-                color: { color: colorLinea, highlight: '#C5A059' },
-                width: anchoLinea,
-                smooth: { type: 'continuous', roundness: 0.5 }
-            });
-        }
-    });
-}
-
-function mostrarNotificacion(tipo, mensaje, icono, distraccion) {
-    var container = document.getElementById('notificaciones');
-    var notif = document.createElement('div');
-    notif.className = 'notificacion ' + (tipo === 'distraccion' ? 'distraccion' : 'importante');
-    
-    var rotacion = (Math.random() - 0.5) * 4;
-    notif.style.transform = 'rotate(' + rotacion + 'deg)';
-    
-    notif.innerHTML = `
-        <div class="notif-header">
-            <span class="icono">${icono || '🔔'}</span>
-            <span>${tipo === 'distraccion' ? '⚠️ Distracción' : '📌 Nueva tarea'}</span>
-            <span class="badge">${tipo === 'distraccion' ? 'Interrupción' : 'Actividad'}</span>
-        </div>
-        <div class="notif-body">${mensaje}</div>
-        <div class="notif-tiempo">ahora</div>
-    `;
-    container.appendChild(notif);
-    if (tipo === 'distraccion' && distraccion) {
-        var intensidad = distraccion.peso || 1;
-        ejecutarComportamientoNotificacion(distraccion.tipo, intensidad);
-    }
-    setTimeout(function() {
-        notif.style.opacity = '0';
-        notif.style.transform = 'translateX(30px) rotate(' + (rotacion + 5) + 'deg)';
-        notif.style.transition = 'all 0.5s ease';
-        setTimeout(function() {
-            if (notif.parentNode) notif.remove();
-        }, 500);
-    }, 6000 + Math.random() * 2000);
-    
-    while (container.children.length > 15) {
-        container.firstChild.remove();
-    }
-}
-
 var textoHolzerInterval = null;
 
 function mostrarTextoHolzer() {
     var el = document.getElementById('textoHolzer');
+    if (!el) return;
     var idx = Math.floor(Math.random() * textosHolzer.length);
     var texto = textosHolzer[idx];
     var x = 5 + Math.random() * 90;
@@ -672,487 +1098,33 @@ function mostrarTextoHolzer() {
     el.classList.add('activo');
     setTimeout(function() {
         el.classList.remove('activo');
-    }, 5000 + Math.random() * 2000);
-}
-
-function agregarActividad(nombre, categoria, esPrincipal) {
-    var ahora = Date.now() / 1000;
-    estado_sistema.historial[nombre] = {
-        categoria: categoria,
-        ultimo_visto: ahora
-    };
-    if (esPrincipal) {
-        estado_sistema.tareas_activas.push(nombre);
-        estadisticas.totalActividades++;
-    }
-    var idConexion = "con-" + nombre;
-    if (!listadoConexiones.get(idConexion)) {
-        var baseDestino = ["🧠 Cerebro", "💡 Plasticidad", "🌐 Conexiones", "⚡ Caos"][Math.floor(Math.random() * 4)];
-        listadoConexiones.add({
-            id: idConexion,
-            from: nombre,
-            to: baseDestino,
-            color: { color: 'rgba(197,160,89,0.3)' }
-        });
-    }
-    estado_sistema.tareas_activas.forEach(function(tarea) {
-        if (tarea !== nombre && Math.random() < 0.6) {
-            var id = "multi-" + nombre + "-" + tarea;
-            if (!listadoConexiones.get(id)) {
-                listadoConexiones.add({
-                    id: id,
-                    from: nombre,
-                    to: tarea,
-                    color: { color: 'rgba(197,160,89,0.2)' },
-                    dashes: Math.random() < 0.3
-                });
-            }
-        }
-    });
-    estado_sistema.nodo_activo = nombre;
-}
-
-function abandonarActividad(nombre) {
-    var ahora = Date.now() / 1000;
-    estado_sistema.historial[nombre].ultimo_visto = ahora - 20;
-    estado_sistema.tareas_activas = estado_sistema.tareas_activas.filter(function(t) {
-        return t !== nombre;
-    });
-    estadisticas.totalAbandonadas++;
-}
-
-function seleccionarDistraccion() {
-    var totalPeso = 0;
-    distracciones.forEach(function(d) {
-        totalPeso += d.peso;
-    });
-    var random = Math.random() * totalPeso;
-    var acumulado = 0;
-    for (var i = 0; i < distracciones.length; i++) {
-        acumulado += distracciones[i].peso;
-        if (random <= acumulado) {
-            return distracciones[i];
-        }
-    }
-    return distracciones[0];
-}
-
-function generarTareaAleatoria() {
-    var keys = Object.keys(actividades);
-    var key = keys[Math.floor(Math.random() * keys.length)];
-    var actividad = actividades[key];
-    var sub = actividad.subactividades[Math.floor(Math.random() * actividad.subactividades.length)];
-    var nombre = sub + " " + (++contadorNodos);
-    var categoria = actividad.categoria;
-    return { nombre: nombre, categoria: categoria, padre: key };
+    }, 6000);
 }
 
 // ============================================
-// FRAGMENTACIÓN CEREBRAL - ANÁLISIS DINÁMICO
+// INICIALIZACIÓN
 // ============================================
-function calcularFragmentacionCerebral() {
-    var categorias = {
-        'productividad': 0,
-        'social': 0,
-        'entretenimiento': 0,
-        'distraccion': 0,
-        'estudio': 0,
-        'trabajo': 0,
-        'caos': 0,
-        'otro': 0
-    };
-    
-    var totalPeso = 0;
-    var ahora = Date.now() / 1000;
-    var tareasActivas = estado_sistema.tareas_activas;
-    var historial = estado_sistema.historial;
-    
-    tareasActivas.forEach(function(tarea) {
-        var info = historial[tarea];
-        if (!info) return;
-        var peso = 1;
-        var tiempoActivo = ahora - info.ultimo_visto;
-        if (tiempoActivo < 5) peso = 3;
-        else if (tiempoActivo < 15) peso = 2;
-        else peso = 1;
-        
-        var categoria = info.categoria || 'otro';
-        var nombreLower = tarea.toLowerCase();
-        if (categoria === 'Programas/Apps' || categoria === 'Navegador Web') {
-            if (nombreLower.includes('whatsapp') || nombreLower.includes('slack') || 
-                nombreLower.includes('twitter') || nombreLower.includes('instagram') ||
-                nombreLower.includes('facebook') || nombreLower.includes('social')) {
-                categorias.social += peso;
-            } else if (nombreLower.includes('youtube') || nombreLower.includes('netflix') || 
-                       nombreLower.includes('spotify') || nombreLower.includes('steam') ||
-                       nombreLower.includes('epic') || nombreLower.includes('twitch') ||
-                       nombreLower.includes('entretenimiento') || nombreLower.includes('juego')) {
-                categorias.entretenimiento += peso;
-            } else if (nombreLower.includes('gmail') || nombreLower.includes('calendar') || 
-                       nombreLower.includes('jira') || nombreLower.includes('zoom') ||
-                       nombreLower.includes('teams') || nombreLower.includes('trabajo')) {
-                categorias.trabajo += peso;
-            } else if (nombreLower.includes('moodle') || nombreLower.includes('google scholar') || 
-                       nombreLower.includes('investigación') || nombreLower.includes('estudio') ||
-                       nombreLower.includes('docs') || nombreLower.includes('sheets')) {
-                categorias.estudio += peso;
-            } else if (nombreLower.includes('figma') || nombreLower.includes('autocad') || 
-                       nombreLower.includes('photoshop') || nombreLower.includes('premiere') ||
-                       nombreLower.includes('diseño')) {
-                categorias.productividad += peso;
-            } else {
-                categorias.productividad += peso * 0.5;
-                categorias.otro += peso * 0.5;
-            }
-        } else {
-            categorias.otro += peso;
-        }
-        totalPeso += peso;
-    });
-    
-    var notificaciones = document.getElementById('notificaciones').children;
-    var distraccionesRecientes = 0;
-    for (var i = 0; i < Math.min(notificaciones.length, 10); i++) {
-        var notif = notificaciones[i];
-        if (notif && notif.classList && notif.classList.contains('distraccion')) {
-            distraccionesRecientes++;
-        }
-    }
-    categorias.distraccion = distraccionesRecientes * 2;
-    totalPeso += categorias.distraccion;
-    
-    var caosBase = estadisticas.totalCambios * 0.5 + estadisticas.totalAbandonadas * 1.5;
-    categorias.caos = Math.min(caosBase, 30);
-    totalPeso += categorias.caos;
-    
-    if (estadisticas.totalAbandonadas > 0) {
-        categorias.productividad = Math.max(0, categorias.productividad - estadisticas.totalAbandonadas * 2);
-        categorias.distraccion += estadisticas.totalAbandonadas * 0.5;
-    }
-    
-    var total = 0;
-    for (var key in categorias) {
-        total += categorias[key];
-    }
-    if (total === 0) {
-        return {
-            productividad: 70,
-            estudio: 20,
-            social: 5,
-            otro: 5,
-            total: 100
-        };
-    }
-    
-    var resultado = {};
-    for (var key in categorias) {
-        resultado[key] = Math.round((categorias[key] / total) * 100);
-    }
-    
-    var suma = 0;
-    for (var key in resultado) {
-        suma += resultado[key];
-    }
-    if (suma !== 100 && suma > 0) {
-        var diff = 100 - suma;
-        var maxKey = Object.keys(resultado).reduce(function(a, b) {
-            return resultado[a] > resultado[b] ? a : b;
-        });
-        resultado[maxKey] = Math.max(0, resultado[maxKey] + diff);
-    }
-    
-    if (tareasActivas.length === 0) {
-        resultado.productividad = 40;
-        resultado.estudio = 30;
-        resultado.social = 10;
-        resultado.otro = 20;
-    }
-    
-    return resultado;
-}
-
-function actualizarMetricasFragmentacion() {
-    var fragmentacion = calcularFragmentacionCerebral();
-    var totalActivas = estado_sistema.tareas_activas.length;
-    
-    var container = document.getElementById('metricasArte');
-    if (!container) return;
-    
-    var html = `
-        <div class="titulo-fragmentacion">🧩 Fragmentación Cerebral</div>
-    `;
-    
-    var categoriasMostrar = [
-        { key: 'productividad', label: '🧠 Productividad', color: 'productividad' },
-        { key: 'trabajo', label: '💼 Trabajo', color: 'trabajo' },
-        { key: 'estudio', label: '📚 Estudio', color: 'estudio' },
-        { key: 'social', label: '📱 Social Media', color: 'social' },
-        { key: 'entretenimiento', label: '🎮 Entretenimiento', color: 'entretenimiento' },
-        { key: 'distraccion', label: '⚠️ Distracción', color: 'distraccion' },
-        { key: 'caos', label: '💥 Caos', color: 'caos' },
-        { key: 'otro', label: '❓ Otro', color: 'otro' }
-    ];
-    
-    var tieneDatos = false;
-    categoriasMostrar.forEach(function(cat) {
-        var valor = fragmentacion[cat.key] || 0;
-        if (valor > 0) {
-            tieneDatos = true;
-            html += `
-                <div class="metrica-arte">
-                    <span class="label">${cat.label}</span>
-                    <div class="barra-arte">
-                        <div class="fill ${cat.color}" style="width: ${valor}%;"></div>
-                    </div>
-                    <span class="valor">${valor}%</span>
-                </div>
-            `;
-        }
-    });
-    
-    if (!tieneDatos || totalActivas === 0) {
-        html = `
-            <div class="titulo-fragmentacion">🧘 Cerebro en Reposo</div>
-            <div class="metrica-arte">
-                <span class="label">🧠 Enfoque</span>
-                <div class="barra-arte">
-                    <div class="fill productividad" style="width: 100%;"></div>
-                </div>
-                <span class="valor">100%</span>
-            </div>
-        `;
-    }
-    
-    var estadoCerebro = '';
-    if (totalActivas === 0) {
-        estadoCerebro = '🧘 En reposo';
-    } else if (fragmentacion.caos > 30 || fragmentacion.distraccion > 25) {
-        estadoCerebro = '💀 Colapso inminente';
-    } else if (fragmentacion.caos > 15 || fragmentacion.distraccion > 15) {
-        estadoCerebro = '🌀 Fragmentado';
-    } else if (totalActivas > 3) {
-        estadoCerebro = '⚡ Multitarea activa';
-    } else {
-        estadoCerebro = '🎯 Enfoque parcial';
-    }
-    
-    var categoriasActivas = [];
-    for (var key in fragmentacion) {
-        if (fragmentacion[key] > 10) {
-            categoriasActivas.push(key);
-        }
-    }
-    
-    html += `
-        <div id="fragmentacionDetalle">
-            <span>${estadoCerebro}</span>
-            ${categoriasActivas.length > 0 ? '· ' + categoriasActivas.length + ' áreas activas' : ''}
-            ${totalActivas > 0 ? '· ' + totalActivas + ' tareas' : ''}
-        </div>
-    `;
-    
-    container.innerHTML = html;
-}
-
-function simularActividad() {
-    var ahora = Date.now() / 1000;
-    var elapsed = (Date.now() - tiempoInicio) / 1000;
-    var mins = Math.floor(elapsed / 60);
-    var secs = Math.floor(elapsed % 60);
-    document.getElementById('timerDisplay').textContent =
-        String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
-    if (elapsed >= DURACION_TOTAL) {
-        document.getElementById('colapsoModal').classList.add('visible');
-        document.getElementById('estadoDisplay').textContent = '💀 Colapso';
-        document.getElementById('totalActividades').textContent = estadisticas.totalActividades;
-        document.getElementById('totalAbandonadas').textContent = estadisticas.totalAbandonadas;
-        document.getElementById('totalCambios').textContent = estadisticas.totalCambios;
-        simulacionActiva = false;
-        if (intervaloSimulacion) clearInterval(intervaloSimulacion);
-        if (textoHolzerInterval) clearInterval(textoHolzerInterval);
-        return;
-    }
-    faseActual = Math.floor(elapsed / 20);
-    var tareasActivas = estado_sistema.tareas_activas.length;
-    document.getElementById('tareasActivas').textContent = tareasActivas + ' activas';
-    document.getElementById('faseDisplay').textContent = 'Fase ' + (faseActual + 1) + '/6';
-    actualizarPersonajePorEstado(faseActual, tareasActivas);
-    
-    var probTarea = 0.15 + (faseActual * 0.03);
-    var probDistraccion = 0.12 + (faseActual * 0.04);
-    var probAbandono = 0.05 + (faseActual * 0.03);
-    
-    if (Math.random() < probTarea && tareasActivas < 12) {
-        var tarea = generarTareaAleatoria();
-        agregarActividad(tarea.nombre, tarea.categoria, true);
-        mostrarNotificacion('importante', 'Nueva tarea: ' + tarea.nombre, '📌');
-        
-        if (Math.random() < 0.4) {
-            var subTarea = generarTareaAleatoria();
-            agregarActividad(subTarea.nombre, subTarea.categoria, true);
-            listadoConexiones.add({
-                id: "sub-" + subTarea.nombre,
-                from: tarea.nombre,
-                to: subTarea.nombre,
-                color: { color: 'rgba(197,160,89,0.3)' }
-            });
-            mostrarNotificacion('importante', 'Sub-tarea: ' + subTarea.nombre, '📎');
-        }
-    }
-    
-    if (Math.random() < probDistraccion) {
-        var dist = seleccionarDistraccion();
-        mostrarNotificacion('distraccion', dist.mensaje, dist.icono, dist);
-        estadisticas.totalCambios++;
-        
-        if (Math.random() < 0.3) {
-            setTimeout(function() {
-                var dist2 = seleccionarDistraccion();
-                mostrarNotificacion('distraccion', dist2.mensaje, dist2.icono, dist2);
-                estadisticas.totalCambios++;
-            }, 500 + Math.random() * 1000);
-        }
-    }
-    
-    if (Math.random() < probAbandono && estado_sistema.tareas_activas.length > 1) {
-        var activas = estado_sistema.tareas_activas;
-        var idx = Math.floor(Math.random() * activas.length);
-        var tareaAbandonar = activas[idx];
-        if (tareaAbandonar && tareaAbandonar !== "🧠 Cerebro") {
-            abandonarActividad(tareaAbandonar);
-            mostrarNotificacion('distraccion', '❌ Abandonada: ' + tareaAbandonar, '❌');
-        }
-    }
-    
-    var caosNivel = Math.min(100, (tareasActivas * 8) + (estadisticas.totalCambios * 2) + (faseActual * 5));
-    if (caosNivel > 60) {
-        document.getElementById('estadoDisplay').textContent = '🔴 Caos';
-    } else if (caosNivel > 30) {
-        document.getElementById('estadoDisplay').textContent = '🟡 Sobrecarga';
-    } else {
-        document.getElementById('estadoDisplay').textContent = '🟢 Enfoque';
-    }
-    
-    actualizarMetricasFragmentacion();
-    
-    var plasticidad = Math.max(0, 100 - (estadisticas.totalAbandonadas * 5) - (tareasActivas * 3) - (faseActual * 4));
-    var desorden = Math.min(100, (tareasActivas * 10) + (estadisticas.totalAbandonadas * 4) + (faseActual * 6) + (estadisticas.totalCambios * 1.5));
-    var atencion = Math.max(0, 100 - (faseActual * 12) - (estadisticas.totalAbandonadas * 4) - (tareasActivas * 2) - (estadisticas.totalCambios * 0.5));
-    
-    document.getElementById('plasticidadFill') && (document.getElementById('plasticidadFill').style.width = plasticidad + '%');
-    document.getElementById('desordenFill') && (document.getElementById('desordenFill').style.width = desorden + '%');
-    document.getElementById('atencionFill') && (document.getElementById('atencionFill').style.width = atencion + '%');
-    
-    actualizarGrafo();
-    
-    if (Math.random() < 0.06 + (faseActual * 0.01)) {
-        mostrarTextoHolzer();
-    }
-}
-
-function iniciarExperiencia() {
-    document.getElementById('overlayInicial').classList.add('oculto');
-    initParticulas();
-    listadoNodos.clear();
-    listadoConexiones.clear();
-    estado_sistema.historial = {};
-    estado_sistema.tareas_activas = [];
-    contadorNodos = 0;
-    estadisticas = {
-        totalActividades: 0,
-        totalAbandonadas: 0,
-        totalCambios: 0
-    };
-    animacionPersonaje.modo = 'sentado';
-    animacionPersonaje.frameActual = 0;
-    animacionPersonaje.direccion = 1;
-    animacionPersonaje.repeticionesCel3 = 0;
-    animacionPersonaje.repeticionesUltimo = 0;
-    animacionPersonaje.ultimoCambio = Date.now();
-    animacionPersonaje.tiempoAlternancia = 0;
-    animacionPersonaje.animacionActiva = true;
-    animacionPersonaje.pausa = false;
-    animacionPersonaje.velocidadActual = animacionPersonaje.velocidadBase;
-    var img = document.getElementById('personajeImg');
-    if (img) img.src = 'imagen/sent1.avif';
-    
-    nodosBase.forEach(function(n) {
-        estado_sistema.historial[n] = { categoria: "Raiz", ultimo_visto: Date.now() / 1000 };
-        listadoNodos.add({
-            id: n,
-            label: n,
-            color: { background: '#EDE8E2', border: '#C5A059' },
-            size: n === "🧠 Cerebro" ? 30 : 22,
-            borderWidth: 2,
-            font: { color: '#1B3022', size: 14, face: 'Inter', bold: true }
-        });
-    });
-    
-    listadoConexiones.add({ id: "c1", from: "🧠 Cerebro", to: "💡 Plasticidad", color: { color: 'rgba(197,160,89,0.4)' }, width: 2 });
-    listadoConexiones.add({ id: "c2", from: "🧠 Cerebro", to: "🧬 Sinapsis", color: { color: 'rgba(197,160,89,0.4)' }, width: 2 });
-    listadoConexiones.add({ id: "c3", from: "🧠 Cerebro", to: "🌐 Conexiones", color: { color: 'rgba(197,160,89,0.4)' }, width: 2 });
-    listadoConexiones.add({ id: "c4", from: "🧠 Cerebro", to: "⚡ Caos", color: { color: 'rgba(197,160,89,0.4)' }, width: 2 });
-    listadoConexiones.add({ id: "c5", from: "💡 Plasticidad", to: "🧬 Sinapsis", color: { color: 'rgba(197,160,89,0.2)' }, width: 1 });
-    listadoConexiones.add({ id: "c6", from: "🌐 Conexiones", to: "⚡ Caos", color: { color: 'rgba(197,160,89,0.2)' }, width: 1 });
-    
-    tiempoInicio = Date.now();
-    simulacionActiva = true;
-    if (intervaloSimulacion) clearInterval(intervaloSimulacion);
-    intervaloSimulacion = setInterval(function() {
-        if (simulacionActiva) {
-            simularActividad();
-            actualizarPersonaje(Date.now());
-        }
-    }, 300);
-    if (textoHolzerInterval) clearInterval(textoHolzerInterval);
-    textoHolzerInterval = setInterval(mostrarTextoHolzer, 8000);
-    setTimeout(actualizarGrafo, 100);
-}
-
-function reiniciarExperiencia() {
-    simulacionActiva = false;
-    if (intervaloSimulacion) {
-        clearInterval(intervaloSimulacion);
-        intervaloSimulacion = null;
-    }
-    if (textoHolzerInterval) {
-        clearInterval(textoHolzerInterval);
-        textoHolzerInterval = null;
-    }
-    listadoNodos.clear();
-    listadoConexiones.clear();
-    estado_sistema.historial = {};
-    estado_sistema.tareas_activas = [];
-    document.getElementById('colapsoModal').classList.remove('visible');
-    document.getElementById('overlayInicial').classList.remove('oculto');
-    document.getElementById('notificaciones').innerHTML = '';
-    document.getElementById('timerDisplay').textContent = '00:00';
-    document.getElementById('estadoDisplay').textContent = '🟢 Estable';
-    document.getElementById('faseDisplay').textContent = 'Fase 1/6';
-    document.getElementById('tareasActivas').textContent = '0 activas';
-    
-    // Reiniciar métricas de fragmentación
-    actualizarMetricasFragmentacion();
-    
-    var el = document.getElementById('textoHolzer');
-    el.classList.remove('activo');
-    el.textContent = '';
-    animacionPersonaje.modo = 'sentado';
-    animacionPersonaje.frameActual = 0;
-    animacionPersonaje.direccion = 1;
-    animacionPersonaje.repeticionesCel3 = 0;
-    animacionPersonaje.repeticionesUltimo = 0;
-    animacionPersonaje.ultimoCambio = Date.now();
-    animacionPersonaje.tiempoAlternancia = 0;
-    animacionPersonaje.animacionActiva = true;
-    animacionPersonaje.pausa = false;
-    animacionPersonaje.velocidadActual = animacionPersonaje.velocidadBase;
-    var img = document.getElementById('personajeImg');
-    if (img) img.src = 'imagen/sent1.avif';
-}
-
 window.onload = function() {
     inicializarGrafo();
-    // Inicializar métricas de fragmentación
-    actualizarMetricasFragmentacion();
+    cargarCSV();
+    actualizarMetricas();
+    
+    if (textoHolzerInterval) clearInterval(textoHolzerInterval);
+    textoHolzerInterval = setInterval(mostrarTextoHolzer, 15000);
+    
+    listaTareasContainer = document.getElementById('listaTareas');
+    if (listaTareasContainer) {
+        var div = document.createElement('div');
+        div.className = 'placeholder-message';
+        div.style.cssText = 'grid-column:1/-1;text-align:center;padding:40px 20px;color:var(--text-muted);font-size:13px;';
+        div.innerHTML = '<i class="fas fa-brain" style="font-size:32px;display:block;margin-bottom:10px;opacity:0.3;"></i>Esperando nuevas tareas...<br><small>Presiona "Ingresar" para comenzar</small>';
+        listaTareasContainer.appendChild(div);
+    }
+    
+    var zona = document.getElementById('zonaNotificaciones');
+    if (zona && !document.getElementById('notificaciones')) {
+        var div = document.createElement('div');
+        div.id = 'notificaciones';
+        zona.appendChild(div);
+    }
 };

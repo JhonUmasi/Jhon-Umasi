@@ -28,53 +28,60 @@
             <button onclick="iniciarExperiencia()" class="btn-iniciar">
                 <i class="fas fa-play"></i> INGRESAR
             </button>
-            <p class="duracion">Duración: 2 minutos</p>
+            <p class="duracion">Sin límite de tiempo</p>
         </div>
     </div>
 
-    <!-- ===== PANEL IZQUIERDO: CAOS VISUAL ===== -->
+    <!-- ===== PANEL IZQUIERDO ===== -->
     <div class="panel-izquierdo">
-        <!-- Canvas de partículas (fondo) -->
         <canvas id="canvasParticulas"></canvas>
 
-        <!-- Personaje animado -->
+        <!-- PERSONAJE - 20% -->
         <div id="personajeContainer">
             <img id="personajeImg" src="imagen/sent1.avif" alt="Personaje">
         </div>
 
-        <!-- Zona de notificaciones caóticas -->
-        <div id="zonaCaos">
+        <!-- NOTIFICACIONES - 8% -->
+        <div id="zonaNotificaciones">
             <div id="notificaciones"></div>
         </div>
 
-        <!-- Métricas de Fragmentación Cerebral -->
+        <!-- TAREAS - GALERÍA - 62% -->
+        <div id="zonaTareas">
+            <div id="listaTareas"></div>
+        </div>
+
+        <!-- MÉTRICAS - 10% -->
         <div id="metricasArte">
-            <div class="titulo-fragmentacion">🧩 Fragmentación Cerebral</div>
+            <div class="titulo-fragmentacion">🧩 Estado Mental</div>
             <div class="metrica-arte">
-                <span class="label">🧠 Enfoque</span>
+                <span class="label">🎯 Atención</span>
                 <div class="barra-arte">
-                    <div class="fill productividad" style="width: 100%;"></div>
+                    <div class="fill atencion" style="width: 100%;"></div>
                 </div>
-                <span class="valor">100%</span>
+                <span class="valor" id="atencionValor">100%</span>
+            </div>
+            <div class="metrica-arte">
+                <span class="label">🧠 Plasticidad</span>
+                <div class="barra-arte">
+                    <div class="fill plasticidad" style="width: 100%;"></div>
+                </div>
+                <span class="valor" id="plasticidadValor">100%</span>
             </div>
             <div id="fragmentacionDetalle">
-                <span>🧘 En reposo</span>
+                <span id="estadoMental">🧘 En reposo</span>
             </div>
         </div>
     </div>
 
-    <!-- ===== PANEL DERECHO: GRAFO CAÓTICO ===== -->
+    <!-- ===== PANEL DERECHO: GRAFO ===== -->
     <div class="panel-derecho">
-        <!-- Texto de Jenny Holzer -->
         <div id="textoHolzer" class="texto-holzer"></div>
 
-        <!-- Indicador -->
         <div id="indicador">
             <span id="timerDisplay">00:00</span>
             <span style="margin:0 8px;opacity:0.3;">|</span>
-            <span id="estadoDisplay">🟢 Estable</span>
-            <span style="margin:0 8px;opacity:0.3;">|</span>
-            <span id="faseDisplay">Fase 1/6</span>
+            <span id="estadoDisplay">🟢 Enfoque</span>
             <span style="margin:0 8px;opacity:0.3;">|</span>
             <span id="tareasActivas">0 activas</span>
             <button onclick="reiniciarExperiencia()" class="btn-reiniciar-arte">
@@ -82,7 +89,6 @@
             </button>
         </div>
 
-        <!-- Grafo -->
         <div id="grafo"></div>
     </div>
 
@@ -103,9 +109,9 @@
                         <span>— Byung-Chul Han</span>
                     </div>
                     <div class="estadisticas-finales">
-                        <p style="font-size:14px;color:#72767d;">Actividades iniciadas: <strong id="totalActividades" style="color:#dcddde;">0</strong></p>
-                        <p style="font-size:14px;color:#72767d;">Actividades abandonadas: <strong id="totalAbandonadas" style="color:#ed4245;">0</strong></p>
-                        <p style="font-size:14px;color:#72767d;">Cambios de tarea: <strong id="totalCambios" style="color:#faa61a;">0</strong></p>
+                        <p>Tareas completadas: <strong id="totalCompletadas" style="color:#43b581;">0</strong></p>
+                        <p>Tareas incompletas: <strong id="totalIncompletas" style="color:#ed4245;">0</strong></p>
+                        <p>Nodos desconectados: <strong id="totalDesconectados" style="color:#95A5A6;">0</strong></p>
                     </div>
                     <button onclick="reiniciarExperiencia()" class="btn-reiniciar-grande">
                         <i class="fas fa-redo"></i> Reiniciar

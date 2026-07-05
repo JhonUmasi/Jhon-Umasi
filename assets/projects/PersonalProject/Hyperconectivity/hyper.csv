@@ -1,0 +1,31 @@
+id,tarea,descripcion,categoria,subcategoria,clicks_necesarios,tiempo_limite,prioridad_base,es_distractor
+1,Revisar Excel financiero,"Revisar balance mensual y corregir errores de fórmulas",Trabajo,Contabilidad,8,15,9,false
+2,Responder WhatsApp del jefe,"Confirmar cambios en el presupuesto del proyecto",Trabajo,Comunicacion,4,12,8,false
+3,Revisar correos Gmail,"Leer y responder correos pendientes de clientes",Trabajo,Comunicacion,5,14,7,false
+4,Actualizar Dashboard Power BI,"Actualizar gráficos de ventas y métricas clave",Trabajo,Analisis,10,15,9,false
+5,Preparar informe semanal,"Escribir resumen de avances del equipo",Trabajo,Reportes,8,15,8,false
+6,Reunión Zoom con equipo,"Discutir objetivos y metas del mes",Trabajo,Reuniones,6,14,8,false
+7,WhatsApp de amigo,"Invitación a cenar esta noche",Social,Amigos,2,8,3,true
+8,WhatsApp de compañero trabajo,"Pregunta sobre código de facturación",Trabajo,Comunicacion,3,10,6,false
+9,Instagram notificaciones,"Fotos nuevas de familia y amigos",Social,Redes,2,6,2,true
+10,YouTube tutorial,"Video de Excel avanzado recomendado",Aprendizaje,Videos,5,12,4,false
+11,Revisar Slack del equipo,"Nuevos mensajes en canales importantes",Trabajo,Comunicacion,4,11,7,false
+12,Correo de cliente importante,"Revisar cotización y responder propuesta",Trabajo,Comunicacion,5,13,8,false
+13,Spotify sugerencia,"Nuevo álbum de tu artista favorito",Entretenimiento,Musica,2,6,2,true
+14,Notificación de Reddit,"Post interesante sobre productividad",Aprendizaje,Foros,3,10,3,false
+15,WhatsApp de familiar,"Recordatorio de reunión familiar",Social,Familia,2,8,3,true
+16,Revisar calendario Google,"Organizar reuniones de la semana",Trabajo,Organizacion,4,10,6,false
+17,Actualizar Jira,"Mover tareas completadas al backlog",Trabajo,Gestion,6,12,7,false
+18,Leer artículo científico,"Estudio sobre plasticidad cerebral",Aprendizaje,Lectura,6,13,4,false
+19,Revisar informe de gastos,"Verificar gastos del departamento",Trabajo,Contabilidad,7,14,7,false
+20,Planificar proyecto nuevo,"Crear estructura inicial del proyecto",Trabajo,Planificacion,10,15,8,false
+21,WhatsApp de amigo 2,"Planear salida de fin de semana",Social,Amigos,2,8,3,true
+22,Correo de newsletter,"Oferta de curso de especialización",Aprendizaje,Cursos,3,10,3,false
+23,Notificación de LinkedIn,"Oferta de trabajo nueva interesante",Trabajo,Comunicacion,3,9,5,false
+24,Revisar tendencias de mercado,"Analizar competencia y tendencias del sector",Trabajo,Analisis,7,14,7,false
+25,Crear presentación,"Diseñar slides para reunión de mañana",Trabajo,Reportes,9,15,8,false
+26,WhatsApp de proveedor,"Confirmar pedido y fechas de entrega",Trabajo,Comunicacion,3,9,6,false
+27,Revisar documentos legales,"Leer contrato y hacer anotaciones",Trabajo,Lectura,6,13,6,false
+28,TikTok notificaciones,"Videos virales de tus intereses",Entretenimiento,Videos,2,5,1,true
+29,Correo de recursos humanos,"Beneficios y actualizaciones de la empresa",Trabajo,Comunicacion,3,8,4,false
+30,Actualizar perfil profesional,"LinkedIn y portafolio personal",Trabajo,Desarrollo,5,10,4,false

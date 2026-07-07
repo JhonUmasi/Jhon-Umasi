@@ -1,5 +1,5 @@
 // ============================================
-// HYPER.JS - SISTEMA CON ESTADOS IRREVERSIBLES v12
+// HYPER.JS - SISTEMA CON ESTADOS IRREVERSIBLES v13
 // ============================================
 
 var simulacionActiva = false;
@@ -7,8 +7,8 @@ var tiempoInicio = 0;
 var tareasDB = [];
 var tareasActivas = [];
 var tareasCompletadas = [];
-var tareasIncompletas = []; // Tiempo en negativo pero aún conectadas
-var nodosDesconectados = []; // Tiempo <= -limite, divagando sin conexión
+var tareasIncompletas = [];
+var nodosDesconectados = [];
 var totalCompletadas = 0;
 var totalIncompletas = 0;
 var totalDesconectados = 0;
@@ -30,8 +30,14 @@ var estadisticas = {
 // CARGA DEL CSV
 // ============================================
 function cargarCSV() {
+    console.log('Cargando CSV...');
     fetch('hyper.csv')
-        .then(response => response.text())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('No se pudo cargar el CSV');
+            }
+            return response.text();
+        })
         .then(data => {
             var lineas = data.split('\n');
             var headers = lineas[0].split(',');
@@ -50,7 +56,11 @@ function cargarCSV() {
                 tarea.es_distractor = tarea.es_distractor === 'true';
                 tareasDB.push(tarea);
             }
-            console.log('CSV cargado:', tareasDB.length, 'tareas');
+            console.log('CSV cargado correctamente:', tareasDB.length, 'tareas');
+            // Si la simulación ya está activa, generar tareas
+            if (simulacionActiva && tareasActivas.length === 0) {
+                generarTareasIniciales();
+            }
         })
         .catch(error => {
             console.error('Error cargando CSV:', error);
@@ -59,6 +69,7 @@ function cargarCSV() {
 }
 
 function cargarTareasRespaldo() {
+    console.log('Usando tareas de respaldo (no se encontró el CSV)');
     tareasDB = [
         { id: 1, tarea: 'Revisar Excel', descripcion: 'Balance mensual', categoria: 'Trabajo', clicks_necesarios: 8, tiempo_limite: 15, prioridad_base: 9, es_distractor: false },
         { id: 2, tarea: 'WhatsApp jefe', descripcion: 'Confirmar cambios', categoria: 'Trabajo', clicks_necesarios: 4, tiempo_limite: 12, prioridad_base: 8, es_distractor: false },
@@ -69,6 +80,9 @@ function cargarTareasRespaldo() {
         { id: 7, tarea: 'TikTok', descripcion: 'Videos virales', categoria: 'Entretenimiento', clicks_necesarios: 2, tiempo_limite: 5, prioridad_base: 1, es_distractor: true },
         { id: 8, tarea: 'Correos Gmail', descripcion: 'Responder pendientes', categoria: 'Trabajo', clicks_necesarios: 5, tiempo_limite: 14, prioridad_base: 7, es_distractor: false },
     ];
+    if (simulacionActiva && tareasActivas.length === 0) {
+        generarTareasIniciales();
+    }
 }
 
 // ============================================
@@ -156,7 +170,10 @@ function actualizarPrioridades() {
 }
 
 function generarTareaAleatoria() {
-    if (tareasDB.length === 0) return null;
+    if (tareasDB.length === 0) {
+        console.warn('No hay tareas en la base de datos');
+        return null;
+    }
     
     actualizarPrioridades();
     
@@ -167,7 +184,10 @@ function generarTareaAleatoria() {
         !nodosDesconectados.some(d => d.id === t.id)
     );
     
-    if (disponibles.length === 0) return null;
+    if (disponibles.length === 0) {
+        console.log('No hay tareas disponibles');
+        return null;
+    }
     
     var tareasConPeso = disponibles.map(function(t) {
         var peso = t.prioridad_base * (prioridadCategoria[t.categoria] || 1.0);
@@ -179,6 +199,8 @@ function generarTareaAleatoria() {
     });
     
     var totalPeso = tareasConPeso.reduce(function(sum, item) { return sum + item.peso; }, 0);
+    if (totalPeso === 0) return null;
+    
     var random = Math.random() * totalPeso;
     var acumulado = 0;
     
@@ -212,7 +234,7 @@ function agregarTarea(tareaDB) {
         tiempo_limite: tareaDB.tiempo_limite,
         tiempo_restante: tareaDB.tiempo_limite,
         prioridad: tareaDB.prioridad_base,
-        estado: 'activa', // activa, incompleta (negativo), desconectado, completada
+        estado: 'activa',
         es_distractor: tareaDB.es_distractor || false,
         iniciada: Date.now(),
         element: null
@@ -229,7 +251,7 @@ function agregarTarea(tareaDB) {
         if (placeholder) placeholder.remove();
     }
     
-    actualizarGrafoComplejo();
+    actualizarFragmentacionCerebro();
     
     var icono = nuevaTarea.es_distractor ? '🎯' : '📌';
     mostrarNotificacion(icono + ' ' + nuevaTarea.tarea + ' (' + nuevaTarea.clicks_necesarios + ' clicks, ' + nuevaTarea.tiempo_limite + 's)', 
@@ -374,7 +396,7 @@ function completarTarea(id) {
     cambiarModoPersonaje('sentado');
     
     document.getElementById('tareasActivas').textContent = tareasActivas.length + ' activas';
-    actualizarGrafoComplejo();
+    actualizarFragmentacionCerebro();
     actualizarMetricas();
     
     mantenerMinimoTareas();
@@ -383,7 +405,6 @@ function completarTarea(id) {
 function moverAIncompleta(tarea) {
     if (!tarea || tarea.estado !== 'activa') return;
     
-    // Marcar como incompleta (tiempo negativo)
     tarea.estado = 'incompleta';
     tareasActivas = tareasActivas.filter(t => t.id !== tarea.id);
     tareasIncompletas.push(tarea);
@@ -406,17 +427,15 @@ function moverAIncompleta(tarea) {
     }
     
     mostrarNotificacion('⏳ ' + tarea.tarea + ' - tiempo agotado (' + Math.ceil(tarea.tiempo_restante) + 's)', 'fallo');
-    actualizarGrafoComplejo();
+    actualizarFragmentacionCerebro();
     actualizarMetricas();
 }
 
 function moverADesconectado(tarea) {
     if (!tarea) return;
     
-    // Desconectar del grafo - divagar sin rumbo
     tarea.estado = 'desconectado';
     
-    // Remover de donde esté
     tareasActivas = tareasActivas.filter(t => t.id !== tarea.id);
     tareasIncompletas = tareasIncompletas.filter(t => t.id !== tarea.id);
     nodosDesconectados.push(tarea);
@@ -438,13 +457,12 @@ function moverADesconectado(tarea) {
         }
     }
     
-    mostrarNotificacion('🌀 ' + tarea.tarea + ' - desconectado del grafo', 'fallo');
-    actualizarGrafoComplejo();
+    mostrarNotificacion('🌀 ' + tarea.tarea + ' - desconectado del sistema', 'fallo');
+    actualizarFragmentacionCerebro();
     actualizarMetricas();
 }
 
 function mantenerMinimoTareas() {
-    // Mantener al menos 4 tareas activas
     var activas = tareasActivas.filter(t => t.estado === 'activa').length;
     var necesarias = 4 - activas;
     
@@ -459,7 +477,6 @@ function mantenerMinimoTareas() {
         }
     }
     
-    // Si hay muchas incompletas, generar más caos
     var incompletas = tareasIncompletas.length;
     if (incompletas > 2) {
         var caosExtra = Math.min(2, Math.floor(incompletas / 2));
@@ -489,7 +506,7 @@ function mostrarMensajeEspera() {
 }
 
 // ============================================
-// NOTIFICACIONES
+// NOTIFICACIONES CON BORROSO PROGRESIVO
 // ============================================
 function mostrarNotificacion(mensaje, tipo) {
     var container = document.getElementById('notificaciones');
@@ -512,6 +529,10 @@ function mostrarNotificacion(mensaje, tipo) {
     notif.textContent = mensaje;
     container.appendChild(notif);
     
+    // Aplicar nivel de borroso según deterioro
+    var plasticidad = calcularPlasticidad();
+    aplicarNivelBorroso(notif, plasticidad);
+    
     while (container.children.length > 3) {
         container.firstChild.remove();
     }
@@ -526,6 +547,18 @@ function mostrarNotificacion(mensaje, tipo) {
             }, 500);
         }
     }, 4000);
+}
+
+function aplicarNivelBorroso(element, plasticidad) {
+    element.classList.remove('blurred', 'very-blurred', 'extreme-blurred');
+    
+    if (plasticidad < 20) {
+        element.classList.add('extreme-blurred');
+    } else if (plasticidad < 40) {
+        element.classList.add('very-blurred');
+    } else if (plasticidad < 60) {
+        element.classList.add('blurred');
+    }
 }
 
 function obtenerIconoCategoria(categoria) {
@@ -604,222 +637,217 @@ function actualizarMetricas() {
     } else {
         document.getElementById('estadoDisplay').textContent = '🟢 Enfoque';
     }
-}
-
-// ============================================
-// GRAFO - CON ESTADOS IRREVERSIBLES
-// ============================================
-var listadoNodos = new vis.DataSet([]);
-var listadoConexiones = new vis.DataSet([]);
-var red = null;
-
-function inicializarGrafo() {
-    var contenedor = document.getElementById('grafo');
-    var datos = { nodes: listadoNodos, edges: listadoConexiones };
-    var opciones = {
-        nodes: {
-            shape: 'dot',
-            font: { size: 12, color: '#1B3022', face: 'Inter', bold: false },
-            borderWidth: 1.5
-        },
-        edges: {
-            width: 1.5,
-            smooth: { type: 'continuous', roundness: 0.5 },
-            arrows: { to: { enabled: false } }
-        },
-        physics: {
-            solver: 'forceAtlas2Based',
-            forceAtlas2Based: {
-                gravitationalConstant: -100,
-                centralGravity: 0.01,
-                springLength: 150,
-                springConstant: 0.06,
-                damping: 0.4
-            },
-            stabilization: { iterations: 200 }
-        },
-        interaction: { hover: true, tooltipDelay: 300 },
-        background: { color: 'rgba(248,245,242,0.0)' }
-    };
-    red = new vis.Network(contenedor, datos, opciones);
-}
-
-function actualizarGrafoComplejo() {
-    var menteId = '🧠 Mente';
     
-    if (!listadoNodos.get(menteId)) {
-        listadoNodos.add({
-            id: menteId,
-            label: '🧠 Mente',
-            color: { background: '#43b581', border: '#2d7d4e' },
-            size: 35,
-            borderWidth: 3,
-            font: { color: '#1B3022', size: 16, face: 'Inter', bold: true }
-        });
+    actualizarBorrosoNotificaciones(plasticidad);
+}
+
+function actualizarBorrosoNotificaciones(plasticidad) {
+    var notifs = document.querySelectorAll('#notificaciones .notif-item');
+    notifs.forEach(function(el) {
+        el.classList.remove('blurred', 'very-blurred', 'extreme-blurred');
+        if (plasticidad < 20) {
+            el.classList.add('extreme-blurred');
+        } else if (plasticidad < 40) {
+            el.classList.add('very-blurred');
+        } else if (plasticidad < 60) {
+            el.classList.add('blurred');
+        }
+    });
+}
+
+// ============================================
+// CEREBRO FRAGMENTADO - Panel Derecho
+// ============================================
+var brainPieces = [];
+var brainTime = 0;
+var brainImageReady = false;
+var brainCanvas, brainCtx;
+var brainImage = new Image();
+var brainFragmentSize = 20;
+var brainDispersionForce = 2.8;
+var brainGlobalSpeed = 0.0025;
+var brainTargetDispersion = 0;
+var brainCurrentDispersion = 0;
+
+function inicializarCerebro() {
+    brainCanvas = document.getElementById('brainCanvas');
+    if (!brainCanvas) return;
+    brainCtx = brainCanvas.getContext('2d');
+    
+    brainImage.src = 'imagen/cabeza.png';
+    brainImage.onload = function() {
+        brainImageReady = true;
+        initBrainPieces();
+        animarCerebro();
+    };
+    brainImage.onerror = function() {
+        console.warn('No se encontró imagen cabeza.png, usando respaldo');
+        brainImageReady = true;
+        initBrainPiecesFallback();
+        animarCerebro();
+    };
+}
+
+function initBrainPiecesFallback() {
+    brainCanvas.width = window.innerWidth * 0.6;
+    brainCanvas.height = window.innerHeight;
+    
+    brainPieces = [];
+    var cols = 20;
+    var rows = 20;
+    var w = brainCanvas.width / cols;
+    var h = brainCanvas.height / rows;
+    
+    for (var y = 0; y < rows; y++) {
+        for (var x = 0; x < cols; x++) {
+            var cx = x / cols - 0.5;
+            var cy = y / rows - 0.5;
+            var dist = Math.sqrt(cx*cx + cy*cy);
+            if (dist > 0.7) continue;
+            
+            var startX = x * w + w/2 - brainCanvas.width/2 + brainCanvas.width/2;
+            var startY = y * h + h/2 - brainCanvas.height/2 + brainCanvas.height/2;
+            
+            brainPieces.push({
+                startX: startX,
+                startY: startY,
+                curX: startX,
+                curY: startY,
+                w: w,
+                h: h,
+                dx: (Math.random() - 0.5) * 3,
+                dy: (Math.random() - 0.5) * 3,
+                fragility: 0.3 + Math.random() * 0.3,
+                color: `hsl(${200 + Math.random() * 40}, 30%, ${50 + Math.random() * 30}%)`,
+                fallback: true
+            });
+        }
+    }
+}
+
+function initBrainPieces() {
+    brainCanvas.width = window.innerWidth * 0.6;
+    brainCanvas.height = window.innerHeight;
+    brainPieces = [];
+    
+    var scale = Math.min(brainCanvas.width / brainImage.width, brainCanvas.height / brainImage.height) * 0.8;
+    var imgWidth = brainImage.width * scale;
+    var imgHeight = brainImage.height * scale;
+    var centerX = (brainCanvas.width - imgWidth) / 2;
+    var centerY = (brainCanvas.height - imgHeight) / 2;
+    
+    var tempCanvas = document.createElement('canvas');
+    var tempCtx = tempCanvas.getContext('2d');
+    tempCanvas.width = brainImage.width;
+    tempCanvas.height = brainImage.height;
+    tempCtx.drawImage(brainImage, 0, 0);
+    var imageData = tempCtx.getImageData(0, 0, brainImage.width, brainImage.height).data;
+    
+    for (var y = 0; y < brainImage.height; y += brainFragmentSize) {
+        for (var x = 0; x < brainImage.width; x += brainFragmentSize) {
+            var pixelX = Math.floor(x + brainFragmentSize / 2);
+            var pixelY = Math.floor(y + brainFragmentSize / 2);
+            var index = (pixelY * brainImage.width + pixelX) * 4;
+            
+            if (imageData[index + 3] < 50) continue;
+            
+            var startX = centerX + x * scale;
+            var startY = centerY + y * scale;
+            
+            var normX = (x - brainImage.width / 2) / (brainImage.width / 2);
+            var normY = (y - brainImage.height / 2) / (brainImage.height / 2);
+            var distFromCenter = Math.sqrt(normX * normX + normY * normY);
+            var fragility = distFromCenter * 0.4 + Math.random() * 0.15;
+            
+            brainPieces.push({
+                srcX: x,
+                srcY: y,
+                srcW: Math.min(brainFragmentSize, brainImage.width - x),
+                srcH: Math.min(brainFragmentSize, brainImage.height - y),
+                startX: startX,
+                startY: startY,
+                curX: startX,
+                curY: startY,
+                destW: Math.min(brainFragmentSize, brainImage.width - x) * scale,
+                destH: Math.min(brainFragmentSize, brainImage.height - y) * scale,
+                dx: (Math.random() - 0.5) * brainDispersionForce,
+                dy: (Math.random() - 0.5) * brainDispersionForce,
+                fragility: fragility,
+                fallback: false
+            });
+        }
+    }
+}
+
+function actualizarFragmentacionCerebro() {
+    var plasticidad = calcularPlasticidad();
+    brainTargetDispersion = 1 - (plasticidad / 100);
+    brainTargetDispersion = Math.max(0.05, Math.min(1, brainTargetDispersion));
+}
+
+function animarCerebro() {
+    if (!brainImageReady) {
+        requestAnimationFrame(animarCerebro);
+        return;
     }
     
-    var categorias = ['Trabajo', 'Social', 'Aprendizaje', 'Entretenimiento'];
+    brainCtx.fillStyle = '#ffffff';
+    brainCtx.fillRect(0, 0, brainCanvas.width, brainCanvas.height);
     
-    categorias.forEach(function(cat) {
-        var catId = 'cat_' + cat;
-        if (!listadoNodos.get(catId)) {
-            listadoNodos.add({
-                id: catId,
-                label: '📂 ' + cat,
-                color: { background: '#43b581', border: '#2d7d4e' },
-                size: 25,
-                borderWidth: 2,
-                font: { color: '#FFFFFF', size: 13, face: 'Inter', bold: true }
-            });
-            listadoConexiones.add({
-                id: 'mente_' + cat,
-                from: menteId,
-                to: catId,
-                color: { color: 'rgba(67,181,129,0.5)' },
-                width: 2,
-                dashes: true
-            });
-        }
-    });
+    brainCurrentDispersion += (brainTargetDispersion - brainCurrentDispersion) * 0.02;
     
-    // Todas las tareas: activas + incompletas + desconectados + completadas
-    var todasTareas = tareasActivas.concat(tareasIncompletas, nodosDesconectados, tareasCompletadas);
+    brainTime += brainGlobalSpeed * (0.5 + brainCurrentDispersion * 0.5);
+    var globalPhase = brainTime * 0.11;
     
-    todasTareas.forEach(function(t) {
-        var id = t.nodoId || ('tarea_' + t.id);
-        var color = { background: '#43b581', border: '#2d7d4e' };
-        var size = 14;
-        var borderWidth = 1.5;
-        var label = t.tarea;
-        var opacity = 1;
+    var forceMultiplier = 0.5 + brainCurrentDispersion * 2.5;
+    
+    for (var i = 0; i < brainPieces.length; i++) {
+        var piece = brainPieces[i];
         
-        if (t.estado === 'completada') {
-            color = { background: '#43b581', border: '#2d7d4e' };
-            size = 12;
-            opacity = 0.5;
-            label = '✅ ' + t.tarea;
-        } else if (t.estado === 'desconectado') {
-            // Nodo divagando - color gris, pequeño, sin conexión
-            color = { background: '#95A5A6', border: '#717f82' };
-            size = 8;
-            opacity = 0.3;
-            label = '🌀 ' + t.tarea;
-        } else if (t.estado === 'incompleta') {
-            // Nodo en tiempo negativo - ROJO, irreversible
-            color = { background: '#ed4245', border: '#a1282b' };
-            size = 12;
-            opacity = 0.7;
-            label = '⏳ ' + t.tarea;
-        } else if (t.estado === 'activa') {
-            var tiempoRestante = t.tiempo_restante;
-            // El color depende del tiempo restante
-            if (tiempoRestante <= 3) {
-                color = { background: '#ed4245', border: '#a1282b' };
-                size = 16;
-                borderWidth = 2.5;
-            } else if (tiempoRestante <= 6) {
-                color = { background: '#faa61a', border: '#c47f15' };
-                size = 15;
-                borderWidth = 2;
-            }
-        }
-        
-        if (listadoNodos.get(id)) {
-            listadoNodos.update({
-                id: id,
-                label: label,
-                color: color,
-                size: size,
-                borderWidth: borderWidth,
-                opacity: opacity
-            });
+        if (globalPhase > piece.fragility * (1 - brainCurrentDispersion * 0.5)) {
+            piece.curX += piece.dx * forceMultiplier * 0.3;
+            piece.curY += piece.dy * forceMultiplier * 0.3;
         } else {
-            listadoNodos.add({
-                id: id,
-                label: label,
-                color: color,
-                size: size,
-                borderWidth: borderWidth,
-                font: { color: '#1B3022', size: 11, face: 'Inter' },
-                opacity: opacity
-            });
-        }
-    });
-    
-    // CONEXIONES - SOLO PARA TAREAS ACTIVAS (NO incompletas, NO desconectados)
-    // Incompletas: conexión se debilita gradualmente
-    // Desconectados: SIN CONEXIÓN
-    
-    tareasActivas.forEach(function(t) {
-        if (t.estado !== 'activa') return;
-        
-        var id = t.nodoId || ('tarea_' + t.id);
-        var catId = 'cat_' + (t.categoria || 'otro');
-        var conexionId = 'cat_' + id;
-        
-        var colorLinea = 'rgba(67,181,129,0.5)';
-        var ancho = 1.5;
-        
-        var tiempoRestante = t.tiempo_restante;
-        if (tiempoRestante <= 3) {
-            colorLinea = 'rgba(237,66,69,0.7)';
-            ancho = 2;
-        } else if (tiempoRestante <= 6) {
-            colorLinea = 'rgba(250,166,26,0.6)';
-            ancho = 2;
+            piece.curX += (piece.startX - piece.curX) * 0.02;
+            piece.curY += (piece.startY - piece.curY) * 0.02;
         }
         
-        if (!listadoConexiones.get(conexionId)) {
-            listadoConexiones.add({
-                id: conexionId,
-                from: catId,
-                to: id,
-                color: { color: colorLinea },
-                width: ancho,
-                smooth: { type: 'continuous', roundness: 0.5 }
-            });
+        if (piece.fallback) {
+            brainCtx.fillStyle = piece.color;
+            brainCtx.fillRect(piece.curX, piece.curY, piece.w, piece.h);
         } else {
-            listadoConexiones.update({
-                id: conexionId,
-                color: { color: colorLinea },
-                width: ancho
-            });
+            brainCtx.drawImage(
+                brainImage,
+                piece.srcX, piece.srcY, piece.srcW, piece.srcH,
+                piece.curX, piece.curY, piece.destW, piece.destH
+            );
         }
-    });
+    }
     
-    // Tareas incompletas - conexión se debilita (nunca se fortalece)
-    tareasIncompletas.forEach(function(t) {
-        var id = t.nodoId || ('tarea_' + t.id);
-        var conexionId = 'cat_' + id;
-        var edge = listadoConexiones.get(conexionId);
-        if (edge) {
-            // Reducir gradualmente la conexión
-            var nuevoAncho = Math.max(0.1, edge.width - 0.01);
-            if (nuevoAncho <= 0.1) {
-                listadoConexiones.remove(conexionId);
-            } else {
-                listadoConexiones.update({
-                    id: conexionId,
-                    width: nuevoAncho,
-                    color: { color: 'rgba(237,66,69,' + (nuevoAncho / 2) + ')' }
-                });
-            }
-        }
-    });
-    
-    // Desconectados - eliminar cualquier conexión que tengan
-    nodosDesconectados.forEach(function(t) {
-        var id = t.nodoId || ('tarea_' + t.id);
-        var conexionId = 'cat_' + id;
-        if (listadoConexiones.get(conexionId)) {
-            listadoConexiones.remove(conexionId);
-        }
-    });
+    requestAnimationFrame(animarCerebro);
 }
 
 // ============================================
 // TIMER Y SIMULACIÓN
 // ============================================
+function generarTareasIniciales() {
+    if (tareasDB.length === 0) {
+        console.warn('No hay tareas para generar');
+        return;
+    }
+    
+    var tareasIniciales = [];
+    var intentos = 0;
+    while (tareasIniciales.length < 5 && intentos < 50) {
+        var tarea = generarTareaAleatoria();
+        if (tarea && !tareasIniciales.some(t => t.id === tarea.id)) {
+            tareasIniciales.push(tarea);
+            agregarTarea(tarea);
+        }
+        intentos++;
+    }
+}
+
 function actualizarTiempo() {
     if (!simulacionActiva) return;
     
@@ -833,56 +861,71 @@ function actualizarTiempo() {
     var tareasADesconectar = [];
     var tareasAIncompletar = [];
     
-    // Procesar tareas activas
     tareasActivas.forEach(function(t) {
         if (t.estado !== 'activa') return;
         var tiempoTranscurrido = (ahora - t.iniciada) / 1000;
         t.tiempo_restante = t.tiempo_limite - tiempoTranscurrido;
         
-        // Actualizar visual
         actualizarTareaElement(t);
         
-        // Verificar estado
         if (t.tiempo_restante < 0) {
-            // Si tiempo negativo y ha pasado el límite (ej: -15 cuando limite=15)
             if (t.tiempo_restante <= -t.tiempo_limite) {
                 tareasADesconectar.push(t);
             } else {
-                // Tiempo negativo pero aún no desconectado
                 tareasAIncompletar.push(t);
             }
         }
     });
     
-    // Mover a incompletas (primera vez que entra en negativo)
     tareasAIncompletar.forEach(function(t) {
         if (t.estado === 'activa') {
             moverAIncompleta(t);
         }
     });
     
-    // Desconectar (llegó a -tiempo_limite)
     tareasADesconectar.forEach(function(t) {
         moverADesconectado(t);
     });
     
-    // También revisar incompletas que puedan haber llegado al límite
     tareasIncompletas.forEach(function(t) {
         var tiempoTranscurrido = (ahora - t.iniciada) / 1000;
         t.tiempo_restante = t.tiempo_limite - tiempoTranscurrido;
         
         if (t.tiempo_restante <= -t.tiempo_limite) {
-            // Mover a desconectado
             moverADesconectado(t);
         }
     });
     
-    // Mantener mínimo 4 tareas activas
     mantenerMinimoTareas();
     
     document.getElementById('tareasActivas').textContent = tareasActivas.length + ' activas';
-    actualizarGrafoComplejo();
+    actualizarFragmentacionCerebro();
     actualizarMetricas();
+    
+    var plasticidad = calcularPlasticidad();
+    var atencion = calcularAtencion();
+    if (plasticidad < 10 && atencion < 15 && nodosDesconectados.length >= 4) {
+        mostrarColapso();
+    }
+}
+
+// ============================================
+// COLAPSO
+// ============================================
+function mostrarColapso() {
+    if (document.getElementById('colapsoModal').classList.contains('visible')) return;
+    
+    simulacionActiva = false;
+    if (intervaloTiempo) {
+        clearInterval(intervaloTiempo);
+        intervaloTiempo = null;
+    }
+    
+    document.getElementById('totalCompletadas').textContent = estadisticas.totalCompletadas;
+    document.getElementById('totalIncompletas').textContent = estadisticas.totalIncompletas;
+    document.getElementById('totalDesconectados').textContent = estadisticas.totalDesconectados;
+    
+    document.getElementById('colapsoModal').classList.add('visible');
 }
 
 // ============================================
@@ -891,14 +934,14 @@ function actualizarTiempo() {
 function iniciarExperiencia() {
     document.getElementById('overlayInicial').classList.add('oculto');
     
+    // Cargar CSV si no está cargado
     if (tareasDB.length === 0) {
         cargarCSV();
     }
     
     initParticulas();
+    inicializarCerebro();
     
-    listadoNodos.clear();
-    listadoConexiones.clear();
     tareasActivas = [];
     tareasCompletadas = [];
     tareasIncompletas = [];
@@ -920,6 +963,11 @@ function iniciarExperiencia() {
         totalDesconectados: 0
     };
     
+    brainCurrentDispersion = 0;
+    brainTargetDispersion = 0;
+    brainPieces = [];
+    brainTime = 0;
+    
     animacionPersonaje.modo = 'sentado';
     animacionPersonaje.frameActual = 0;
     animacionPersonaje.direccion = 1;
@@ -931,67 +979,38 @@ function iniciarExperiencia() {
         listaTareasContainer.innerHTML = '';
     }
     
-    var menteId = '🧠 Mente';
-    if (!listadoNodos.get(menteId)) {
-        listadoNodos.add({
-            id: menteId,
-            label: '🧠 Mente',
-            color: { background: '#43b581', border: '#2d7d4e' },
-            size: 35,
-            borderWidth: 3,
-            font: { color: '#1B3022', size: 16, face: 'Inter', bold: true }
-        });
-    }
-    
-    ['Trabajo', 'Social', 'Aprendizaje', 'Entretenimiento'].forEach(function(cat) {
-        var catId = 'cat_' + cat;
-        if (!listadoNodos.get(catId)) {
-            listadoNodos.add({
-                id: catId,
-                label: '📂 ' + cat,
-                color: { background: '#43b581', border: '#2d7d4e' },
-                size: 25,
-                borderWidth: 2,
-                font: { color: '#FFFFFF', size: 13, face: 'Inter', bold: true }
-            });
-            listadoConexiones.add({
-                id: 'mente_' + cat,
-                from: menteId,
-                to: catId,
-                color: { color: 'rgba(67,181,129,0.5)' },
-                width: 2,
-                dashes: true
-            });
-        }
-    });
-    
     tiempoInicio = Date.now();
     simulacionActiva = true;
     
     if (intervaloTiempo) clearInterval(intervaloTiempo);
     intervaloTiempo = setInterval(actualizarTiempo, 1000);
     
-    // Generar 5 tareas iniciales
-    setTimeout(function() {
-        var tareasIniciales = [];
-        var intentos = 0;
-        while (tareasIniciales.length < 5 && intentos < 50) {
-            var tarea = generarTareaAleatoria();
-            if (tarea && !tareasIniciales.some(t => t.id === tarea.id)) {
-                tareasIniciales.push(tarea);
-                agregarTarea(tarea);
+    // Esperar a que el CSV cargue antes de generar tareas
+    if (tareasDB.length > 0) {
+        setTimeout(generarTareasIniciales, 500);
+    } else {
+        // Si el CSV no está cargado, esperar
+        var waitForCSV = setInterval(function() {
+            if (tareasDB.length > 0) {
+                clearInterval(waitForCSV);
+                setTimeout(generarTareasIniciales, 500);
             }
-            intentos++;
-        }
-    }, 500);
+        }, 200);
+        
+        // Timeout por si el CSV nunca carga
+        setTimeout(function() {
+            clearInterval(waitForCSV);
+            if (tareasDB.length > 0) {
+                setTimeout(generarTareasIniciales, 500);
+            }
+        }, 5000);
+    }
     
     setInterval(function() {
         if (simulacionActiva) {
             actualizarPersonaje(Date.now());
         }
     }, 200);
-    
-    setTimeout(actualizarGrafoComplejo, 1000);
 }
 
 function reiniciarExperiencia() {
@@ -1001,8 +1020,11 @@ function reiniciarExperiencia() {
         intervaloTiempo = null;
     }
     
-    listadoNodos.clear();
-    listadoConexiones.clear();
+    brainPieces = [];
+    brainCurrentDispersion = 0;
+    brainTargetDispersion = 0;
+    brainTime = 0;
+    
     tareasActivas = [];
     tareasCompletadas = [];
     tareasIncompletas = [];
@@ -1023,6 +1045,10 @@ function reiniciarExperiencia() {
     document.querySelector('.fill.atencion').style.width = '100%';
     document.querySelector('.fill.plasticidad').style.width = '100%';
     document.getElementById('estadoMental').textContent = '🧘 En reposo';
+    
+    if (brainImageReady) {
+        initBrainPieces();
+    }
 }
 
 // ============================================
@@ -1105,7 +1131,7 @@ function mostrarTextoHolzer() {
 // INICIALIZACIÓN
 // ============================================
 window.onload = function() {
-    inicializarGrafo();
+    inicializarCerebro();
     cargarCSV();
     actualizarMetricas();
     

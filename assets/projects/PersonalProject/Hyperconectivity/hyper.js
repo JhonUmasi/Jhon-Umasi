@@ -1,5 +1,5 @@
 // ============================================
-// HYPER.JS - SISTEMA CON ESTADOS IRREVERSIBLES v13
+// HYPER.JS - SISTEMA CON ESTADOS IRREVERSIBLES v14
 // ============================================
 
 var simulacionActiva = false;
@@ -57,7 +57,6 @@ function cargarCSV() {
                 tareasDB.push(tarea);
             }
             console.log('CSV cargado correctamente:', tareasDB.length, 'tareas');
-            // Si la simulación ya está activa, generar tareas
             if (simulacionActiva && tareasActivas.length === 0) {
                 generarTareasIniciales();
             }
@@ -529,7 +528,6 @@ function mostrarNotificacion(mensaje, tipo) {
     notif.textContent = mensaje;
     container.appendChild(notif);
     
-    // Aplicar nivel de borroso según deterioro
     var plasticidad = calcularPlasticidad();
     aplicarNivelBorroso(notif, plasticidad);
     
@@ -639,6 +637,7 @@ function actualizarMetricas() {
     }
     
     actualizarBorrosoNotificaciones(plasticidad);
+    actualizarFragmentacionCerebro();
 }
 
 function actualizarBorrosoNotificaciones(plasticidad) {
@@ -668,6 +667,7 @@ var brainDispersionForce = 2.8;
 var brainGlobalSpeed = 0.0025;
 var brainTargetDispersion = 0;
 var brainCurrentDispersion = 0;
+var brainPiecesOriginal = [];
 
 function inicializarCerebro() {
     brainCanvas = document.getElementById('brainCanvas');
@@ -678,12 +678,15 @@ function inicializarCerebro() {
     brainImage.onload = function() {
         brainImageReady = true;
         initBrainPieces();
+        // Guardar una copia de las piezas originales para poder restaurarlas
+        brainPiecesOriginal = JSON.parse(JSON.stringify(brainPieces));
         animarCerebro();
     };
     brainImage.onerror = function() {
         console.warn('No se encontró imagen cabeza.png, usando respaldo');
         brainImageReady = true;
         initBrainPiecesFallback();
+        brainPiecesOriginal = JSON.parse(JSON.stringify(brainPieces));
         animarCerebro();
     };
 }
@@ -781,8 +784,11 @@ function initBrainPieces() {
 
 function actualizarFragmentacionCerebro() {
     var plasticidad = calcularPlasticidad();
+    // Invertir: menor plasticidad = más fragmentación
+    // plasticidad 100% -> dispersion 0 (cerebro intacto)
+    // plasticidad 0% -> dispersion 1 (cerebro completamente fragmentado)
     brainTargetDispersion = 1 - (plasticidad / 100);
-    brainTargetDispersion = Math.max(0.05, Math.min(1, brainTargetDispersion));
+    brainTargetDispersion = Math.max(0, Math.min(1, brainTargetDispersion));
 }
 
 function animarCerebro() {
@@ -794,24 +800,32 @@ function animarCerebro() {
     brainCtx.fillStyle = '#ffffff';
     brainCtx.fillRect(0, 0, brainCanvas.width, brainCanvas.height);
     
-    brainCurrentDispersion += (brainTargetDispersion - brainCurrentDispersion) * 0.02;
+    // Suavizar transición de fragmentación - permite que se recupere
+    brainCurrentDispersion += (brainTargetDispersion - brainCurrentDispersion) * 0.03;
     
-    brainTime += brainGlobalSpeed * (0.5 + brainCurrentDispersion * 0.5);
+    brainTime += brainGlobalSpeed * (0.3 + brainCurrentDispersion * 0.7);
     var globalPhase = brainTime * 0.11;
     
-    var forceMultiplier = 0.5 + brainCurrentDispersion * 2.5;
+    var forceMultiplier = brainCurrentDispersion * 3.0;
     
     for (var i = 0; i < brainPieces.length; i++) {
         var piece = brainPieces[i];
         
-        if (globalPhase > piece.fragility * (1 - brainCurrentDispersion * 0.5)) {
+        // Si la dispersión es muy baja, las piezas vuelven a su posición original
+        if (brainCurrentDispersion < 0.05) {
+            piece.curX += (piece.startX - piece.curX) * 0.05;
+            piece.curY += (piece.startY - piece.curY) * 0.05;
+        } else if (globalPhase > piece.fragility * (1 - brainCurrentDispersion * 0.3)) {
+            // Las piezas se dispersan
             piece.curX += piece.dx * forceMultiplier * 0.3;
             piece.curY += piece.dy * forceMultiplier * 0.3;
         } else {
+            // Las piezas tienden a volver a su posición original
             piece.curX += (piece.startX - piece.curX) * 0.02;
             piece.curY += (piece.startY - piece.curY) * 0.02;
         }
         
+        // Dibujar la pieza
         if (piece.fallback) {
             brainCtx.fillStyle = piece.color;
             brainCtx.fillRect(piece.curX, piece.curY, piece.w, piece.h);
@@ -899,7 +913,6 @@ function actualizarTiempo() {
     mantenerMinimoTareas();
     
     document.getElementById('tareasActivas').textContent = tareasActivas.length + ' activas';
-    actualizarFragmentacionCerebro();
     actualizarMetricas();
     
     var plasticidad = calcularPlasticidad();
@@ -934,7 +947,6 @@ function mostrarColapso() {
 function iniciarExperiencia() {
     document.getElementById('overlayInicial').classList.add('oculto');
     
-    // Cargar CSV si no está cargado
     if (tareasDB.length === 0) {
         cargarCSV();
     }
@@ -985,11 +997,9 @@ function iniciarExperiencia() {
     if (intervaloTiempo) clearInterval(intervaloTiempo);
     intervaloTiempo = setInterval(actualizarTiempo, 1000);
     
-    // Esperar a que el CSV cargue antes de generar tareas
     if (tareasDB.length > 0) {
         setTimeout(generarTareasIniciales, 500);
     } else {
-        // Si el CSV no está cargado, esperar
         var waitForCSV = setInterval(function() {
             if (tareasDB.length > 0) {
                 clearInterval(waitForCSV);
@@ -997,7 +1007,6 @@ function iniciarExperiencia() {
             }
         }, 200);
         
-        // Timeout por si el CSV nunca carga
         setTimeout(function() {
             clearInterval(waitForCSV);
             if (tareasDB.length > 0) {

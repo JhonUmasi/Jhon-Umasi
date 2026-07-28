@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokémon Godot Engine | Gamedev Project</title>
+    
+    <script src="../../../config.js"></script>
+    <link rel="stylesheet" href="PokemonGodot.css">
+</head>
+<body>
+
+    <!-- Header Fijo Superior -->
+    <header class="topbar">
+        <div class="topbar-container">
+            <a href="../../../../index.html" class="btn-back">MENÚ PRINCIPAL</a>
+            <div class="logo">Gridmon Godot <span>Editor</span></div>
+            <div id="social-header"></div>
+        </div>
+    </header>
+
+    <!-- Layout de 3 Columnas Rectas -->
+    <div class="layout-wrapper">
+        
+        <!-- COLUMNA IZQUIERDA: Filtros / Navegación -->
+        <aside class="sidebar-left">
+            <nav class="sidebar-nav">
+                <span class="nav-category">General</span>
+                <a href="#capturas" class="nav-item active">Capturas</a>
+                <a href="#actualizaciones" class="nav-item">Actualizaciones</a>
+                
+                <span class="nav-category">Plugins Integrados</span>
+                <a href="#plugin-movimientos" class="nav-item sub-item">Movimientos Editor</a>
+                <a href="#plugin-pokemon-propiedades" class="nav-item sub-item">Propiedades & Ataques</a>
+                <a href="#plugin-item-generador" class="nav-item sub-item">Item Generador</a>
+                <a href="#plugin-items-editor" class="nav-item sub-item">Items Editor</a>
+                <a href="#plugin-npc-generador" class="nav-item sub-item">NPC Generador</a>
+                <a href="#plugin-pokemon-sprite" class="nav-item sub-item">Sprite Editor</a>
+                <a href="#plugin-pokemon-generador" class="nav-item sub-item">Pokemon Generador</a>
+
+                <span class="nav-category">Recursos</span>
+                <a href="#links" class="nav-item">Links & Descargas</a>
+            </nav>
+        </aside>
+
+        <!-- COLUMNA CENTRAL: Contenido Principal -->
+        <main class="content-center">
+            
+            <!-- Hero -->
+            <section class="main-hero">
+                <span class="status-tag">PROYECTO ACTIVO</span>
+                <h1>POKÉMON GODOT EDITOR</h1>
+                <p>Gridmon Godot Editor es un entorno de desarrollo integral 
+                    diseñado específicamente para llevar la creación de juegos de rol 
+                    estilo Pokémon al siguiente nivel en Godot Engine. Inspirado en la 
+                    flexibilidad de herramientas clásicas pero adaptado a la arquitectura 
+                    moderna de nodos, este editor te permite gestionar de forma visual bases de 
+                    datos complejas de criaturas, diseñar mapas basados en cuadrículas y programar sistemas 
+                    de eventos interactivos sin fricciones. Todo lo que necesitas para estructurar tu propio 
+                    juego de Pokémon en un solo lugar, optimizando tu flujo de trabajo y aprovechando al máximo 
+                    el rendimiento y la versatilidad de Godot.</p>
+                <div class="tech-tags">
+                    <span class="tech-tag">Godot 4.5.1</span>
+                    <span class="tech-tag">GDScript</span>
+                    <span class="tech-tag">Pixel Art</span>
+                    <span class="tech-tag">PokéAPI</span>
+                </div>
+            </section>
+
+            <!-- Capturas -->
+            <section id="capturas" class="content-section">
+                <h2>Capturas</h2>
+                <div class="gallery-grid">
+                    <div class="media-frame">
+                        <img src="/assets/projects/PersonalProject/PokemonGodot/image/ima1.avif" alt="Captura de pantalla 1" loading="lazy">
+                    </div>
+                    <div class="media-frame">
+                        <img src="/assets/projects/PersonalProject/PokemonGodot/image/ima2.avif" alt="Captura de pantalla 2" loading="lazy">
+                    </div>
+                    <div class="media-frame">
+                        <img src="/assets/projects/PersonalProject/PokemonGodot/image/ima3.avif" alt="Captura de pantalla 3" loading="lazy">
+                    </div>
+                    <div class="media-frame">
+                        <img src="/assets/projects/PersonalProject/PokemonGodot/image/ima4.avif" alt="Captura de pantalla 4" loading="lazy">
+                    </div>
+                    <div class="media-frame">
+                        <img src="/assets/projects/PersonalProject/PokemonGodot/image/ima5.avif" alt="Captura de pantalla 5" loading="lazy">
+                    </div>
+                    <div class="media-frame">
+                        <img src="/assets/projects/PersonalProject/PokemonGodot/image/ima6.avif" alt="Captura de pantalla 5" loading="lazy">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Plugins (Lista puramente tipográfica, sin cajas) -->
+            <section id="plugins" class="content-section">
+                <h2>Módulos & Plugins</h2>
+                
+                <article class="plugin-item" id="plugin-movimientos">
+                    <h3>Movimientos - Editor</h3>
+                    <p>Gestión y configuración de los movimientos de los Pokémon, sus datos de combate y parámetros de ataque.</p>
+                </article>
+
+                <article class="plugin-item" id="plugin-pokemon-propiedades">
+                    <h3>Pokemon - Propiedades y Ataques</h3>
+                    <p>Edición de estadísticas base, tipos, habilidades y sets de ataques para cada criatura.</p>
+                </article>
+
+                <article class="plugin-item" id="plugin-item-generador">
+                    <h3>Item - Generador</h3>
+                    <p>Herramienta para la creación rápida y registro de nuevos ítems en la base de datos.</p>
+                </article>
+
+                <article class="plugin-item" id="plugin-items-editor">
+                    <h3>Items - Editor</h3>
+                    <p>Modificación de efectos, descripciones, categorías y valores de los objetos del juego.</p>
+                </article>
+
+                <article class="plugin-item" id="plugin-npc-generador">
+                    <h3>NPC - Generador</h3>
+                    <p>Módulo para generar personajes no jugables, sus diálogos, sprites y comportamientos básicos.</p>
+                </article>
+
+                <article class="plugin-item" id="plugin-pokemon-sprite">
+                    <h3>Pokemon - Sprite Editor</h3>
+                    <p>Visualización y asignación de hojas de sprites horizontales/verticales para las criaturas.</p>
+                </article>
+
+                <article class="plugin-item" id="plugin-pokemon-generador">
+                    <h3>Pokemon - Generador</h3>
+                    <p>Generación automatizada de nuevas entradas en el sistema para agilizar la adición de Pokémon.</p>
+                </article>
+            </section>
+
+            <!-- Changelog -->
+            <section id="actualizaciones" class="content-section">
+                <h2>Historial de Cambios</h2>
+                <div id="changelog-container">
+                    <!-- JS inyecta datos -->
+                </div>
+            </section>
+
+            <!-- Links y Descargas -->
+            <section id="links" class="content-section">
+                <h2>Links & Descargas</h2>
+                <div class="downloads-list">
+                    <a href="https://drive.google.com/drive/folders/19fgOC1lmlRPgx_j2I5U22RPdGloLwBUY?usp=drive_link" class="download-row">
+                        <span>Descargar de Gridmon Godot Editor</span>
+                        <small>v1.1.0 (.exe)</small>
+                    </a>
+                    <a href="https://godotengine.org/es/" class="download-row">
+                        <span>Enlace Oficial de Godot</span>
+                    </a>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- COLUMNA DERECHA: Datos Rápidos -->
+        <aside class="sidebar-right">
+            <div class="info-block">
+                <h4>Información del Proyecto</h4>
+                <ul class="info-list">
+                    <li><span>Versión:</span> <strong>v1.1.0</strong></li>
+                    <li><span>Compatibilidad:</span> <strong>Godot 4.5.1x</strong></li>
+                    <li><span>Licencia:</span> <strong>MIT</strong></li>
+                </ul>
+            </div>
+
+            <div class="info-block">
+                <h4>Acceso Rápido</h4>
+                <a href="https://drive.google.com/drive/folders/19fgOC1lmlRPgx_j2I5U22RPdGloLwBUY?usp=drive_link" class="plain-link">Descargas Directas →</a>
+            </div>
+        </aside>
+
+    </div>
+
+    <script src="PokemonGodot.js"></script>
+</body>
+</html>

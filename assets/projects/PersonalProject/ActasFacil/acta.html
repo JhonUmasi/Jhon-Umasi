@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Generador de Actas PFC1</title>
+    <link rel="stylesheet" href="acta.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- PANEL DE EDICIÓN -->
+        <div class="form-panel">
+            <!-- BARRA DE BOTONES FIJA ARRIBA -->
+            <div class="action-bar">
+                <button type="button" class="btn-export" onclick="descargarPDFDirecto()">📥 DESCARGAR ACTA</button>
+                <button type="button" class="btn-preview" onclick="previsualizarActa()">👁️ PREVISUALIZAR</button>
+            </div>
+
+            <h2>Editor de Acta PFIC 1</h2>
+            
+            <fieldset>
+                <legend>Encabezado y Metadatos</legend>
+                <div class="grid-2">
+                    <div>
+                        <label>Acta N°</label>
+                        <input type="text" id="in_numActa" oninput="actualizar()">
+                    </div>
+                    <div>
+                        <label>Grupo N°</label>
+                        <input type="text" id="in_grupo" oninput="actualizar()">
+                    </div>
+                </div>
+                <label>Profesor</label>
+                <input type="text" id="in_profesor" oninput="actualizar()">
+                <label>Proyecto Seleccionado</label>
+                <input type="text" id="in_tema" oninput="actualizar()">
+            </fieldset>
+
+            <fieldset>
+                <legend>1. Información de la Reunión</legend>
+                <div class="grid-2">
+                    <div>
+                        <label>Fecha</label>
+                        <input type="date" id="in_fecha" onchange="actualizar()">
+                    </div>
+                    <div>
+                        <label>Duración (Horas)</label>
+                        <input type="number" step="0.25" min="0" id="in_duracion" oninput="calcTiempoDesdeDuracion(); actualizar();">
+                    </div>
+                    <div>
+                        <label>Hora Inicio</label>
+                        <input type="time" id="in_horaIni" onchange="calcTiempoDesdeHoras(); actualizar();">
+                    </div>
+                    <div>
+                        <label>Hora Fin</label>
+                        <input type="time" id="in_horaFin" onchange="calcTiempoDesdeHoras(); actualizar();">
+                    </div>
+                    <div>
+                        <label>Modalidad</label>
+                        <select id="in_modalidad" onchange="actualizar()">
+                            <option value="Virtual">Virtual</option>
+                            <option value="Presencial">Presencial</option>
+                            <option value="Híbrida">Híbrida</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Lugar / Plataforma</label>
+                        <input type="text" id="in_lugar" oninput="actualizar()">
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>2. Asistencia</legend>
+                <div id="container_asistencia"></div>
+                <button type="button" class="btn-add" onclick="agregarAsistente()">+ Agregar Asistente</button>
+                <label>Observaciones de Asistencia</label>
+                <textarea id="in_obsAsistencia" rows="2" oninput="actualizar()"></textarea>
+            </fieldset>
+
+            <fieldset>
+                <legend>3. Agenda de la Reunión</legend>
+                <label>3.1. Objetivo</label>
+                <textarea id="in_objetivo" rows="2" oninput="actualizar()"></textarea>
+                
+                <label style="margin-top:10px;">3.2. Temas a Tratar (Agenda Previa)</label>
+                <div id="container_agenda_temas"></div>
+                <button type="button" class="btn-add" onclick="agregarTemaAgenda()">+ Agregar Tema a Tratar</button>
+            </fieldset>
+
+            <fieldset>
+                <legend>4. Desarrollo de la Reunión</legend>
+                <label style="color:#1565c0;">4.1. Compromisos Anteriores</label>
+                <div id="container_compromisos"></div>
+                <button type="button" class="btn-add" onclick="agregarCompromiso()">+ Agregar Compromiso</button>
+                
+                <label style="color:#1565c0; margin-top:12px;">4.2. Temas Discutidos y Decisiones</label>
+                <div id="container_temas"></div>
+                <button type="button" class="btn-add" onclick="agregarTema()">+ Agregar Tema Discutido</button>
+
+                <label style="margin-top:10px;">4.3. Problemas / Conflictos</label>
+                <textarea id="in_problemas" rows="2" oninput="actualizar()"></textarea>
+            </fieldset>
+
+            <fieldset>
+                <legend>5. Acuerdos y Tareas Asignadas</legend>
+                <div id="container_tareas"></div>
+                <button type="button" class="btn-add" onclick="agregarTarea()">+ Agregar Tarea</button>
+            </fieldset>
+
+            <fieldset>
+                <legend>6. Próxima Reunión</legend>
+                <div class="grid-2">
+                    <div>
+                        <label>Fecha Propuesta</label>
+                        <input type="date" id="in_proxFecha" onchange="actualizar()">
+                    </div>
+                    <div>
+                        <label>Hora Propuesta</label>
+                        <input type="time" id="in_proxHora" onchange="actualizar()">
+                    </div>
+                    <div>
+                        <label>Modalidad</label>
+                        <select id="in_proxModalidad" onchange="actualizar()">
+                            <option value="Virtual">Virtual</option>
+                            <option value="Presencial">Presencial</option>
+                            <option value="Híbrida">Híbrida</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Lugar / Plataforma</label>
+                        <input type="text" id="in_proxLugar" oninput="actualizar()">
+                    </div>
+                </div>
+                <label>Temas a Tratar</label>
+                <textarea id="in_proxTemas" rows="2" oninput="actualizar()"></textarea>
+            </fieldset>
+
+            <fieldset>
+                <legend>7. Observaciones Generales</legend>
+                <textarea id="in_obsGenerales" rows="2" oninput="actualizar()"></textarea>
+            </fieldset>
+
+            <fieldset>
+                <legend>8. Firma</legend>
+                <label>Hora de conclusión</label>
+                <input type="time" id="in_horaFirma" onchange="actualizar()">
+                
+                <label>Coordinador del equipo</label>
+                <input type="text" id="in_coordinador" oninput="actualizar()">
+                <label>Firma Coordinador (Imagen)</label>
+                <input type="file" accept="image/*" onchange="cargarFirma(event, 'img_firma_coordinador', 'firma_1_img')">
+
+                <label>Elaborado por</label>
+                <input type="text" id="in_elaborador" oninput="actualizar()">
+                <label>Firma Elaborador (Imagen)</label>
+                <input type="file" accept="image/*" onchange="cargarFirma(event, 'img_firma_elaborador', 'firma_2_img')">
+            </fieldset>
+
+            <!-- Botones inferiores (respaldo) -->
+            <div class="action-bar-bottom">
+                <button type="button" class="btn-export" onclick="descargarPDFDirecto()">📥 DESCARGAR ACTA</button>
+                <button type="button" class="btn-preview" onclick="previsualizarActa()">👁️ PREVISUALIZAR</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PARA TEXTO LARGO -->
+    <div id="modal_texto" class="modal-overlay">
+        <div class="modal-content">
+            <h3 id="modal_titulo">Editar Detalles de Tarea</h3>
+            <textarea id="modal_textarea" rows="8"></textarea>
+            <div class="modal-actions">
+                <button type="button" class="btn-add" onclick="guardarModalTexto()">Guardar</button>
+                <button type="button" class="btn-del" onclick="cerrarModalTexto()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PARA PREVISUALIZACIÓN -->
+    <div id="modal_preview" class="modal-overlay" onclick="if(event.target===this) cerrarPrevisualizacion()">
+        <div class="modal-content modal-preview">
+            <div class="modal-preview-header">
+                <h3>Vista Previa del Acta</h3>
+                <button type="button" class="btn-del" onclick="cerrarPrevisualizacion()">✕ Cerrar</button>
+            </div>
+            <div id="preview_content" class="preview-scroll"></div>
+            <div class="modal-actions">
+                <button type="button" class="btn-export" onclick="cerrarPrevisualizacion(); descargarPDFDirecto();">📥 DESCARGAR</button>
+                <button type="button" class="btn-del" onclick="cerrarPrevisualizacion()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="acta.js"></script>
+</body>
+</html>

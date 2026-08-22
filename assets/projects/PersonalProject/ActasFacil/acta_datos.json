@@ -1,0 +1,108 @@
+{
+  "encabezado": {
+    "universidad": "UNIVERSIDAD DE INGENIERIA Y TECNOLOGIA",
+    "carrera": "INGENIERIA CIVIL",
+    "curso": "Proyecto Final de Ingeniería Civil 1",
+    "proyecto_taic": "PROYECTO TAIC 2026",
+    "ciclo": "2026-2",
+    "grupo": "05",
+    "profesor": "Ing. Carlos Alberto Benedetty Torres",
+    "proyecto_seleccionado": "Por Definir"
+  },
+  "seccion_1_info_reunion": {
+    "num_acta": "01",
+    "fecha": "22/08/2026",
+    "hora_inicio": "14:00",
+    "hora_fin": "15:30",
+    "duracion": "1.5 horas",
+    "modalidad": "Virtual",
+    "lugar": "Google Meet"
+  },
+  "seccion_2_asistencia": {
+    "asistentes": [
+      {
+        "num": 1,
+        "nombre": "Jhon Alex Umasi Huisa",
+        "codigo": "20211012",
+        "rol": "Coordinador",
+        "asistencia": "Sí"
+      },
+      {
+        "num": 2,
+        "nombre": "Richard Alejandro Cordova Alarcon",
+        "codigo": "20211015",
+        "rol": "Elaborador",
+        "asistencia": "Sí"
+      }
+    ],
+    "observaciones_asistencia": "Sin observaciones de asistencia"
+  },
+  "seccion_3_agenda": {
+    "objetivo_reunion": "Definir el alcance del marco teórico y asignación de actividades iniciales.",
+    "temas_a_tratar": "1. Revisión de bibliografía base.\n2. Distribución de capítulos.\n3. Fijar fechas de entregas intermedias."
+  },
+  "seccion_4_desarrollo": {
+    "compromisos_anteriores": [
+      {
+        "tarea": "Revisión de marco teórico",
+        "responsable": "Richard Cordova",
+        "estado": "Completado",
+        "observaciones": "Sin observaciones"
+      },
+      {
+        "tarea": "Recopilación de normativa AASHTO",
+        "responsable": "Jhon Umasi",
+        "estado": "Completado",
+        "observaciones": "Norma actualizada a 2026"
+      }
+    ],
+    "temas": [
+      {
+        "num": 1,
+        "titulo": "Modelamiento estructural",
+        "discusion": "Se evaluaron los paquetes de software disponibles y licencias del campus.",
+        "decision": "Se utilizará ETABS para las simulaciones principales."
+      },
+      {
+        "num": 2,
+        "titulo": "Estructuración del informe final",
+        "discusion": "Se debatió el orden de los capítulos de acuerdo con las guías de PFC 1.",
+        "decision": "El capítulo de metodología se redactará en paralelo al marco teórico."
+      }
+    ],
+    "problemas_identificados": "Dificultad de acceso a la base de datos de ensayos de laboratorio de ciclos anteriores."
+  },
+  "seccion_5_acuerdos_tareas": [
+    {
+      "num": 1,
+      "tarea": "Redacción del Capítulo 3",
+      "responsable": "Jhon Umasi",
+      "fecha_limite": "28/08/2026",
+      "entregable": "Documento PDF"
+    },
+    {
+      "num": 2,
+      "tarea": "Simulación inicial del pavimento",
+      "responsable": "Richard Cordova",
+      "fecha_limite": "30/08/2026",
+      "entregable": "Archivo .EDB"
+    }
+  ],
+  "seccion_6_proxima_reunion": {
+    "fecha_propuesta": "29/08/2026",
+    "hora_propuesta": "14:00",
+    "modalidad": "Virtual",
+    "lugar": "Google Meet",
+    "temas_a_tratar": "Revisión del avance del Capítulo 3 y validación del modelo inicial."
+  },
+  "seccion_7_observaciones_generales": "Mantener comunicación fluida mediante el grupo de WhatsApp para resolver bloqueos técnicos.",
+  "seccion_8_firma": {
+    "hora_firma": "15:30",
+    "coordinador": "Jhon Alex Umasi Huisa",
+    "elaborador": "Richard Alejandro Cordova Alarcon",
+    "quien_lo_hizo": "Richard Alejandro Cordova Alarcon",
+    "fecha": "22/08/2026",
+    "firma_1_img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+    "firma_2_img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
+  }
+}

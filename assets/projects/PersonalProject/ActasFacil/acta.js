@@ -74,7 +74,6 @@ window.onload = function() {
     renderCompromisos();
     renderTemas();
     renderTareas();
-    // No llamamos a actualizar() para vista previa automática
 };
 
 // CALCULO BIDIRECCIONAL TIEMPO
@@ -130,7 +129,6 @@ function cargarFormularioDesdeJSON() {
 }
 
 function actualizar() {
-    // Solo actualiza el JSON, NO la vista previa
     dataJSON.seccion_1_info_reunion.num_acta = document.getElementById("in_numActa").value;
     dataJSON.encabezado.grupo = document.getElementById("in_grupo").value;
     dataJSON.encabezado.profesor = document.getElementById("in_profesor").value;
@@ -166,7 +164,6 @@ function renderAsistentes() {
 
     dataJSON.seccion_2_asistencia.asistentes.forEach((item, i) => {
         item.num = i + 1;
-        const rolTexto = item.rol === "Otro" ? item.rol_custom : item.rol;
         cont.innerHTML += `
             <div class="dynamic-row" style="flex-wrap:wrap;">
                 <input type="text" placeholder="Nombre" style="flex:2;" value="${item.nombre}" oninput="dataJSON.seccion_2_asistencia.asistentes[${i}].nombre=this.value; renderCompromisos(); renderTareas(); actualizar();">
@@ -216,6 +213,36 @@ function agregarTemaAgenda() {
     renderTemasAgenda();
 }
 
+// ==========================================
+// FUNCIÓN PARA SELECTOR MÚLTIPLE DE RESPONSABLES
+// ==========================================
+function generarSelectorResponsables(listaSeleccionados, onchangeCallback) {
+    const asistentes = dataJSON.seccion_2_asistencia.asistentes.map(a => a.nombre).filter(n => n.trim() !== "");
+    if (asistentes.length === 0) {
+        return `<div class="multiselect-box"><i style="color:#888; font-size:11px;">No hay asistentes registrados. Agregue asistentes en la sección 2.</i></div>`;
+    }
+    
+    let html = `<div class="multiselect-box">`;
+    asistentes.forEach(nombre => {
+        const checked = listaSeleccionados.includes(nombre) ? "checked" : "";
+        // Escapar el nombre para evitar problemas con comillas
+        const nombreEscapado = nombre.replace(/"/g, '&quot;');
+        html += `<div class="multiselect-item">
+            <input type="checkbox" value="${nombreEscapado}" ${checked} onchange="${onchangeCallback}">
+            <span>${nombre}</span>
+        </div>`;
+    });
+    html += `</div>`;
+    return html;
+}
+
+function toggleResponsable(arr, nombre) {
+    const idx = arr.indexOf(nombre);
+    if (idx > -1) arr.splice(idx, 1);
+    else arr.push(nombre);
+    actualizar();
+}
+
 // 4.1 COMPROMISOS ANTERIORES
 function renderCompromisos() {
     const cont = document.getElementById("container_compromisos");
@@ -249,13 +276,6 @@ function renderCompromisos() {
                 <button type="button" class="btn-del" style="margin-top:4px;" onclick="dataJSON.seccion_4_desarrollo.compromisos_anteriores.splice(${i},1); renderCompromisos(); actualizar();">Eliminar Compromiso</button>
             </div>`;
     });
-}
-
-function toggleResponsable(arr, nombre) {
-    const idx = arr.indexOf(nombre);
-    if (idx > -1) arr.splice(idx, 1);
-    else arr.push(nombre);
-    actualizar();
 }
 
 function agregarCompromiso() {
@@ -361,13 +381,11 @@ function cargarFirma(event, imgElementId, propiedadDataJSON) {
     reader.onload = function(e) {
         const base64Result = e.target.result;
 
-        // Guardar en el objeto dataJSON que consume el PDF
         if (!dataJSON.seccion_8_firma) {
             dataJSON.seccion_8_firma = {};
         }
         dataJSON.seccion_8_firma[propiedadDataJSON] = base64Result;
 
-        // Solo actualizar datos, no vista previa
         if (typeof actualizar === 'function') {
             actualizar();
         }
@@ -380,7 +398,6 @@ function cargarFirma(event, imgElementId, propiedadDataJSON) {
 // PREVISUALIZACIÓN EN MODAL
 // ==========================================
 function generarHTMLPrevisualizacion() {
-    // Función auxiliar para formatear fecha
     function formatearFecha(fecha) {
         if (!fecha) return "-";
         const partes = fecha.split('-');
@@ -541,7 +558,7 @@ function generarHTMLPrevisualizacion() {
 }
 
 function previsualizarActa() {
-    actualizar(); // Asegurar que los datos estén actualizados
+    actualizar();
     const contenido = generarHTMLPrevisualizacion();
     document.getElementById('preview_content').innerHTML = contenido;
     document.getElementById('modal_preview').style.display = 'flex';
@@ -554,7 +571,7 @@ function cerrarPrevisualizacion() {
 // EXPORTACIÓN PDF VECTORIAL NATIVA
 function descargarPDFDirecto() {
     try {
-        actualizar(); // Asegurar datos actualizados
+        actualizar();
 
         const jsPDF = window.jspdf ? window.jspdf.jsPDF : null;
         if (!jsPDF) { alert("Error: jsPDF no está disponible."); return; }
@@ -626,7 +643,6 @@ function descargarPDFDirecto() {
 
         doc.setFont("times", "bold"); doc.text("3.2. Temas a tratar (agenda previa):", 15, y); y += 3;
 
-        // Mapeo de filas solo con Número y Título
         const temasAgendaBody = dataJSON.seccion_3_agenda.temas_a_tratar_list.map(t => [
             `Tema ${t.num}`,
             t.titulo || "-"

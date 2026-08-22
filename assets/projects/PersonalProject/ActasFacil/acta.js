@@ -296,9 +296,9 @@ function renderTemas() {
                 <label>Tema ${item.num}: Título</label>
                 <input type="text" value="${item.titulo}" oninput="dataJSON.seccion_4_desarrollo.temas[${i}].titulo=this.value; actualizar();">
                 <label>Discusión</label>
-                <textarea rows="2" oninput="dataJSON.seccion_4_desarrollo.temas[${i}].discusion=this.value; actualizar();">${item.discusion}</textarea>
+                <textarea rows="4" oninput="dataJSON.seccion_4_desarrollo.temas[${i}].discusion=this.value; actualizar();">${item.discusion}</textarea>
                 <label>Decisión tomada</label>
-                <textarea rows="2" oninput="dataJSON.seccion_4_desarrollo.temas[${i}].decision=this.value; actualizar();">${item.decision}</textarea>
+                <textarea rows="4" oninput="dataJSON.seccion_4_desarrollo.temas[${i}].decision=this.value; actualizar();">${item.decision}</textarea>
                 <button type="button" class="btn-del" style="margin-top:4px;" onclick="dataJSON.seccion_4_desarrollo.temas.splice(${i},1); renderTemas(); actualizar();">Eliminar Tema</button>
             </div>`;
     });
@@ -580,6 +580,16 @@ function descargarPDFDirecto() {
         const numActa = dataJSON.seccion_1_info_reunion.num_acta || "01";
         let y = 15;
 
+        // Función auxiliar para verificar espacio y saltar página si es necesario
+        function checkPage(espacioNecesario) {
+            if (y + espacioNecesario > 277) { // 277mm = altura útil de página A4
+                doc.addPage();
+                y = 15;
+                return true;
+            }
+            return false;
+        }
+
         // Encabezado
         doc.setFont("times", "bold"); doc.setFontSize(11);
         doc.text(dataJSON.encabezado.universidad || "UNIVERSIDAD DE INGENIERÍA Y TECNOLOGÍA", 105, y, { align: "center" }); y += 5;
@@ -676,15 +686,42 @@ function descargarPDFDirecto() {
         });
         y = doc.lastAutoTable.finalY + 5;
 
+        // ============================================================
+        // 4.2 TEMAS DISCUTIDOS - CON VERIFICACIÓN DE SALTO DE PÁGINA
+        // ============================================================
         doc.setFont("times", "bold"); doc.text("4.2. Temas discutidos y decisiones tomadas", 15, y); y += 4;
-        (dataJSON.seccion_4_desarrollo.temas || []).forEach(t => {
-            doc.setFont("times", "bold"); doc.text(`Tema ${t.num}: ${t.titulo}`, 15, y); y += 4;
+        
+        const temasList = dataJSON.seccion_4_desarrollo.temas || [];
+        for (let idx = 0; idx < temasList.length; idx++) {
+            const t = temasList[idx];
+            
+            // Verificar espacio antes de cada tema (mínimo 30mm para cada tema)
+            checkPage(30);
+            
+            doc.setFont("times", "bold"); 
+            doc.text(`Tema ${t.num || idx + 1}: ${t.titulo || "Sin título"}`, 15, y); 
+            y += 5;
+            
             doc.setFont("times", "normal");
-            let sDisc = doc.splitTextToSize(`Discusión: ${t.discusion}`, 180);
-            doc.text(sDisc, 15, y); y += (sDisc.length * 4);
-            let sDec = doc.splitTextToSize(`Decisión tomada: ${t.decision}`, 180);
-            doc.text(sDec, 15, y); y += (sDec.length * 4) + 2;
-        });
+            
+            // Discusión
+            let sDisc = doc.splitTextToSize(`Discusión: ${t.discusion || "-"}`, 170);
+            // Verificar espacio para la discusión
+            const espacioDisc = (sDisc.length * 4) + 2;
+            checkPage(espacioDisc);
+            doc.text(sDisc, 15, y);
+            y += espacioDisc;
+            
+            // Decisión
+            let sDec = doc.splitTextToSize(`Decisión tomada: ${t.decision || "-"}`, 170);
+            const espacioDec = (sDec.length * 4) + 3;
+            checkPage(espacioDec);
+            doc.text(sDec, 15, y);
+            y += espacioDec;
+            
+            // Espacio entre temas
+            y += 2;
+        }
 
         doc.setFont("times", "bold"); doc.text("4.3. Problemas o conflictos identificados", 15, y); y += 4;
         doc.setFont("times", "normal");

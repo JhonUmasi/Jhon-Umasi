@@ -22,7 +22,7 @@ let dataJSON = {
   "seccion_2_asistencia": {
     "asistentes": [
       { "num": 1, "nombre": "Jhon Alex Umasi Huisa", "codigo": "202220117", "rol": "Tesista", "rol_custom": "", "asistencia": "Sí" },
-      { "num": 2, "nombre": "Richard Alejandor Cordova Alarcon", "codigo": "202220219", "rol": "Tesista", "rol_custom": "", "asistencia": "Sí" }
+      { "num": 2, "nombre": "Richard Alejandro Cordova Alarcon", "codigo": "202220219", "rol": "Tesista", "rol_custom": "", "asistencia": "Sí" }
     ],
     "observaciones_asistencia": "Sin observaciones, todos asistieron puntualmente."
   },

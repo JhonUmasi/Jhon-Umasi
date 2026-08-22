@@ -29,8 +29,8 @@ let dataJSON = {
   "seccion_3_agenda": {
     "objetivo_reunion": "Definir el alcance del marco teórico y asignación de actividades iniciales.",
     "temas_a_tratar_list": [
-      { "num": 1, "titulo": "Revisión de bibliografía base", "discusion": "Evaluación preliminar", "decision": "Aprobado" },
-      { "num": 2, "titulo": "Distribución de capítulos", "discusion": "Reparto según carga", "decision": "Asignado" }
+      { "num": 1, "titulo": "Revisión de bibliografía base" },
+      { "num": 2, "titulo": "Distribución de capítulos" }
     ]
   },
   "seccion_4_desarrollo": {
@@ -203,38 +203,17 @@ function renderTemasAgenda() {
     dataJSON.seccion_3_agenda.temas_a_tratar_list.forEach((item, i) => {
         item.num = i + 1;
         cont.innerHTML += `
-            <div style="border: 1px dashed #aaa; padding:6px; margin-bottom:8px;">
-                <label>Tema ${item.num}: Título</label>
-                <input type="text" value="${item.titulo}" oninput="dataJSON.seccion_3_agenda.temas_a_tratar_list[${i}].titulo=this.value; actualizar();">
-                <label>Discusión</label>
-                <textarea rows="2" oninput="dataJSON.seccion_3_agenda.temas_a_tratar_list[${i}].discusion=this.value; actualizar();">${item.discusion}</textarea>
-                <label>Decisión tomada</label>
-                <textarea rows="2" oninput="dataJSON.seccion_3_agenda.temas_a_tratar_list[${i}].decision=this.value; actualizar();">${item.decision}</textarea>
-                <button type="button" class="btn-del" style="margin-top:4px;" onclick="dataJSON.seccion_3_agenda.temas_a_tratar_list.splice(${i},1); renderTemasAgenda(); actualizar();">Eliminar Tema</button>
+            <div style="border: 1px dashed #aaa; padding:6px; margin-bottom:8px; display:flex; align-items:center; gap:8px;">
+                <label style="white-space:nowrap;">Tema ${item.num}:</label>
+                <input type="text" style="flex:1;" value="${item.titulo}" oninput="dataJSON.seccion_3_agenda.temas_a_tratar_list[${i}].titulo=this.value; actualizar();">
+                <button type="button" class="btn-del" onclick="dataJSON.seccion_3_agenda.temas_a_tratar_list.splice(${i},1); renderTemasAgenda(); actualizar();">Eliminar</button>
             </div>`;
     });
 }
 
 function agregarTemaAgenda() {
-    dataJSON.seccion_3_agenda.temas_a_tratar_list.push({ num: 0, titulo: "", discusion: "", decision: "" });
+    dataJSON.seccion_3_agenda.temas_a_tratar_list.push({ num: 0, titulo: "" });
     renderTemasAgenda();
-}
-
-// MULTISELECT ASISTENTES DELEGATE
-function generarSelectorResponsables(listaSeleccionados, onchangeCallback) {
-    const asistentes = dataJSON.seccion_2_asistencia.asistentes.map(a => a.nombre).filter(n => n.trim() !== "");
-    if (asistentes.length === 0) return `<div class="multiselect-box"><i>No hay asistentes</i></div>`;
-    
-    let html = `<div class="multiselect-box">`;
-    asistentes.forEach(nombre => {
-        const checked = listaSeleccionados.includes(nombre) ? "checked" : "";
-        html += `<div class="multiselect-item">
-            <input type="checkbox" value="${nombre}" ${checked} onchange="${onchangeCallback}">
-            <span>${nombre}</span>
-        </div>`;
-    });
-    html += `</div>`;
-    return html;
 }
 
 // 4.1 COMPROMISOS ANTERIORES
@@ -462,13 +441,13 @@ function generarHTMLPrevisualizacion() {
             <p class="sub-label"><b>3.1. Objetivo de la reunión:</b></p>
             <div class="text-block">${dataJSON.seccion_3_agenda.objetivo_reunion || "-"}</div>
             <p class="sub-label"><b>3.2. Temas a tratar (agenda previa):</b></p>
-            ${dataJSON.seccion_3_agenda.temas_a_tratar_list.map(t => `
-                <div style="margin-bottom: 6px;">
-                    <p style="margin:2px 0;"><b>Tema ${t.num}:</b> ${t.titulo}</p>
-                    <p style="margin:2px 0;"><b>Discusión:</b> ${t.discusion}</p>
-                    <p style="margin:2px 0;"><b>Decisión tomada:</b> ${t.decision}</p>
-                </div>
-            `).join('')}
+            ${dataJSON.seccion_3_agenda.temas_a_tratar_list.length > 0 ? `
+                <ul style="margin: 4px 0 10px 20px; padding: 0;">
+                    ${dataJSON.seccion_3_agenda.temas_a_tratar_list.map(t => `
+                        <li style="margin-bottom: 3px;"><b>Tema ${t.num}:</b> ${t.titulo || '-'}</li>
+                    `).join('')}
+                </ul>
+            ` : '<div class="text-block">-</div>'}
 
             <p class="section-header">4. DESARROLLO DE LA REUNIÓN</p>
             <p class="sub-label"><b>4.1. Revisión de compromisos de la reunión anterior</b></p>
@@ -636,22 +615,34 @@ function descargarPDFDirecto() {
         doc.setFont("times", "normal");
         doc.text(`Observaciones sobre inasistencias o retrasos: ${dataJSON.seccion_2_asistencia.observaciones_asistencia || "-"}`, 15, y); y += 8;
 
-        // 3. Agenda
+        // 3. Agenda de la Reunión
         doc.setFont("times", "bold"); doc.text("3. AGENDA DE LA REUNIÓN", 15, y); y += 5;
-        doc.text("3.1. Objetivo de la reunión:", 15, y); y += 4;
-        doc.setFont("times", "normal");
-        let splitObj = doc.splitTextToSize(dataJSON.seccion_3_agenda.objetivo_reunion || "-", 180);
-        doc.text(splitObj, 15, y); y += (splitObj.length * 4) + 3;
-
-        doc.setFont("times", "bold"); doc.text("3.2. Temas a tratar (agenda previa):", 15, y); y += 4;
-        doc.setFont("times", "normal");
         
-        let textoAgenda = (dataJSON.seccion_3_agenda.temas_a_tratar_list || []).map(t => 
-            `Tema ${t.num}: ${t.titulo}\nDiscusión: ${t.discusion}\nDecisión tomada: ${t.decision}`
-        ).join("\n\n");
+        doc.setFont("times", "bold"); doc.text("3.1. Objetivo de la reunión:", 15, y); y += 4;
+        doc.setFont("times", "normal");
+        const objLines = doc.splitTextToSize(dataJSON.seccion_3_agenda.objetivo_reunion || "-", 180);
+        doc.text(objLines, 15, y);
+        y += (objLines.length * 4) + 4;
 
-        let splitTemasTratar = doc.splitTextToSize(textoAgenda || "-", 180);
-        doc.text(splitTemasTratar, 15, y); y += (splitTemasTratar.length * 4) + 7;
+        doc.setFont("times", "bold"); doc.text("3.2. Temas a tratar (agenda previa):", 15, y); y += 3;
+
+        // Mapeo de filas solo con Número y Título
+        const temasAgendaBody = dataJSON.seccion_3_agenda.temas_a_tratar_list.map(t => [
+            `Tema ${t.num}`,
+            t.titulo || "-"
+        ]);
+
+        doc.autoTable({
+            startY: y,
+            head: [['N°', 'Tema / Punto a Tratar']],
+            body: temasAgendaBody.length > 0 ? temasAgendaBody : [['-', 'No se registraron temas']],
+            theme: 'plain',
+            styles: { font: 'times', fontSize: 9, cellPadding: 1.5, lineColor: [0, 0, 0], lineWidth: 0.1 },
+            headStyles: { fontStyle: 'bold' },
+            columnStyles: { 0: { cellWidth: 25, fontStyle: 'bold' } },
+            margin: { left: 15, right: 15 }
+        });
+        y = doc.lastAutoTable.finalY + 6;
 
         // 4. Desarrollo
         if (y > 220) { doc.addPage(); y = 15; }

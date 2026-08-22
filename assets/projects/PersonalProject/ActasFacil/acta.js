@@ -773,7 +773,7 @@ function descargarPDFDirecto() {
 
         y += 5;
 
-        doc.text("Coordinador del equipo:", 15, y);
+        doc.text("Coordinador:", 15, y);
         doc.text("Elaborado por:", 110, y); y += 5;
 
         doc.setFont("times", "bold");

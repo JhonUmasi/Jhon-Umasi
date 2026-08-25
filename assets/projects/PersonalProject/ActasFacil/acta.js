@@ -22,7 +22,7 @@ let dataJSON = {
   "seccion_2_asistencia": {
     "asistentes": [
       { "num": 1, "nombre": "Jhon Alex Umasi Huisa", "codigo": "202220117", "rol": "Tesista", "rol_custom": "", "asistencia": "Sí" },
-      { "num": 2, "nombre": "Richard Alejandro Cordova Alarcon", "codigo": "202220219", "rol": "Tesista", "rol_custom": "", "asistencia": "Sí" }
+      { "num": 2, "nombre": "Richard Alejandor Cordova Alarcon", "codigo": "202220219", "rol": "Tesista", "rol_custom": "", "asistencia": "Sí" }
     ],
     "observaciones_asistencia": "Sin observaciones, todos asistieron puntualmente."
   },
@@ -603,7 +603,11 @@ function descargarPDFDirecto() {
         doc.text(`Ciclo: ${dataJSON.encabezado.ciclo || "2026-2"}`, 15, y); y += 5;
         doc.text(`Grupo N°: ${dataJSON.encabezado.grupo || "-"}`, 15, y); y += 5;
         doc.text(`Profesor: ${dataJSON.encabezado.profesor || "-"}`, 15, y); y += 5;
-        doc.text(`Proyecto seleccionado: ${dataJSON.encabezado.proyecto_seleccionado || "-"}`, 15, y); y += 8;
+        doc.setFont("times", "normal"); doc.setFontSize(10);
+        let proyectoLinea = `Proyecto seleccionado: ${dataJSON.encabezado.proyecto_seleccionado || "-"}`;
+        let lineasProyecto = doc.splitTextToSize(proyectoLinea, 170);
+        doc.text(lineasProyecto, 15, y);
+        y += (lineasProyecto.length * 5) + 2;
 
         // 1. Info
         doc.setFont("times", "bold"); doc.text("1. INFORMACIÓN DE LA REUNIÓN", 15, y); y += 3;
